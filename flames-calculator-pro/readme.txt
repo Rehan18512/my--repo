@@ -4,7 +4,7 @@ Tags: flames, flames calculator, love calculator, compatibility, relationship, n
 Requires at least: 5.0
 Tested up to: 6.6
 Requires PHP: 7.0
-Stable tag: 1.0.0
+Stable tag: 1.0.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -59,6 +59,16 @@ No. Everything (CSS, animations, audio, canvas, share image) is built-in vanilla
 All styles and IDs are scoped under `.fcp-` and a unique container ID, so it should not conflict with theme styles.
 
 == Changelog ==
+
+= 1.0.1 =
+* Fix: results not showing on submit caused by WordPress wpautop injecting
+  `<p>` tags inside the inline `<script>` block. CSS now prints via `wp_head`
+  and JS via `wp_footer`, both bypassing wpautop entirely.
+* Defensive CSS for `[hidden]` and inline `display:none` so theme overrides
+  cannot prevent the loading/result panels from showing.
+* JS auto-initializes every `.fcp-wrap` instance on the page.
+* Submit handler bound to both form `submit` and button `click` for
+  maximum reliability.
 
 = 1.0.0 =
 * Initial release.
