@@ -5,7 +5,7 @@
  * Inputs: your name, crush name, your zodiac (optional), crush zodiac (optional).
  * Outputs: crush %, "likes you back?" verdict, soulmate status, future-together,
  *   horoscope compatibility, mood emoji, best date idea, confession day,
- *   crush song, golden hints, personalized advice, share, FAQ + JSON-LD.
+ *   crush song, golden hints, personalized advice, share, Hindi+English bilingual mode, JSON-LD schema.
  */
 
 if ( ! defined( 'ABSPATH' ) ) { exit; }
@@ -169,15 +169,10 @@ function ccp_render_crush_calculator( $atts = array() ) {
         .cc-lvl-range { font-size: 12px; color: #BE185D; font-weight: 700; }
         .cc-lvl-desc { font-size: 12px; color: #5B5070; margin: 4px 0 0; }
 
-        /* FAQ */
-        .cc-faq { margin-top: 24px; }
-        .cc-faq h2 { font-size: 24px; color: #2E1065; margin-bottom: 12px; }
-        .cc-faq-item { background: #fff; border-radius: 14px; margin-bottom: 10px; box-shadow: 0 8px 20px rgba(0,0,0,0.05); border: 1px solid #EEE8FB; overflow: hidden; }
-        .cc-faq-q { width: 100%; min-height: 56px; padding: 16px 18px; background: #fff; border: none; text-align: left; font-size: 15.5px; font-weight: 700; font-family: 'Poppins', sans-serif; color: #1F1933; cursor: pointer; display: flex; justify-content: space-between; align-items: center; gap: 10px; }
-        .cc-faq-q::after { content: "+"; font-size: 24px; font-weight: 400; color: #BE185D; transition: transform .25s; }
-        .cc-faq-item.cc-open .cc-faq-q::after { transform: rotate(45deg); }
-        .cc-faq-a { padding: 0 18px; max-height: 0; overflow: hidden; transition: max-height .35s ease, padding .35s ease; color: #5B5070; font-size: 14.5px; }
-        .cc-faq-item.cc-open .cc-faq-a { padding: 0 18px 18px; max-height: 600px; }
+        /* Language toggle */
+        .cc-lang { display: inline-flex; gap: 4px; background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.22); border-radius: 999px; padding: 4px; margin-top: 14px; position: relative; z-index: 1; }
+        .cc-lang-btn { background: transparent; color: #fff; border: none; padding: 7px 16px; font-size: 13px; font-weight: 700; font-family: 'Poppins', sans-serif; border-radius: 999px; cursor: pointer; transition: background .2s, color .2s; min-height: 34px; }
+        .cc-lang-btn.cc-lang-active { background: #FBBF24; color: #1F1933; box-shadow: 0 6px 14px rgba(245,158,11,0.35); }
 
         @keyframes cc-pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.08); } }
         @keyframes cc-bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
@@ -209,12 +204,16 @@ function ccp_render_crush_calculator( $atts = array() ) {
 
     <header class="cc-header">
         <div class="cc-header-icon">&#128150;</div>
-        <h1>Crush Calculator</h1>
-        <p class="cc-header-sub">Does your crush like you back? Get instant crush %, horoscope match, soulmate verdict, confession day, mood emoji &amp; song.</p>
+        <h1 data-i18n="title">Crush Calculator</h1>
+        <p class="cc-header-sub" data-i18n="sub">Does your crush like you back? Get instant crush %, horoscope match, soulmate verdict, confession day, mood emoji &amp; song.</p>
         <div class="cc-stats">
-            <div class="cc-stat"><div class="cc-stat-num" id="cc-counter">3,12,940</div><div class="cc-stat-lbl">Tests Today</div></div>
-            <div class="cc-stat"><div class="cc-stat-num">4.9&#9733;</div><div class="cc-stat-lbl">Rating</div></div>
-            <div class="cc-stat"><div class="cc-stat-num">100%</div><div class="cc-stat-lbl">Anonymous</div></div>
+            <div class="cc-stat"><div class="cc-stat-num" id="cc-counter">3,12,940</div><div class="cc-stat-lbl" data-i18n="tests">Tests Today</div></div>
+            <div class="cc-stat"><div class="cc-stat-num">4.9&#9733;</div><div class="cc-stat-lbl" data-i18n="rating">Rating</div></div>
+            <div class="cc-stat"><div class="cc-stat-num">100%</div><div class="cc-stat-lbl" data-i18n="anon">Anonymous</div></div>
+        </div>
+        <div class="cc-lang" role="group" aria-label="Language">
+            <button type="button" class="cc-lang-btn cc-lang-active" data-lang="en">English</button>
+            <button type="button" class="cc-lang-btn" data-lang="hi">हिंदी</button>
         </div>
     </header>
 
@@ -233,21 +232,21 @@ function ccp_render_crush_calculator( $atts = array() ) {
             </div>
             <div class="cc-zodiacs">
                 <div>
-                    <label class="cc-zlabel" for="cc-zo-a">Your zodiac (optional)</label>
+                    <label class="cc-zlabel" for="cc-zo-a" data-i18n="zo_a">Your zodiac (optional)</label>
                     <select class="cc-select" id="cc-zo-a"></select>
                 </div>
                 <div>
-                    <label class="cc-zlabel" for="cc-zo-b">Crush zodiac (optional)</label>
+                    <label class="cc-zlabel" for="cc-zo-b" data-i18n="zo_b">Crush zodiac (optional)</label>
                     <select class="cc-select" id="cc-zo-b"></select>
                 </div>
             </div>
-            <div class="cc-error" id="cc-error">Please enter both names to continue.</div>
-            <button type="button" class="cc-btn cc-btn-primary" id="cc-calc-btn">Reveal The Truth &#128150;</button>
+            <div class="cc-error" id="cc-error" data-i18n="err_empty">Please enter both names to continue.</div>
+            <button type="button" class="cc-btn cc-btn-primary" id="cc-calc-btn" data-i18n="calc_btn">Reveal The Truth &#128150;</button>
             <div class="cc-trust">
-                <span>&#128274; 100% Anonymous</span>
-                <span>&#9889; Instant Result</span>
-                <span>&#127942; Free Forever</span>
-                <span>&#128302; Vedic + Western</span>
+                <span data-i18n="t_anon">&#128274; 100% Anonymous</span>
+                <span data-i18n="t_instant">&#9889; Instant Result</span>
+                <span data-i18n="t_free">&#127942; Free Forever</span>
+                <span data-i18n="t_vedic">&#128302; Vedic + Western</span>
             </div>
         </div>
 
@@ -293,27 +292,27 @@ function ccp_render_crush_calculator( $atts = array() ) {
             </div>
 
             <div class="cc-bars">
-                <div class="cc-bar-row"><div class="cc-bar-top"><span>&#10024; Attraction</span><span id="cc-b1-v">0%</span></div><div class="cc-bar"><div class="cc-bar-fill" id="cc-b1"></div></div></div>
-                <div class="cc-bar-row"><div class="cc-bar-top"><span>&#128172; Vibe Match</span><span id="cc-b2-v">0%</span></div><div class="cc-bar"><div class="cc-bar-fill" id="cc-b2"></div></div></div>
-                <div class="cc-bar-row"><div class="cc-bar-top"><span>&#128293; Chemistry</span><span id="cc-b3-v">0%</span></div><div class="cc-bar"><div class="cc-bar-fill" id="cc-b3"></div></div></div>
-                <div class="cc-bar-row"><div class="cc-bar-top"><span>&#127881; Long-term Potential</span><span id="cc-b4-v">0%</span></div><div class="cc-bar"><div class="cc-bar-fill" id="cc-b4"></div></div></div>
+                <div class="cc-bar-row"><div class="cc-bar-top"><span data-i18n="m_attr">&#10024; Attraction</span><span id="cc-b1-v">0%</span></div><div class="cc-bar"><div class="cc-bar-fill" id="cc-b1"></div></div></div>
+                <div class="cc-bar-row"><div class="cc-bar-top"><span data-i18n="m_vibe">&#128172; Vibe Match</span><span id="cc-b2-v">0%</span></div><div class="cc-bar"><div class="cc-bar-fill" id="cc-b2"></div></div></div>
+                <div class="cc-bar-row"><div class="cc-bar-top"><span data-i18n="m_chem">&#128293; Chemistry</span><span id="cc-b3-v">0%</span></div><div class="cc-bar"><div class="cc-bar-fill" id="cc-b3"></div></div></div>
+                <div class="cc-bar-row"><div class="cc-bar-top"><span data-i18n="m_lt">&#127881; Long-term Potential</span><span id="cc-b4-v">0%</span></div><div class="cc-bar"><div class="cc-bar-fill" id="cc-b4"></div></div></div>
             </div>
 
             <!-- Predictions -->
             <div class="cc-preds">
-                <div class="cc-pred"><div class="cc-pred-ic" id="cc-pe">&#128525;</div><h4>Mood Emoji</h4><div class="cc-pred-val" id="cc-pev">--</div></div>
-                <div class="cc-pred"><div class="cc-pred-ic">&#127801;</div><h4>Best Date Idea</h4><div class="cc-pred-val" id="cc-pdv">--</div></div>
-                <div class="cc-pred"><div class="cc-pred-ic">&#127925;</div><h4>Your Song</h4><div class="cc-pred-val" id="cc-psv">--</div></div>
-                <div class="cc-pred"><div class="cc-pred-ic">&#128197;</div><h4>Confess On</h4><div class="cc-pred-val" id="cc-pcv">--</div></div>
-                <div class="cc-pred"><div class="cc-pred-ic">&#127872;</div><h4>Gift Idea</h4><div class="cc-pred-val" id="cc-pgv">--</div></div>
-                <div class="cc-pred"><div class="cc-pred-ic">&#127807;</div><h4>Lucky Charm</h4><div class="cc-pred-val" id="cc-plv">--</div></div>
-                <div class="cc-pred"><div class="cc-pred-ic">&#128276;</div><h4>Power Word</h4><div class="cc-pred-val" id="cc-pwv">--</div></div>
-                <div class="cc-pred"><div class="cc-pred-ic">&#127770;</div><h4>Confession Time</h4><div class="cc-pred-val" id="cc-ptv">--</div></div>
+                <div class="cc-pred"><div class="cc-pred-ic" id="cc-pe">&#128525;</div><h4 data-i18n="p_emoji">Mood Emoji</h4><div class="cc-pred-val" id="cc-pev">--</div></div>
+                <div class="cc-pred"><div class="cc-pred-ic">&#127801;</div><h4 data-i18n="p_date">Best Date Idea</h4><div class="cc-pred-val" id="cc-pdv">--</div></div>
+                <div class="cc-pred"><div class="cc-pred-ic">&#127925;</div><h4 data-i18n="p_song">Your Song</h4><div class="cc-pred-val" id="cc-psv">--</div></div>
+                <div class="cc-pred"><div class="cc-pred-ic">&#128197;</div><h4 data-i18n="p_conf">Confess On</h4><div class="cc-pred-val" id="cc-pcv">--</div></div>
+                <div class="cc-pred"><div class="cc-pred-ic">&#127872;</div><h4 data-i18n="p_gift">Gift Idea</h4><div class="cc-pred-val" id="cc-pgv">--</div></div>
+                <div class="cc-pred"><div class="cc-pred-ic">&#127807;</div><h4 data-i18n="p_charm">Lucky Charm</h4><div class="cc-pred-val" id="cc-plv">--</div></div>
+                <div class="cc-pred"><div class="cc-pred-ic">&#128276;</div><h4 data-i18n="p_word">Power Word</h4><div class="cc-pred-val" id="cc-pwv">--</div></div>
+                <div class="cc-pred"><div class="cc-pred-ic">&#127770;</div><h4 data-i18n="p_time">Confession Time</h4><div class="cc-pred-val" id="cc-ptv">--</div></div>
             </div>
 
             <!-- Horoscope -->
             <div class="cc-horo">
-                <h3>&#9802; Horoscope Compatibility</h3>
+                <h3 data-i18n="horo_h">&#9802; Horoscope Compatibility</h3>
                 <div class="cc-horo-row">
                     <span class="cc-zo" id="cc-zo-a-disp">--</span>
                     <span class="cc-zo" id="cc-zo-b-disp">--</span>
@@ -325,7 +324,7 @@ function ccp_render_crush_calculator( $atts = array() ) {
 
             <!-- Soulmate / Future -->
             <div class="cc-soul">
-                <h3>&#128081; Soulmate Verdict</h3>
+                <h3 data-i18n="soul_h">&#128081; Soulmate Verdict</h3>
                 <div class="cc-soul-status" id="cc-soul-status">--</div>
                 <p class="cc-soul-future" id="cc-soul-future"></p>
             </div>
@@ -338,20 +337,20 @@ function ccp_render_crush_calculator( $atts = array() ) {
 
             <!-- Advice -->
             <div class="cc-advice">
-                <h3>&#129302; Your Crush Advice</h3>
+                <h3 data-i18n="advice_h">&#129302; Your Crush Advice</h3>
                 <p id="cc-advice-text"></p>
                 <div class="cc-tags" id="cc-tags"></div>
             </div>
 
             <!-- Share -->
             <div class="cc-share">
-                <a href="#" class="cc-share-btn cc-sb-wa" id="cc-sb-wa" target="_blank" rel="noopener">&#128241; WhatsApp</a>
-                <a href="#" class="cc-share-btn cc-sb-tw" id="cc-sb-tw" target="_blank" rel="noopener">&#119991; Twitter</a>
-                <button type="button" class="cc-share-btn cc-sb-save" id="cc-sb-save">&#128247; Save Card</button>
-                <button type="button" class="cc-share-btn cc-sb-copy" id="cc-sb-copy">&#128279; Copy Link</button>
+                <a href="#" class="cc-share-btn cc-sb-wa" id="cc-sb-wa" target="_blank" rel="noopener" data-i18n="sh_wa">&#128241; WhatsApp</a>
+                <a href="#" class="cc-share-btn cc-sb-tw" id="cc-sb-tw" target="_blank" rel="noopener" data-i18n="sh_tw">&#119991; Twitter</a>
+                <button type="button" class="cc-share-btn cc-sb-save" id="cc-sb-save" data-i18n="sh_save">&#128247; Save Card</button>
+                <button type="button" class="cc-share-btn cc-sb-copy" id="cc-sb-copy" data-i18n="sh_copy">&#128279; Copy Link</button>
             </div>
 
-            <button type="button" class="cc-btn cc-try" id="cc-try-btn">&#128260; Try Another Crush</button>
+            <button type="button" class="cc-btn cc-try" id="cc-try-btn" data-i18n="try_again">&#128260; Try Another Crush</button>
         </div>
     </section>
 
@@ -363,39 +362,17 @@ function ccp_render_crush_calculator( $atts = array() ) {
         <div class="cc-lvl"><div class="cc-lvl-icon">&#129402;</div><h4>Just Vibes</h4><div class="cc-lvl-range">0-29%</div><p class="cc-lvl-desc">Friendship may suit better.</p></div>
     </section>
 
-    <section class="cc-faq">
-        <h2>Crush Calculator &mdash; FAQs</h2>
-        <div class="cc-faq-item"><button class="cc-faq-q" type="button">How does the crush calculator work?</button><div class="cc-faq-a"><p>It blends three signals from both names plus optional zodiac compatibility: (1) letter overlap, (2) name numerology, and (3) seeded harmony. If zodiacs are entered, an additional Western horoscope-compatibility weight is added. The blend produces your crush %, verdict, mood emoji, song, gift idea, and confession timing.</p></div></div>
-        <div class="cc-faq-item"><button class="cc-faq-q" type="button">Will the calculator tell me if my crush likes me back?</button><div class="cc-faq-a"><p>The tool gives a clear verdict — Yes / Maybe / Slow Down — based on the score and horoscope alignment. Treat it as a confidence boost or a reflection nudge, not a final answer. Real signals come from how your crush behaves around you.</p></div></div>
-        <div class="cc-faq-item"><button class="cc-faq-q" type="button">Are the results based on astrology?</button><div class="cc-faq-a"><p>Yes &mdash; the optional zodiac inputs use Western horoscope compatibility logic combined with name-numerology. You can also use the calculator without entering zodiacs; in that case only the name-based signals are used.</p></div></div>
-        <div class="cc-faq-item"><button class="cc-faq-q" type="button">Is my crush&rsquo;s name private?</button><div class="cc-faq-a"><p>Yes. Everything runs inside your browser. Names and zodiacs are never sent to a server, saved, or shared. The tool is fully anonymous and works offline once loaded.</p></div></div>
-        <div class="cc-faq-item"><button class="cc-faq-q" type="button">Why does the same crush pair always give the same result?</button><div class="cc-faq-a"><p>The algorithm is deterministic &mdash; it uses a seeded calculation instead of randomness so your result is consistent and shareable. The score won&rsquo;t change unless the inputs do.</p></div></div>
-        <div class="cc-faq-item"><button class="cc-faq-q" type="button">Should I really confess based on this result?</button><div class="cc-faq-a"><p>If the result is high, take it as a gentle push to make a thoughtful move. Always be respectful, low-pressure, and ready to handle any answer with maturity. Real-life chemistry > any calculator.</p></div></div>
-    </section>
-
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
-      "@graph": [
-        {
-          "@type": "SoftwareApplication",
-          "name": "Crush Calculator",
-          "applicationCategory": "LifestyleApplication",
-          "operatingSystem": "Web",
-          "url": "https://cosmiccalculators.in/crush-calculator/",
-          "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
-          "aggregateRating": { "@type": "AggregateRating", "ratingValue": "4.9", "ratingCount": "13680" }
-        },
-        {
-          "@type": "FAQPage",
-          "mainEntity": [
-            { "@type": "Question", "name": "How does the crush calculator work?", "acceptedAnswer": { "@type": "Answer", "text": "It blends letter overlap, name numerology, seeded harmony, and optional zodiac horoscope-compatibility to produce a crush %, verdict, song, mood emoji, and confession timing." } },
-            { "@type": "Question", "name": "Will it tell me if my crush likes me back?", "acceptedAnswer": { "@type": "Answer", "text": "It gives a Yes / Maybe / Slow Down verdict based on score and horoscope alignment. Use it as guidance, not a final answer." } },
-            { "@type": "Question", "name": "Is my crush's name private?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. All calculations happen in your browser. Nothing is sent to any server, logged, or saved." } },
-            { "@type": "Question", "name": "Why is the result the same every time?", "acceptedAnswer": { "@type": "Answer", "text": "The algorithm is deterministic and seeded, so the same inputs always return the same output. This makes results shareable and reproducible." } }
-          ]
-        }
-      ]
+      "@type": "SoftwareApplication",
+      "name": "Crush Calculator",
+      "applicationCategory": "LifestyleApplication",
+      "operatingSystem": "Web",
+      "inLanguage": ["en", "hi"],
+      "url": "https://cosmiccalculators.in/crush-calculator/",
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+      "aggregateRating": { "@type": "AggregateRating", "ratingValue": "4.9", "ratingCount": "13680" }
     }
     </script>
 </div>
@@ -403,7 +380,82 @@ function ccp_render_crush_calculator( $atts = array() ) {
 <script>
 (function(){
     'use strict';
-    var CC = { $: function(id){ return document.getElementById(id); }, nameA: '', nameB: '', zoA: '', zoB: '' };
+    var CC = { $: function(id){ return document.getElementById(id); }, nameA: '', nameB: '', zoA: '', zoB: '', score: 0, lang: 'en' };
+
+    var T = {
+        en: {
+            title: 'Crush Calculator',
+            sub: 'Does your crush like you back? Get instant crush %, horoscope match, soulmate verdict, confession day, mood emoji & song.',
+            tests: 'Tests Today', rating: 'Rating', anon: 'Anonymous',
+            pl_a: 'Your name', pl_b: 'Crush name',
+            zo_a: 'Your zodiac (optional)', zo_b: 'Crush zodiac (optional)', zo_pick: '— select —',
+            err_empty: 'Please enter both names to continue.', err_short: 'Names should be at least 2 characters.',
+            calc_btn: 'Reveal The Truth 💖',
+            t_anon: '🔒 100% Anonymous', t_instant: '⚡ Instant Result', t_free: '🏆 Free Forever', t_vedic: '🔮 Vedic + Western',
+            m_attr: '✨ Attraction', m_vibe: '💬 Vibe Match', m_chem: '🔥 Chemistry', m_lt: '🎉 Long-term Potential',
+            p_emoji: 'Mood Emoji', p_date: 'Best Date Idea', p_song: 'Your Song', p_conf: 'Confess On',
+            p_gift: 'Gift Idea', p_charm: 'Lucky Charm', p_word: 'Power Word', p_time: 'Confession Time',
+            horo_h: '♎ Horoscope Compatibility', horo_hint: 'Add both zodiac signs to see your full horoscope compatibility reading.',
+            soul_h: '👑 Soulmate Verdict',
+            hints_h: 'Golden Hints for',
+            advice_h: '🤖 Your Crush Advice',
+            sh_wa: '📱 WhatsApp', sh_tw: '𝕏 Twitter', sh_save: '📷 Save Card', sh_copy: '🔗 Copy Link',
+            try_again: '🔄 Try Another Crush',
+            you: 'You', crush: 'Crush',
+            v_yes: '💚 YES — They likely like you back',
+            v_maybe: '💛 MAYBE — Signals are mixed',
+            v_slow: '🧡 SLOW — Build comfort first',
+            v_hold: '❤️ HOLD — Focus on you for now',
+            load: ['🔍 Reading the energy between you...', '🌌 Checking horoscope alignment...', '✨ Decoding crush signals...', '💖 Drafting your reading...']
+        },
+        hi: {
+            title: 'क्रश कैलकुलेटर',
+            sub: 'क्या आपका क्रश आपको भी पसंद करता है? तुरंत क्रश %, राशि मिलान, सोलमेट फ़ैसला, इज़हार का दिन, मूड इमोजी और गाना पाइए।',
+            tests: 'आज के टेस्ट', rating: 'रेटिंग', anon: 'गुमनाम',
+            pl_a: 'आपका नाम', pl_b: 'क्रश का नाम',
+            zo_a: 'आपकी राशि (वैकल्पिक)', zo_b: 'क्रश की राशि (वैकल्पिक)', zo_pick: '— चुनें —',
+            err_empty: 'कृपया दोनों नाम भरें।', err_short: 'नाम कम से कम 2 अक्षर का होना चाहिए।',
+            calc_btn: 'सच्चाई जानें 💖',
+            t_anon: '🔒 100% गुमनाम', t_instant: '⚡ तुरंत नतीजा', t_free: '🏆 हमेशा मुफ़्त', t_vedic: '🔮 वैदिक + पाश्चात्य',
+            m_attr: '✨ आकर्षण', m_vibe: '💬 वाइब मिलान', m_chem: '🔥 केमिस्ट्री', m_lt: '🎉 लंबे समय की संभावना',
+            p_emoji: 'मूड इमोजी', p_date: 'सबसे अच्छा डेट', p_song: 'आपका गाना', p_conf: 'इज़हार का दिन',
+            p_gift: 'गिफ़्ट आइडिया', p_charm: 'लकी चार्म', p_word: 'पावर शब्द', p_time: 'इज़हार का समय',
+            horo_h: '♎ राशि अनुकूलता', horo_hint: 'पूरी राशि-रीडिंग के लिए दोनों राशियाँ चुनें।',
+            soul_h: '👑 सोलमेट का फ़ैसला',
+            hints_h: 'गोल्डन हिंट्स',
+            advice_h: '🤖 आपके क्रश के लिए सलाह',
+            sh_wa: '📱 व्हाट्सऐप', sh_tw: '𝕏 ट्विटर', sh_save: '📷 कार्ड सेव', sh_copy: '🔗 लिंक कॉपी',
+            try_again: '🔄 दूसरा क्रश आज़माएँ',
+            you: 'आप', crush: 'क्रश',
+            v_yes: '💚 हाँ — शायद आपको भी पसंद करते हैं',
+            v_maybe: '💛 शायद — संकेत मिले-जुले हैं',
+            v_slow: '🧡 धीरे — पहले दोस्ती बढ़ाएँ',
+            v_hold: '❤️ रुकें — अभी ख़ुद पर ध्यान दें',
+            load: ['🔍 आप दोनों के बीच की ऊर्जा पढ़ी जा रही है...', '🌌 राशि अनुकूलता जाँची जा रही है...', '✨ क्रश संकेत डिकोड हो रहे हैं...', '💖 आपकी रीडिंग तैयार हो रही है...']
+        }
+    };
+
+    function applyLang(lang) {
+        if (!T[lang]) return;
+        CC.lang = lang;
+        document.querySelectorAll('#cc-wrap [data-i18n]').forEach(function(el){
+            var k = el.getAttribute('data-i18n');
+            if (T[lang][k] != null) el.textContent = T[lang][k];
+        });
+        var na = CC.$('cc-name-a'), nb = CC.$('cc-name-b');
+        if (na) na.placeholder = T[lang].pl_a;
+        if (nb) nb.placeholder = T[lang].pl_b;
+        rebuildZodiacs();
+        document.querySelectorAll('#cc-wrap .cc-lang-btn').forEach(function(b){
+            b.classList.toggle('cc-lang-active', b.getAttribute('data-lang') === lang);
+        });
+        if (CC.score > 0 && CC.$('cc-result').classList.contains('cc-show')) {
+            renderResultContent();
+        }
+    }
+    document.querySelectorAll('#cc-wrap .cc-lang-btn').forEach(function(btn){
+        btn.addEventListener('click', function(){ applyLang(btn.getAttribute('data-lang')); });
+    });
 
     function escapeHtml(s) {
         return String(s).replace(/[&<>"']/g, function(c){
@@ -411,13 +463,28 @@ function ccp_render_crush_calculator( $atts = array() ) {
         });
     }
 
-    var ZODIACS = [
-        ['', '— select —'],
-        ['aries','♈ Aries'],['taurus','♉ Taurus'],['gemini','♊ Gemini'],
-        ['cancer','♋ Cancer'],['leo','♌ Leo'],['virgo','♍ Virgo'],
-        ['libra','♎ Libra'],['scorpio','♏ Scorpio'],['sagittarius','♐ Sagittarius'],
-        ['capricorn','♑ Capricorn'],['aquarius','♒ Aquarius'],['pisces','♓ Pisces']
-    ];
+    var ZODIAC_LABELS = {
+        en: { aries:'♈ Aries', taurus:'♉ Taurus', gemini:'♊ Gemini', cancer:'♋ Cancer', leo:'♌ Leo', virgo:'♍ Virgo', libra:'♎ Libra', scorpio:'♏ Scorpio', sagittarius:'♐ Sagittarius', capricorn:'♑ Capricorn', aquarius:'♒ Aquarius', pisces:'♓ Pisces' },
+        hi: { aries:'♈ मेष', taurus:'♉ वृषभ', gemini:'♊ मिथुन', cancer:'♋ कर्क', leo:'♌ सिंह', virgo:'♍ कन्या', libra:'♎ तुला', scorpio:'♏ वृश्चिक', sagittarius:'♐ धनु', capricorn:'♑ मकर', aquarius:'♒ कुंभ', pisces:'♓ मीन' }
+    };
+    var ZODIAC_KEYS = ['aries','taurus','gemini','cancer','leo','virgo','libra','scorpio','sagittarius','capricorn','aquarius','pisces'];
+
+    function rebuildZodiacs() {
+        var a = CC.$('cc-zo-a'), b = CC.$('cc-zo-b');
+        if (!a || !b) return;
+        var prevA = a.value, prevB = b.value;
+        var labels = ZODIAC_LABELS[CC.lang] || ZODIAC_LABELS.en;
+        var pickLbl = (T[CC.lang] && T[CC.lang].zo_pick) || '— select —';
+        a.innerHTML = ''; b.innerHTML = '';
+        var oa = document.createElement('option'); oa.value=''; oa.textContent = pickLbl; a.appendChild(oa);
+        var ob = document.createElement('option'); ob.value=''; ob.textContent = pickLbl; b.appendChild(ob);
+        for (var i=0; i<ZODIAC_KEYS.length; i++) {
+            var k = ZODIAC_KEYS[i];
+            var o1 = document.createElement('option'); o1.value = k; o1.textContent = labels[k]; a.appendChild(o1);
+            var o2 = document.createElement('option'); o2.value = k; o2.textContent = labels[k]; b.appendChild(o2);
+        }
+        a.value = prevA; b.value = prevB;
+    }
 
     // Element grouping: fire / earth / air / water
     var Z_ELEMENT = {
@@ -440,13 +507,7 @@ function ccp_render_crush_calculator( $atts = array() ) {
         return 62;
     }
 
-    (function populateZ(){
-        var a = CC.$('cc-zo-a'), b = CC.$('cc-zo-b');
-        for (var i=0; i<ZODIACS.length; i++) {
-            var o1 = document.createElement('option'); o1.value = ZODIACS[i][0]; o1.textContent = ZODIACS[i][1]; a.appendChild(o1);
-            var o2 = document.createElement('option'); o2.value = ZODIACS[i][0]; o2.textContent = ZODIACS[i][1]; b.appendChild(o2);
-        }
-    })();
+    rebuildZodiacs();
 
     var elInputPhase = CC.$('cc-input-phase');
     var elLoading    = CC.$('cc-loading');
@@ -522,22 +583,38 @@ function ccp_render_crush_calculator( $atts = array() ) {
         return { attr: vary(1), vibe: vary(2), chem: vary(3), lt: vary(4) };
     }
 
-    function getLevel(score) {
-        if (score >= 90) return { emoji: '👑', name: 'Soulmate',       color: '#F59E0B' };
-        if (score >= 70) return { emoji: '🔥', name: 'Strong Chance',  color: '#BE185D' };
-        if (score >= 50) return { emoji: '💖', name: 'Mutual Vibes',   color: '#7C3AED' };
-        if (score >= 30) return { emoji: '😌', name: 'One-Sided?',     color: '#2563EB' };
-        return { emoji: '🥺', name: 'Just Friendly Vibes', color: '#94A3B8' };
+    var LEVEL_NAMES = {
+        en: ['Soulmate','Strong Chance','Mutual Vibes','One-Sided?','Just Friendly Vibes'],
+        hi: ['सोलमेट','मज़बूत मौक़ा','दोनों तरफ़ वाइब्स','एकतरफ़ा?','सिर्फ़ दोस्ताना']
+    };
+    function getLevel(score, lang) {
+        lang = lang || CC.lang;
+        var L = LEVEL_NAMES[lang] || LEVEL_NAMES.en;
+        if (score >= 90) return { emoji: '👑', name: L[0], color: '#F59E0B' };
+        if (score >= 70) return { emoji: '🔥', name: L[1], color: '#BE185D' };
+        if (score >= 50) return { emoji: '💖', name: L[2], color: '#7C3AED' };
+        if (score >= 30) return { emoji: '😌', name: L[3], color: '#2563EB' };
+        return { emoji: '🥺', name: L[4], color: '#94A3B8' };
     }
 
-    function getVerdict(score) {
-        if (score >= 75) return '💚 YES — They likely like you back';
-        if (score >= 55) return '💛 MAYBE — Signals are mixed';
-        if (score >= 35) return '🧡 SLOW — Build comfort first';
-        return '❤️ HOLD — Focus on you for now';
+    function getVerdict(score, lang) {
+        lang = lang || CC.lang;
+        var tt = T[lang] || T.en;
+        if (score >= 75) return tt.v_yes;
+        if (score >= 55) return tt.v_maybe;
+        if (score >= 35) return tt.v_slow;
+        return tt.v_hold;
     }
 
-    function getDescription(score, n1, n2) {
+    function getDescription(score, n1, n2, lang) {
+        lang = lang || CC.lang;
+        if (lang === 'hi') {
+            if (score >= 90) return n1 + ' और ' + n2 + ', आप दोनों के बीच की ऊर्जा दुर्लभ और रोमांचक है — ऐसे रिश्तों पर ही गाने लिखे जाते हैं। अगर वक्त सही लगे, क़दम उठा लें। सितारे आपके साथ हैं।';
+            if (score >= 70) return n1 + ' और ' + n2 + ', असली चिंगारी है। आपका क्रश भी शायद वही महसूस करता है — शायद उससे भी ज़्यादा जितना दिखाता है। अपने सच्चे रूप में रहें, जादू अपने आप बनेगा।';
+            if (score >= 50) return n1 + ' और ' + n2 + ', केमिस्ट्री असली है पर अधूरी है। खोजने के लिए काफ़ी है, जल्दबाज़ी के लिए नहीं। थोड़ी और बातचीत, थोड़ा और साथ — और रिश्ता अपना रूप दिखाएगा।';
+            if (score >= 30) return n1 + ' और ' + n2 + ', अभी जुड़ाव आपकी तरफ़ से ज़्यादा हो सकता है। यह "नहीं" नहीं है — "अभी नहीं" है। धैर्य रखें, असली रहें, और जो बहना चाहिए उसे ज़ोर से न खींचें।';
+            return n1 + ' और ' + n2 + ', रोमांटिक चिंगारी अभी शांत लगती है, पर दोस्ती अक्सर कुछ गहरा बन जाती है। पहले असली बातचीत और साझा पल पर ध्यान दें।';
+        }
         if (score >= 90) return n1 + ' & ' + n2 + ', the energy between you is rare and electric — the kind people write love songs about. If the timing feels right, take the leap. The stars are clearly in your favor.';
         if (score >= 70) return n1 + ' & ' + n2 + ', there is a real spark here. Your crush probably feels it too — maybe more than they show. Keep being your honest self and let the magic build naturally.';
         if (score >= 50) return n1 + ' & ' + n2 + ', the chemistry is real but unfinished. There is enough to explore but not enough to rush. Talk more, hang out longer, and watch the bond reveal itself.';
@@ -547,93 +624,93 @@ function ccp_render_crush_calculator( $atts = array() ) {
 
     var EMOJI_POOL = ['💗','💘','💝','💖','😍','🥰','💞','💓','🌹','🦋','✨','💫','🔥','🌷','🍓'];
 
-    var DATE_IDEAS = [
-        'Sunset rooftop with chai',
-        'Aquarium walk',
-        'Bookstore + coffee',
-        'Bowling night',
-        'Street food crawl',
-        'Sunset beach drive',
-        'Picnic in a garden park',
-        'Movie + ice cream',
-        'Stargazing on a terrace',
-        'Long late-night phone call',
-        'Trip to a local cafe',
-        'Cooking together at home'
-    ];
+    var POOLS = {
+        en: {
+            DATE_IDEAS: ['Sunset rooftop with chai','Aquarium walk','Bookstore + coffee','Bowling night','Street food crawl','Sunset beach drive','Picnic in a garden park','Movie + ice cream','Stargazing on a terrace','Long late-night phone call','Trip to a local cafe','Cooking together at home'],
+            SONGS: ['"Tum Hi Ho" — Arijit Singh','"Sweater Weather" — The Neighbourhood','"Tera Hone Laga Hoon" — Atif Aslam','"Perfect" — Ed Sheeran','"Pasoori" — Ali Sethi & Shae Gill','"Crush" — David Archuleta','"Tujh Mein Rab Dikhta Hai" — Rab Ne Bana Di Jodi','"Stay" — The Kid LAROI & Justin Bieber','"Kesariya" — Arijit Singh','"Hawayein" — Arijit Singh','"Apna Bana Le" — Arijit Singh','"Ek Ladki Ko Dekha Toh" — Kumar Sanu'],
+            GIFTS: ['Handwritten letter','Their favorite chocolate','A book they’ll love','A playlist made for them','Polaroid photo memory','Their favorite snack box','Mini bouquet (any flower)','Custom keychain','Sticky note with one honest line','A meme that screams “them”','Voice note saying hi','Their favorite coffee'],
+            CHARMS: ['Lucky pink stone','Gold thread bracelet','Pink rose petal in wallet','Spritz of vanilla perfume','Smile + eye contact','Wear something maroon','Talk to them on a Friday','Carry their favorite scent','Send a midnight “hi”','Use their name in a compliment','Listen — really listen','Wear a confident outfit'],
+            WORDS: ['Patience','Confidence','Soft Eyes','Calm','Curiosity','Honesty','Mystery','Lightness','Warmth','Charm','Listen','Smile'],
+            DAYS: ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'],
+            TIMES: ['Morning ☀️','Afternoon 🌤','Sunset 🌇','Evening 🌙','Midnight 🌌']
+        },
+        hi: {
+            DATE_IDEAS: ['छत पर चाय और सूर्यास्त','एक्वेरियम की सैर','बुकस्टोर + कॉफ़ी','बॉलिंग नाइट','स्ट्रीट फ़ूड क्रॉल','बीच ड्राइव','बग़ीचे में पिकनिक','मूवी + आइसक्रीम','छत पर तारे देखना','देर रात की लंबी फ़ोन कॉल','लोकल कैफ़े जाना','साथ में घर पर खाना बनाना'],
+            SONGS: ['"तुम ही हो" — अरिजित सिंह','"तेरा होने लगा हूँ" — आतिफ़ असलम','"परफ़ेक्ट" — Ed Sheeran','"पसूरी" — अली सेठी और शे गिल','"तुझ में रब दिखता है" — रब ने बना दी जोड़ी','"केसरिया" — अरिजित सिंह','"हवाएँ" — अरिजित सिंह','"अपना बना ले" — अरिजित सिंह','"एक लड़की को देखा" — कुमार सानू','"क्रश" — David Archuleta','"पल" — Jubin Nautiyal','"छम्मक छल्लो" — Akon'],
+            GIFTS: ['हाथ से लिखा ख़त','उनकी पसंदीदा चॉकलेट','कोई किताब जो उन्हें पसंद हो','उनके लिए बनाई प्लेलिस्ट','पोलरॉइड फ़ोटो की याद','उनके पसंदीदा स्नैक्स का बॉक्स','मिनी गुलदस्ता','कस्टम चाबी का छल्ला','एक ईमानदार लाइन वाला नोट','उन पर सटीक मीम','हाय कहती वॉइस नोट','उनकी पसंदीदा कॉफ़ी'],
+            CHARMS: ['गुलाबी लकी पत्थर','सोने का धागा कलाई पर','पर्स में गुलाब की पंखुड़ी','वनिला परफ्यूम का छिड़काव','मुस्कान + आँखों का संपर्क','मरून रंग पहनें','शुक्रवार को बात करें','उनकी पसंदीदा ख़ुशबू पहनें','आधी रात की "हाय"','तारीफ़ में उनका नाम लें','सच में सुनें','आत्मविश्वासी पहनावा'],
+            WORDS: ['धैर्य','आत्मविश्वास','नर्म नज़र','शांति','जिज्ञासा','ईमानदारी','रहस्य','हल्कापन','गर्मजोशी','आकर्षण','सुनें','मुस्कान'],
+            DAYS: ['रविवार','सोमवार','मंगलवार','बुधवार','गुरुवार','शुक्रवार','शनिवार'],
+            TIMES: ['सुबह ☀️','दोपहर 🌤','सूर्यास्त 🌇','शाम 🌙','आधी रात 🌌']
+        }
+    };
 
-    var SONGS = [
-        '"Tum Hi Ho" — Arijit Singh',
-        '"Sweater Weather" — The Neighbourhood',
-        '"Tera Hone Laga Hoon" — Atif Aslam',
-        '"Perfect" — Ed Sheeran',
-        '"Pasoori" — Ali Sethi & Shae Gill',
-        '"Crush" — David Archuleta',
-        '"Tujh Mein Rab Dikhta Hai" — Rab Ne Bana Di Jodi',
-        '"Stay" — The Kid LAROI & Justin Bieber',
-        '"Kesariya" — Arijit Singh',
-        '"Hawayein" — Arijit Singh',
-        '"Apna Bana Le" — Arijit Singh',
-        '"Ek Ladki Ko Dekha Toh" — Kumar Sanu'
-    ];
-
-    var GIFTS = [
-        'Handwritten letter',
-        'Their favorite chocolate',
-        'A book they’ll love',
-        'A playlist made for them',
-        'Polaroid photo memory',
-        'Their favorite snack box',
-        'Mini bouquet (any flower)',
-        'Custom keychain',
-        'Sticky note with one honest line',
-        'A meme that screams “them”',
-        'Voice note saying hi',
-        'Their favorite coffee'
-    ];
-
-    var CHARMS = [
-        'Lucky pink stone',
-        'Gold thread bracelet',
-        'Pink rose petal in wallet',
-        'Spritz of vanilla perfume',
-        'Smile + eye contact',
-        'Wear something maroon',
-        'Talk to them on a Friday',
-        'Carry their favorite scent',
-        'Send a midnight “hi”',
-        'Use their name in a compliment',
-        'Listen — really listen',
-        'Wear a confident outfit'
-    ];
-
-    var WORDS = ['Patience','Confidence','Soft Eyes','Calm','Curiosity','Honesty','Mystery','Lightness','Warmth','Charm','Listen','Smile'];
-
-    var DAYS_LIST = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
-    var TIMES = ['Morning ☀️','Afternoon 🌤','Sunset 🌇','Evening 🌙','Midnight 🌌'];
-
-    function getHints(score, n1, n2) {
-        if (score >= 70) return [
-            { i: '👁', t: 'Eye Contact Magic', d: 'Hold a 3-second glance once. That single look says everything words can’t.' },
-            { i: '🗒', t: 'Drop A Subtle Hint', d: 'Compliment one specific thing about them — not generic. Specific = real.' },
-            { i: '🌃', t: 'Plan Quality Time', d: 'Invite them to one chill hangout. Real love grows in low-pressure moments.' },
-            { i: '🔓', t: 'Show A Real Side', d: 'Share one thing nobody else knows. Vulnerability fast-forwards trust.' }
-        ];
-        if (score >= 40) return [
-            { i: '🤝', t: 'Be A Good Friend First', d: 'Friendship is the safest bridge to romance. Skip the rush.' },
-            { i: '🎯', t: 'Find Common Ground', d: 'Discover one thing you both love and turn it into a shared ritual.' },
-            { i: '📞', t: 'Stay Lightly In Touch', d: 'Two thoughtful messages a week beats 20 random ones.' },
-            { i: '🌱', t: 'Let It Breathe', d: 'Pressure kills crush energy. Be calm, kind, and curious.' }
-        ];
-        return [
-            { i: '🪞', t: 'Self First', d: 'A confident, happy you is the biggest attraction multiplier.' },
-            { i: '🚪', t: 'Don’t Force It', d: 'Some doors aren’t closed forever — they’re closed for now.' },
-            { i: '🛤', t: 'Stay Open', d: 'The right person often arrives when you stop chasing the wrong one.' },
-            { i: '✨', t: 'Be Mysterious', d: 'Reveal slowly. People crave what they cannot fully read.' }
-        ];
+    var HINTS_DATA = {
+        en: {
+            high: [
+                { i: '👁', t: 'Eye Contact Magic', d: 'Hold a 3-second glance once. That single look says everything words can’t.' },
+                { i: '🗒', t: 'Drop A Subtle Hint', d: 'Compliment one specific thing about them — not generic. Specific = real.' },
+                { i: '🌃', t: 'Plan Quality Time', d: 'Invite them to one chill hangout. Real love grows in low-pressure moments.' },
+                { i: '🔓', t: 'Show A Real Side', d: 'Share one thing nobody else knows. Vulnerability fast-forwards trust.' }
+            ],
+            mid: [
+                { i: '🤝', t: 'Be A Good Friend First', d: 'Friendship is the safest bridge to romance. Skip the rush.' },
+                { i: '🎯', t: 'Find Common Ground', d: 'Discover one thing you both love and turn it into a shared ritual.' },
+                { i: '📞', t: 'Stay Lightly In Touch', d: 'Two thoughtful messages a week beats 20 random ones.' },
+                { i: '🌱', t: 'Let It Breathe', d: 'Pressure kills crush energy. Be calm, kind, and curious.' }
+            ],
+            low: [
+                { i: '🪞', t: 'Self First', d: 'A confident, happy you is the biggest attraction multiplier.' },
+                { i: '🚪', t: 'Don’t Force It', d: 'Some doors aren’t closed forever — they’re closed for now.' },
+                { i: '🛤', t: 'Stay Open', d: 'The right person often arrives when you stop chasing the wrong one.' },
+                { i: '✨', t: 'Be Mysterious', d: 'Reveal slowly. People crave what they cannot fully read.' }
+            ]
+        },
+        hi: {
+            high: [
+                { i: '👁', t: 'नज़र का जादू', d: 'एक बार 3 सेकंड की नज़र थामें। यह एक नज़र वो सब कह जाती है जो शब्द नहीं कह सकते।' },
+                { i: '🗒', t: 'हल्का संकेत दें', d: 'उनकी एक ख़ास चीज़ की तारीफ़ करें — आम नहीं, ख़ास। ख़ास = असली।' },
+                { i: '🌃', t: 'क्वालिटी टाइम', d: 'एक हल्का-फुल्का मिलना तय करें। असली प्यार बिना दबाव के बढ़ता है।' },
+                { i: '🔓', t: 'अपनी असली सतह', d: 'एक बात जो किसी को नहीं पता, उनसे साझा करें। यह भरोसा तेज़ बनाता है।' }
+            ],
+            mid: [
+                { i: '🤝', t: 'पहले अच्छे दोस्त', d: 'दोस्ती ही रोमांस का सबसे सुरक्षित पुल है। जल्दबाज़ी छोड़ें।' },
+                { i: '🎯', t: 'साझा रुचि', d: 'एक चीज़ ढूँढें जो दोनों को पसंद हो, उसे अपना रिवाज बना लें।' },
+                { i: '📞', t: 'हल्का संपर्क', d: 'हफ़्ते में दो सोच-समझकर भेजे संदेश 20 रैंडम से बेहतर हैं।' },
+                { i: '🌱', t: 'साँस लेने दें', d: 'दबाव क्रश की ऊर्जा को मार देता है। शांत, दयालु और जिज्ञासु रहें।' }
+            ],
+            low: [
+                { i: '🪞', t: 'पहले ख़ुद', d: 'आत्मविश्वासी, ख़ुश आप ही सबसे बड़ा आकर्षण हैं।' },
+                { i: '🚪', t: 'ज़ोर न लगाएँ', d: 'कुछ दरवाज़े हमेशा के लिए बंद नहीं — अभी के लिए बंद हैं।' },
+                { i: '🛤', t: 'खुले रहें', d: 'सही इंसान अक्सर तब आता है जब आप ग़लत के पीछे भागना बंद करते हैं।' },
+                { i: '✨', t: 'रहस्यमय रहें', d: 'धीरे-धीरे खुलें। जो पूरी तरह न पढ़ा जा सके, लोगों को वही चाहिए।' }
+            ]
+        }
+    };
+    function getHints(score, n1, n2, lang) {
+        lang = lang || CC.lang;
+        var H = HINTS_DATA[lang] || HINTS_DATA.en;
+        if (score >= 70) return H.high;
+        if (score >= 40) return H.mid;
+        return H.low;
     }
 
-    function getAdvice(score, n1, n2) {
+    function getAdvice(score, n1, n2, lang) {
+        lang = lang || CC.lang;
+        if (lang === 'hi') {
+            if (score >= 70) return {
+                text: n1 + ' और ' + n2 + ', ब्रह्मांड संकेत दे रहा है — ध्यान दें। असली, बिना दबाव और आत्मविश्वासी रहें। हरी झंडी दिखे तो धीरे-धीरे क़दम बढ़ाएँ। सही पल पर सही क़दम सब कुछ बदल देता है।',
+                tags: ['गहरी चिंगारी','क़दम बढ़ाएँ','आत्मविश्वासी ऊर्जा','कॉस्मिक हाँ']
+            };
+            if (score >= 40) return {
+                text: n1 + ' और ' + n2 + ', ऊर्जा गर्म है पर अभी बन रही है। पहले आराम, फिर रोमांस। वो दोस्त बनें जो सुनता है। क्रश आमतौर पर छोटे-छोटे लगातार पलों से प्यार बनते हैं — भव्य इशारों से नहीं।',
+                tags: ['धीमी शुरुआत','दोस्ती पहले','धैर्य रखें','संकेत देखें']
+            };
+            return {
+                text: n1 + ' और ' + n2 + ', हर क्रश प्रेम-कहानी नहीं बनता — और यह बिल्कुल ठीक है। कभी-कभी सही क़दम है महसूस करना, सीखना और आगे बढ़ना। सही इंसान आपकी ऊर्जा से अपने आप मेल खाएगा।',
+                tags: ['ठीक हों + बढ़ें','आत्म-प्रेम','खुला दिल','सही साथी आएगा']
+            };
+        }
         if (score >= 70) return {
             text: n1 + ' & ' + n2 + ', the universe is dropping hints — pay attention. Stay genuine, low-pressure, and confident. If you sense a green signal, lean in gently. The right move at the right moment can change everything.',
             tags: ['Strong Spark','Make A Move','Confident Energy','Cosmic Yes']
@@ -648,17 +725,32 @@ function ccp_render_crush_calculator( $atts = array() ) {
         };
     }
 
-    function getSoulmate(score) {
+    function getSoulmate(score, lang) {
+        lang = lang || CC.lang;
+        if (lang === 'hi') {
+            if (score >= 88) return { status: '👑 कॉस्मिक सोलमेट जोड़ी', future: 'अगर दोनों साथ चलने का चयन करें, तो यह जुड़ाव दशकों तक चल सकता है। विवाह, गहरी दोस्ती और जीवनभर का साथ — सब संभव है।' };
+            if (score >= 70) return { status: '🔥 मज़बूत भावी मेल',     future: 'मेहनत और ईमानदार संवाद के साथ रिश्ता लंबा चल सकता है। लंबे समय का प्यार बहुत संभव है।' };
+            if (score >= 50) return { status: '💞 संभावित भावी बंधन',   future: 'असली संभावना है — पर अगले 6-12 महीने निर्णायक होंगे। भरोसा बनाएँ, और समय को परीक्षा करने दें।' };
+            if (score >= 30) return { status: '🌱 धीमी आँच का रिश्ता',   future: 'अभी हमेशा का मेल नहीं — पर एक सार्थक अध्याय है। कुछ धीमे जुड़ाव बाद में सबको चौंकाते हैं।' };
+            return { status: '🤝 दोस्त के तौर पर बेहतर', future: 'रोमांटिक भविष्य अभी कम संभव लगता है, पर एक शानदार दोस्ती मुमकिन है। कभी-कभी यही असली तोहफ़ा है।' };
+        }
         if (score >= 88) return { status: '👑 Cosmic Soulmate Pair', future: 'If both choose to walk together, this connection has the potential to last decades. Marriage, deep friendship, and lifelong support — all on the table.' };
         if (score >= 70) return { status: '🔥 Strong Future Match',  future: 'The relationship could go the distance with effort and honest communication. Long-term love is very possible.' };
         if (score >= 50) return { status: '💞 Possible Future Bond',  future: 'There is real potential — but the next 6 to 12 months will decide. Build trust, share more, and let time test the bond.' };
         if (score >= 30) return { status: '🌱 Slow Burn Connection',  future: 'Not a forever match yet — but a meaningful chapter. Some of these slow connections surprise everyone later.' };
-        return { status: '🤝 Better As Friends',                       future: 'A romantic future seems unlikely right now, but a great friendship is possible. Sometimes that is the real gift.' };
+        return { status: '🤝 Better As Friends', future: 'A romantic future seems unlikely right now, but a great friendship is possible. Sometimes that is the real gift.' };
     }
 
-    function getHoroscopeText(score, a, b) {
-        if (score === null) return 'Add both zodiac signs to see your full horoscope compatibility reading.';
+    function getHoroscopeText(score, a, b, lang) {
+        lang = lang || CC.lang;
+        if (score === null) return (T[lang] && T[lang].horo_hint) || T.en.horo_hint;
         var sa = labelOf(a), sb = labelOf(b);
+        if (lang === 'hi') {
+            if (score >= 85) return sa + ' और ' + sb + ' के बीच विद्युत-तेज़ और गहरी सामंजस्यपूर्ण ऊर्जा है। संवाद बहता है, भाव मिलते हैं, मतभेद जल्दी सुलझते हैं। एक धन्य जोड़ी।';
+            if (score >= 70) return sa + ' और ' + sb + ' में स्वाभाविक केमिस्ट्री और साझा मूल्य हैं। मेहनत के साथ यह कुछ ठोस और सार्थक बन सकता है।';
+            if (score >= 60) return sa + ' और ' + sb + ' ऊपर से अलग लगते हैं, पर अगर धैर्य और जिज्ञासा रहे तो बहुत सुंदर पूरक बन सकते हैं।';
+            return sa + ' और ' + sb + ' का ज्योतिषीय मेल थोड़ा कठिन है। असली मेहनत, ईमानदारी और परस्पर सम्मान चाहिए होगा।';
+        }
         if (score >= 85) return sa + ' and ' + sb + ' share an electric, deeply harmonious cosmic energy. Communication flows, emotions align, and conflicts resolve quickly. A blessed pairing.';
         if (score >= 70) return sa + ' and ' + sb + ' have natural chemistry and shared values. With effort, this can grow into something solid and meaningful.';
         if (score >= 60) return sa + ' and ' + sb + ' are different on the surface but can complement each other beautifully if both stay patient and curious.';
@@ -666,44 +758,43 @@ function ccp_render_crush_calculator( $atts = array() ) {
     }
 
     function labelOf(key) {
-        for (var i=0; i<ZODIACS.length; i++) if (ZODIACS[i][0] === key) return ZODIACS[i][1];
-        return '—';
+        var labels = ZODIAC_LABELS[CC.lang] || ZODIAC_LABELS.en;
+        return labels[key] || '—';
     }
 
     function pickFromList(seed, list) { return list[seed % list.length]; }
 
-    function buildPredictions(n1, n2, score) {
+    function buildPredictions(n1, n2, score, lang) {
+        lang = lang || CC.lang;
+        var P = POOLS[lang] || POOLS.en;
         var seed = seedFor(n1 + '|' + n2);
         return {
             emoji: pickFromList(seed, EMOJI_POOL),
-            date:  pickFromList(seed >> 1, DATE_IDEAS),
-            song:  pickFromList(seed >> 2, SONGS),
-            day:   pickFromList(seed >> 3, DAYS_LIST),
-            gift:  pickFromList(seed >> 4, GIFTS),
-            charm: pickFromList(seed >> 5, CHARMS),
-            word:  pickFromList(seed >> 6, WORDS),
-            time:  pickFromList(seed >> 7, TIMES)
+            date:  pickFromList(seed >> 1, P.DATE_IDEAS),
+            song:  pickFromList(seed >> 2, P.SONGS),
+            day:   pickFromList(seed >> 3, P.DAYS),
+            gift:  pickFromList(seed >> 4, P.GIFTS),
+            charm: pickFromList(seed >> 5, P.CHARMS),
+            word:  pickFromList(seed >> 6, P.WORDS),
+            time:  pickFromList(seed >> 7, P.TIMES)
         };
     }
 
-    var loadSteps = [
-        '🔍 Reading the energy between you...',
-        '🌌 Checking horoscope alignment...',
-        '✨ Decoding crush signals...',
-        '💖 Drafting your reading...'
-    ];
+    function getLoadSteps() { return (T[CC.lang] && T[CC.lang].load) || T.en.load; }
 
     function runLoading(callback) {
         var stepEl = CC.$('cc-load-step');
         var barEl  = CC.$('cc-progress-bar');
+        var steps = getLoadSteps();
         var i = 0;
-        stepEl.textContent = loadSteps[0];
+        stepEl.textContent = steps[0];
         barEl.style.width = '8%';
         var interval = setInterval(function(){
             i++;
-            if (i < loadSteps.length) {
+            steps = getLoadSteps();
+            if (i < steps.length) {
                 stepEl.style.opacity = '0';
-                setTimeout(function(){ stepEl.textContent = loadSteps[i]; stepEl.style.opacity = '1'; }, 200);
+                setTimeout(function(){ stepEl.textContent = steps[i]; stepEl.style.opacity = '1'; }, 200);
                 barEl.style.width = ((i+1) * 25) + '%';
             } else {
                 clearInterval(interval);
@@ -741,50 +832,28 @@ function ccp_render_crush_calculator( $atts = array() ) {
         setTimeout(function(){ box.remove(); }, 4200);
     }
 
-    function showResult() {
+    function renderResultContent() {
         var n1 = CC.nameA, n2 = CC.nameB;
+        if (!CC.score || !n1 || !n2) return;
+        var lang = CC.lang;
+        var tt = T[lang] || T.en;
         var zo = zodiacCompat(CC.zoA, CC.zoB);
-        var score = calcCrush(n1, n2, zo);
-        var metrics = calcMetrics(n1, n2, score);
-        var level = getLevel(score);
-        var desc = getDescription(score, n1, n2);
-        var hints = getHints(score, n1, n2);
-        var advice = getAdvice(score, n1, n2);
-        var preds = buildPredictions(n1, n2, score);
-        var soul = getSoulmate(score);
-        var horoText = getHoroscopeText(zo, CC.zoA, CC.zoB);
-        var verdict = getVerdict(score);
+        var level = getLevel(CC.score, lang);
+        var desc  = getDescription(CC.score, n1, n2, lang);
+        var hints = getHints(CC.score, n1, n2, lang);
+        var advice = getAdvice(CC.score, n1, n2, lang);
+        var preds = buildPredictions(n1, n2, CC.score, lang);
+        var soul = getSoulmate(CC.score, lang);
+        var horoText = getHoroscopeText(zo, CC.zoA, CC.zoB, lang);
+        var verdict = getVerdict(CC.score, lang);
 
         CC.$('cc-rc-n-a').textContent = n1;
         CC.$('cc-rc-n-b').textContent = n2;
         CC.$('cc-rc-av-a').textContent = n1.charAt(0).toUpperCase();
         CC.$('cc-rc-av-b').textContent = n2.charAt(0).toUpperCase();
-
         CC.$('cc-level').textContent = level.emoji + ' ' + level.name;
         CC.$('cc-desc').textContent  = desc;
         CC.$('cc-verdict').textContent = verdict;
-
-        elLoading.classList.remove('cc-show');
-        elLoading.style.display = 'none';
-        elResult.classList.add('cc-show');
-
-        animateNum(CC.$('cc-pct'), 0, score, 1800);
-
-        var circ = 2 * Math.PI * 86;
-        setTimeout(function(){
-            CC.$('cc-ring-fg').style.strokeDashoffset = circ - (circ * score / 100);
-        }, 80);
-
-        setTimeout(function(){
-            CC.$('cc-b1').style.width = metrics.attr + '%';
-            CC.$('cc-b2').style.width = metrics.vibe + '%';
-            CC.$('cc-b3').style.width = metrics.chem + '%';
-            CC.$('cc-b4').style.width = metrics.lt + '%';
-            CC.$('cc-b1-v').textContent = metrics.attr + '%';
-            CC.$('cc-b2-v').textContent = metrics.vibe + '%';
-            CC.$('cc-b3-v').textContent = metrics.chem + '%';
-            CC.$('cc-b4-v').textContent = metrics.lt + '%';
-        }, 220);
 
         CC.$('cc-pe').textContent  = preds.emoji;
         CC.$('cc-pev').textContent = preds.emoji + '  ' + level.name;
@@ -796,20 +865,17 @@ function ccp_render_crush_calculator( $atts = array() ) {
         CC.$('cc-pwv').textContent = preds.word;
         CC.$('cc-ptv').textContent = preds.time;
 
-        // Horoscope
-        CC.$('cc-zo-a-disp').textContent = CC.zoA ? labelOf(CC.zoA) : 'You';
-        CC.$('cc-zo-b-disp').textContent = CC.zoB ? labelOf(CC.zoB) : 'Crush';
+        CC.$('cc-zo-a-disp').textContent = CC.zoA ? labelOf(CC.zoA) : tt.you;
+        CC.$('cc-zo-b-disp').textContent = CC.zoB ? labelOf(CC.zoB) : tt.crush;
         var horoScore = zo === null ? 0 : zo;
-        setTimeout(function(){ CC.$('cc-horo-fill').style.width = horoScore + '%'; }, 250);
+        CC.$('cc-horo-fill').style.width = horoScore + '%';
         CC.$('cc-horo-val').textContent = horoScore + '%';
         CC.$('cc-horo-text').textContent = horoText;
 
-        // Soulmate
         CC.$('cc-soul-status').textContent = soul.status;
         CC.$('cc-soul-future').textContent = soul.future;
 
-        // Hints
-        CC.$('cc-hints-title').innerHTML = '⭐ Golden Hints for ' + escapeHtml(n1) + ' &amp; ' + escapeHtml(n2);
+        CC.$('cc-hints-title').innerHTML = '⭐ ' + escapeHtml(tt.hints_h) + ' ' + escapeHtml(n1) + ' &amp; ' + escapeHtml(n2);
         var grid = CC.$('cc-hints-grid');
         grid.innerHTML = '';
         for (var hi=0; hi<hints.length; hi++) {
@@ -822,10 +888,6 @@ function ccp_render_crush_calculator( $atts = array() ) {
             grid.appendChild(card);
         }
 
-        var predEls = document.querySelectorAll('#cc-wrap .cc-pred');
-        for (var pi=0; pi<predEls.length; pi++) predEls[pi].style.animationDelay = (pi * 0.07) + 's';
-
-        // Advice
         CC.$('cc-advice-text').textContent = advice.text;
         var tagsBox = CC.$('cc-tags');
         tagsBox.innerHTML = '';
@@ -836,7 +898,40 @@ function ccp_render_crush_calculator( $atts = array() ) {
             tagsBox.appendChild(tag);
         }
 
-        setupShare(n1, n2, score, level.name);
+        setupShare(n1, n2, CC.score, level.name);
+    }
+
+    function showResult() {
+        var n1 = CC.nameA, n2 = CC.nameB;
+        var zo = zodiacCompat(CC.zoA, CC.zoB);
+        var score = calcCrush(n1, n2, zo);
+        var metrics = calcMetrics(n1, n2, score);
+        CC.score = score;
+
+        elLoading.classList.remove('cc-show');
+        elLoading.style.display = 'none';
+        elResult.classList.add('cc-show');
+
+        renderResultContent();
+
+        animateNum(CC.$('cc-pct'), 0, score, 1800);
+
+        var circ = 2 * Math.PI * 86;
+        setTimeout(function(){ CC.$('cc-ring-fg').style.strokeDashoffset = circ - (circ * score / 100); }, 80);
+
+        setTimeout(function(){
+            CC.$('cc-b1').style.width = metrics.attr + '%';
+            CC.$('cc-b2').style.width = metrics.vibe + '%';
+            CC.$('cc-b3').style.width = metrics.chem + '%';
+            CC.$('cc-b4').style.width = metrics.lt + '%';
+            CC.$('cc-b1-v').textContent = metrics.attr + '%';
+            CC.$('cc-b2-v').textContent = metrics.vibe + '%';
+            CC.$('cc-b3-v').textContent = metrics.chem + '%';
+            CC.$('cc-b4-v').textContent = metrics.lt + '%';
+        }, 220);
+
+        var predEls = document.querySelectorAll('#cc-wrap .cc-pred');
+        for (var pi=0; pi<predEls.length; pi++) predEls[pi].style.animationDelay = (pi * 0.07) + 's';
 
         if (score >= 70) setTimeout(confetti, 600);
 
@@ -883,8 +978,9 @@ function ccp_render_crush_calculator( $atts = array() ) {
     elCalcBtn.addEventListener('click', function(){
         var n1 = (elNameA.value || '').trim();
         var n2 = (elNameB.value || '').trim();
-        if (!n1 || !n2) { elError.textContent = 'Please enter both names to continue.'; elError.classList.add('cc-show'); return; }
-        if (n1.length < 2 || n2.length < 2) { elError.textContent = 'Names should be at least 2 characters.'; elError.classList.add('cc-show'); return; }
+        var tt = T[CC.lang] || T.en;
+        if (!n1 || !n2) { elError.textContent = tt.err_empty; elError.classList.add('cc-show'); return; }
+        if (n1.length < 2 || n2.length < 2) { elError.textContent = tt.err_short; elError.classList.add('cc-show'); return; }
         elError.classList.remove('cc-show');
         CC.nameA = n1; CC.nameB = n2;
         CC.zoA = CC.$('cc-zo-a').value;
@@ -915,18 +1011,17 @@ function ccp_render_crush_calculator( $atts = array() ) {
         setTimeout(function(){ elNameA.focus(); }, 400);
     });
 
-    var faqs = document.querySelectorAll('#cc-wrap .cc-faq-item');
-    faqs.forEach(function(item){
-        var q = item.querySelector('.cc-faq-q');
-        q.addEventListener('click', function(){ item.classList.toggle('cc-open'); });
-    });
-
     var counterEl = CC.$('cc-counter');
     var count = 312940;
     setInterval(function(){
         count += 1 + Math.floor(Math.random()*3);
         counterEl.textContent = count.toLocaleString('en-IN');
     }, 8000);
+
+    try {
+        var lg = (navigator.language || navigator.userLanguage || 'en').toLowerCase();
+        if (lg.indexOf('hi') === 0) applyLang('hi'); else applyLang('en');
+    } catch (e) { applyLang('en'); }
 })();
 </script>
     <?php

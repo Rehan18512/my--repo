@@ -2,8 +2,8 @@
 /**
  * Plugin Name: Cosmic Calculators Pro - Friendship, Mulank & Crush
  * Plugin URI:  https://cosmiccalculators.in
- * Description: Three premium calculators in one plugin: Friendship Calculator (by name), Mulank/Bhagyank Numerology Calculator (by birthdate), and Crush Calculator. Animated, SEO-optimized, golden hints, personalized advice, career/pet/song predictions, horoscope &amp; soulmate insights. Shortcodes: [friendship_calculator] [mulank_calculator] [crush_calculator]
- * Version:     1.0.0
+ * Description: Three premium bilingual (English + हिंदी) calculators in one plugin: Friendship Calculator (by name), Mulank/Bhagyank Numerology Calculator (by birthdate), and Crush Calculator. Animated, SEO-optimized, golden hints, personalized advice, career/pet/song predictions, horoscope &amp; soulmate insights, language toggle. Shortcodes: [friendship_calculator] [mulank_calculator] [crush_calculator]
+ * Version:     1.1.0
  * Author:      Cosmic Calculators
  * Author URI:  https://cosmiccalculators.in
  * License:     GPL-2.0+
@@ -17,7 +17,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-define( 'CCP_VERSION', '1.0.0' );
+define( 'CCP_VERSION', '1.1.0' );
 define( 'CCP_PATH', plugin_dir_path( __FILE__ ) );
 define( 'CCP_URL', plugin_dir_url( __FILE__ ) );
 

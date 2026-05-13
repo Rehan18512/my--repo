@@ -6,7 +6,7 @@
  * Outputs: Mulank (1-9), Bhagyank (1-9), ruling planet, personality,
  *   lucky color/day/number/gemstone, career fields, compatible numbers
  *   for friendship, love, business; health insights, famous personalities,
- *   remedies, golden hints, advice, share, FAQ + JSON-LD.
+ *   remedies, golden hints, advice, share, Hindi+English bilingual mode, JSON-LD schema.
  */
 
 if ( ! defined( 'ABSPATH' ) ) { exit; }
@@ -154,15 +154,10 @@ function ccp_render_mulank_calculator( $atts = array() ) {
         .mc-n9-num { font-family: 'Poppins', sans-serif; font-weight: 800; color: #1F1933; font-size: 22px; }
         .mc-n9-pl { font-size: 11px; color: #6B5E85; text-transform: uppercase; letter-spacing: 0.06em; }
 
-        /* FAQ */
-        .mc-faq { margin-top: 24px; }
-        .mc-faq h2 { font-size: 24px; color: #2E1065; margin-bottom: 12px; }
-        .mc-faq-item { background: #fff; border-radius: 14px; margin-bottom: 10px; box-shadow: 0 8px 20px rgba(0,0,0,0.05); border: 1px solid #EEE8FB; overflow: hidden; }
-        .mc-faq-q { width: 100%; min-height: 56px; padding: 16px 18px; background: #fff; border: none; text-align: left; font-size: 15.5px; font-weight: 700; font-family: 'Poppins', sans-serif; color: #1F1933; cursor: pointer; display: flex; justify-content: space-between; align-items: center; gap: 10px; }
-        .mc-faq-q::after { content: "+"; font-size: 24px; font-weight: 400; color: #7C3AED; transition: transform .25s; }
-        .mc-faq-item.mc-open .mc-faq-q::after { transform: rotate(45deg); }
-        .mc-faq-a { padding: 0 18px; max-height: 0; overflow: hidden; transition: max-height .35s ease, padding .35s ease; color: #5B5070; font-size: 14.5px; }
-        .mc-faq-item.mc-open .mc-faq-a { padding: 0 18px 18px; max-height: 700px; }
+        /* Language toggle */
+        .mc-lang { display: inline-flex; gap: 4px; background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.22); border-radius: 999px; padding: 4px; margin-top: 14px; position: relative; z-index: 1; }
+        .mc-lang-btn { background: transparent; color: #fff; border: none; padding: 7px 16px; font-size: 13px; font-weight: 700; font-family: 'Poppins', sans-serif; border-radius: 999px; cursor: pointer; transition: background .2s, color .2s; min-height: 34px; }
+        .mc-lang-btn.mc-lang-active { background: #FBBF24; color: #1F1933; box-shadow: 0 6px 14px rgba(245,158,11,0.35); }
 
         @keyframes mc-pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.08); } }
         @keyframes mc-bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
@@ -191,24 +186,28 @@ function ccp_render_mulank_calculator( $atts = array() ) {
 
     <header class="mc-header">
         <div class="mc-header-icon">&#128302;</div>
-        <h1>Mulank &amp; Bhagyank Calculator</h1>
-        <p class="mc-header-sub">Discover your Numerology Root Number (Mulank) &amp; Destiny Number (Bhagyank) with ruling planet, lucky days, gemstones, career, compatibility &amp; remedies.</p>
+        <h1 data-i18n="title">Mulank &amp; Bhagyank Calculator</h1>
+        <p class="mc-header-sub" data-i18n="sub">Discover your Numerology Root Number (Mulank) &amp; Destiny Number (Bhagyank) with ruling planet, lucky days, gemstones, career, compatibility &amp; remedies.</p>
         <div class="mc-stats">
-            <div class="mc-stat"><div class="mc-stat-num" id="mc-counter">1,89,652</div><div class="mc-stat-lbl">Readings Today</div></div>
-            <div class="mc-stat"><div class="mc-stat-num">4.9&#9733;</div><div class="mc-stat-lbl">Rating</div></div>
-            <div class="mc-stat"><div class="mc-stat-num">100%</div><div class="mc-stat-lbl">Free</div></div>
+            <div class="mc-stat"><div class="mc-stat-num" id="mc-counter">1,89,652</div><div class="mc-stat-lbl" data-i18n="tests">Readings Today</div></div>
+            <div class="mc-stat"><div class="mc-stat-num">4.9&#9733;</div><div class="mc-stat-lbl" data-i18n="rating">Rating</div></div>
+            <div class="mc-stat"><div class="mc-stat-num">100%</div><div class="mc-stat-lbl" data-i18n="free">Free</div></div>
+        </div>
+        <div class="mc-lang" role="group" aria-label="Language">
+            <button type="button" class="mc-lang-btn mc-lang-active" data-lang="en">English</button>
+            <button type="button" class="mc-lang-btn" data-lang="hi">हिंदी</button>
         </div>
     </header>
 
     <section class="mc-card">
         <div class="mc-input-phase" id="mc-input-phase">
             <div class="mc-field mc-name-row" style="grid-column: 1 / -1;">
-                <label class="mc-label" for="mc-name">Your Name (optional)</label>
+                <label class="mc-label" for="mc-name" data-i18n="lbl_name">Your Name (optional)</label>
                 <input type="text" id="mc-name" class="mc-input" placeholder="e.g. Rahul Sharma" maxlength="40" autocomplete="off" />
             </div>
             <div class="mc-fields" style="margin-top: 14px;">
                 <div class="mc-field">
-                    <label class="mc-label">Date of Birth</label>
+                    <label class="mc-label" data-i18n="lbl_dob">Date of Birth</label>
                     <div class="mc-dob">
                         <select id="mc-day" class="mc-select" aria-label="Day"></select>
                         <select id="mc-month" class="mc-select" aria-label="Month"></select>
@@ -216,22 +215,22 @@ function ccp_render_mulank_calculator( $atts = array() ) {
                     </div>
                 </div>
                 <div class="mc-field">
-                    <label class="mc-label" for="mc-gender">Gender (optional)</label>
+                    <label class="mc-label" for="mc-gender" data-i18n="lbl_gender">Gender (optional)</label>
                     <select id="mc-gender" class="mc-select">
-                        <option value="">Prefer not to say</option>
-                        <option value="m">Male</option>
-                        <option value="f">Female</option>
-                        <option value="o">Other</option>
+                        <option value="" data-i18n="g_none">Prefer not to say</option>
+                        <option value="m" data-i18n="g_m">Male</option>
+                        <option value="f" data-i18n="g_f">Female</option>
+                        <option value="o" data-i18n="g_o">Other</option>
                     </select>
                 </div>
             </div>
-            <div class="mc-error" id="mc-error">Please select your full date of birth.</div>
-            <button type="button" class="mc-btn mc-btn-primary" id="mc-calc-btn">Reveal My Numbers &#128302;</button>
+            <div class="mc-error" id="mc-error" data-i18n="err_dob">Please select your full date of birth.</div>
+            <button type="button" class="mc-btn mc-btn-primary" id="mc-calc-btn" data-i18n="calc_btn">Reveal My Numbers &#128302;</button>
             <div class="mc-trust">
-                <span>&#128274; 100% Private</span>
-                <span>&#9889; Instant Reading</span>
-                <span>&#127942; Vedic + Western</span>
-                <span>&#128241; Mobile Friendly</span>
+                <span data-i18n="t_private">&#128274; 100% Private</span>
+                <span data-i18n="t_instant">&#9889; Instant Reading</span>
+                <span data-i18n="t_vedic">&#127942; Vedic + Western</span>
+                <span data-i18n="t_mobile">&#128241; Mobile Friendly</span>
             </div>
         </div>
 
@@ -249,8 +248,8 @@ function ccp_render_mulank_calculator( $atts = array() ) {
         <div class="mc-result" id="mc-result">
             <div class="mc-result-card">
                 <div class="mc-numbers">
-                    <div class="mc-num-box"><div class="mc-num-lbl">Mulank</div><div class="mc-num-val" id="mc-mulank-v">0</div><div class="mc-num-sub">Root Number</div></div>
-                    <div class="mc-num-box"><div class="mc-num-lbl">Bhagyank</div><div class="mc-num-val" id="mc-bhagyank-v">0</div><div class="mc-num-sub">Destiny Number</div></div>
+                    <div class="mc-num-box"><div class="mc-num-lbl" data-i18n="mulank">Mulank</div><div class="mc-num-val" id="mc-mulank-v">0</div><div class="mc-num-sub" data-i18n="mulank_sub">Root Number</div></div>
+                    <div class="mc-num-box"><div class="mc-num-lbl" data-i18n="bhagyank">Bhagyank</div><div class="mc-num-val" id="mc-bhagyank-v">0</div><div class="mc-num-sub" data-i18n="bhagyank_sub">Destiny Number</div></div>
                 </div>
                 <div class="mc-planet" id="mc-planet">&#127773; Planet</div>
                 <p class="mc-rc-desc" id="mc-rc-desc">Your numerology profile is being cast...</p>
@@ -260,27 +259,27 @@ function ccp_render_mulank_calculator( $atts = array() ) {
 
             <!-- Info grid -->
             <div class="mc-info">
-                <div class="mc-info-card"><div class="mc-info-ic">&#127912;</div><h4>Lucky Color</h4><div class="mc-color-row"><span class="mc-color-sw" id="mc-color-sw"></span><span class="mc-info-val" id="mc-color-v">--</span></div></div>
-                <div class="mc-info-card"><div class="mc-info-ic">&#128197;</div><h4>Lucky Day</h4><div class="mc-info-val" id="mc-day-v">--</div></div>
-                <div class="mc-info-card"><div class="mc-info-ic">&#128142;</div><h4>Lucky Gemstone</h4><div class="mc-info-val" id="mc-gem-v">--</div></div>
-                <div class="mc-info-card"><div class="mc-info-ic">&#127815;</div><h4>Lucky Numbers</h4><div class="mc-info-val" id="mc-numbers-v">--</div></div>
-                <div class="mc-info-card"><div class="mc-info-ic">&#128276;</div><h4>Lucky Metal</h4><div class="mc-info-val" id="mc-metal-v">--</div></div>
-                <div class="mc-info-card"><div class="mc-info-ic">&#127757;</div><h4>Lucky Direction</h4><div class="mc-info-val" id="mc-dir-v">--</div></div>
+                <div class="mc-info-card"><div class="mc-info-ic">&#127912;</div><h4 data-i18n="i_color">Lucky Color</h4><div class="mc-color-row"><span class="mc-color-sw" id="mc-color-sw"></span><span class="mc-info-val" id="mc-color-v">--</span></div></div>
+                <div class="mc-info-card"><div class="mc-info-ic">&#128197;</div><h4 data-i18n="i_day">Lucky Day</h4><div class="mc-info-val" id="mc-day-v">--</div></div>
+                <div class="mc-info-card"><div class="mc-info-ic">&#128142;</div><h4 data-i18n="i_gem">Lucky Gemstone</h4><div class="mc-info-val" id="mc-gem-v">--</div></div>
+                <div class="mc-info-card"><div class="mc-info-ic">&#127815;</div><h4 data-i18n="i_nums">Lucky Numbers</h4><div class="mc-info-val" id="mc-numbers-v">--</div></div>
+                <div class="mc-info-card"><div class="mc-info-ic">&#128276;</div><h4 data-i18n="i_metal">Lucky Metal</h4><div class="mc-info-val" id="mc-metal-v">--</div></div>
+                <div class="mc-info-card"><div class="mc-info-ic">&#127757;</div><h4 data-i18n="i_dir">Lucky Direction</h4><div class="mc-info-val" id="mc-dir-v">--</div></div>
             </div>
 
             <!-- Compatibility -->
             <div class="mc-compat">
-                <h3>&#128279; Number Compatibility</h3>
+                <h3 data-i18n="compat_h">&#128279; Number Compatibility</h3>
                 <div class="mc-compat-grid">
-                    <div class="mc-compat-box"><h4>Best Friends</h4><div class="mc-compat-nums" id="mc-cf-v">--</div></div>
-                    <div class="mc-compat-box"><h4>Love Match</h4><div class="mc-compat-nums" id="mc-cl-v">--</div></div>
-                    <div class="mc-compat-box"><h4>Business Partners</h4><div class="mc-compat-nums" id="mc-cb-v">--</div></div>
+                    <div class="mc-compat-box"><h4 data-i18n="c_friends">Best Friends</h4><div class="mc-compat-nums" id="mc-cf-v">--</div></div>
+                    <div class="mc-compat-box"><h4 data-i18n="c_love">Love Match</h4><div class="mc-compat-nums" id="mc-cl-v">--</div></div>
+                    <div class="mc-compat-box"><h4 data-i18n="c_biz">Business Partners</h4><div class="mc-compat-nums" id="mc-cb-v">--</div></div>
                 </div>
             </div>
 
             <!-- Career -->
             <div class="mc-career">
-                <h3>&#128188; Career Paths That Suit You</h3>
+                <h3 data-i18n="career_h">&#128188; Career Paths That Suit You</h3>
                 <div class="mc-career-list" id="mc-career-list"></div>
             </div>
 
@@ -292,30 +291,30 @@ function ccp_render_mulank_calculator( $atts = array() ) {
 
             <!-- Famous -->
             <div class="mc-famous">
-                <h3>&#127775; Famous Personalities With Same Mulank</h3>
+                <h3 data-i18n="famous_h">&#127775; Famous Personalities With Same Mulank</h3>
                 <p id="mc-famous-p">--</p>
             </div>
 
             <!-- Remedies -->
             <div class="mc-remedies">
-                <h3>&#129776; Simple Remedies &amp; Power Rituals</h3>
+                <h3 data-i18n="rem_h">&#129776; Simple Remedies &amp; Power Rituals</h3>
                 <ul class="mc-rem-list" id="mc-rem-list"></ul>
             </div>
 
             <!-- Share -->
             <div class="mc-share">
-                <a href="#" class="mc-share-btn mc-sb-wa" id="mc-sb-wa" target="_blank" rel="noopener">&#128241; WhatsApp</a>
-                <a href="#" class="mc-share-btn mc-sb-tw" id="mc-sb-tw" target="_blank" rel="noopener">&#119991; Twitter</a>
-                <button type="button" class="mc-share-btn mc-sb-save" id="mc-sb-save">&#128247; Save Card</button>
-                <button type="button" class="mc-share-btn mc-sb-copy" id="mc-sb-copy">&#128279; Copy Link</button>
+                <a href="#" class="mc-share-btn mc-sb-wa" id="mc-sb-wa" target="_blank" rel="noopener" data-i18n="sh_wa">&#128241; WhatsApp</a>
+                <a href="#" class="mc-share-btn mc-sb-tw" id="mc-sb-tw" target="_blank" rel="noopener" data-i18n="sh_tw">&#119991; Twitter</a>
+                <button type="button" class="mc-share-btn mc-sb-save" id="mc-sb-save" data-i18n="sh_save">&#128247; Save Card</button>
+                <button type="button" class="mc-share-btn mc-sb-copy" id="mc-sb-copy" data-i18n="sh_copy">&#128279; Copy Link</button>
             </div>
 
-            <button type="button" class="mc-btn mc-try" id="mc-try-btn">&#128260; Calculate Again</button>
+            <button type="button" class="mc-btn mc-try" id="mc-try-btn" data-i18n="try_again">&#128260; Calculate Again</button>
         </div>
     </section>
 
     <section>
-        <h2 style="font-size:22px;color:#2E1065;margin: 22px 0 10px;">All Mulank Numbers &amp; Their Ruling Planets</h2>
+        <h2 style="font-size:22px;color:#2E1065;margin: 22px 0 10px;" data-i18n="ref_h">All Mulank Numbers &amp; Their Ruling Planets</h2>
         <div class="mc-grid9">
             <div class="mc-n9"><div class="mc-n9-num">1</div><div class="mc-n9-pl">Sun</div></div>
             <div class="mc-n9"><div class="mc-n9-num">2</div><div class="mc-n9-pl">Moon</div></div>
@@ -329,39 +328,17 @@ function ccp_render_mulank_calculator( $atts = array() ) {
         </div>
     </section>
 
-    <section class="mc-faq">
-        <h2>Mulank &amp; Bhagyank &mdash; FAQs</h2>
-        <div class="mc-faq-item"><button class="mc-faq-q" type="button">What is Mulank in numerology?</button><div class="mc-faq-a"><p>Mulank (also called Root or Birth Number) is the single-digit total of your birth date. For example, if you were born on the 27th, your Mulank is 2+7=9. It reveals your core personality and natural strengths.</p></div></div>
-        <div class="mc-faq-item"><button class="mc-faq-q" type="button">What is Bhagyank?</button><div class="mc-faq-a"><p>Bhagyank (Destiny or Life Path Number) is the single-digit total of your full birth date — day + month + year. It shows your life mission, karmic path, and what the universe is steering you toward.</p></div></div>
-        <div class="mc-faq-item"><button class="mc-faq-q" type="button">How is Mulank different from Bhagyank?</button><div class="mc-faq-a"><p>Mulank is who you are right now &mdash; instinct, vibe, natural talents. Bhagyank is where life is taking you &mdash; opportunities, lessons, destiny. Both numbers together give a complete numerology snapshot.</p></div></div>
-        <div class="mc-faq-item"><button class="mc-faq-q" type="button">Does my Mulank change?</button><div class="mc-faq-a"><p>No. Your Mulank and Bhagyank are fixed for life because they are based on your fixed date of birth. What changes is how skillfully you express your number&rsquo;s strengths.</p></div></div>
-        <div class="mc-faq-item"><button class="mc-faq-q" type="button">Is Vedic numerology accurate?</button><div class="mc-faq-a"><p>Vedic numerology has been used in India for thousands of years to guide career, relationships, and timing of major decisions. Modern users find it powerful for self-reflection and pattern recognition. Use it as guidance, not a substitute for real choices.</p></div></div>
-        <div class="mc-faq-item"><button class="mc-faq-q" type="button">Is my date of birth stored?</button><div class="mc-faq-a"><p>No. The entire calculation runs inside your browser. Your date of birth is never sent to a server, saved, or shared. It is 100% private.</p></div></div>
-    </section>
-
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
-      "@graph": [
-        {
-          "@type": "SoftwareApplication",
-          "name": "Mulank & Bhagyank Calculator",
-          "applicationCategory": "LifestyleApplication",
-          "operatingSystem": "Web",
-          "url": "https://cosmiccalculators.in/mulank-calculator/",
-          "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
-          "aggregateRating": { "@type": "AggregateRating", "ratingValue": "4.9", "ratingCount": "11240" }
-        },
-        {
-          "@type": "FAQPage",
-          "mainEntity": [
-            { "@type": "Question", "name": "What is Mulank in numerology?", "acceptedAnswer": { "@type": "Answer", "text": "Mulank is the single-digit total of your birth date. For someone born on the 27th, Mulank is 2+7=9. It reveals core personality and natural strengths." } },
-            { "@type": "Question", "name": "What is Bhagyank?", "acceptedAnswer": { "@type": "Answer", "text": "Bhagyank is the single-digit total of your full birth date — day + month + year. It represents life path and destiny." } },
-            { "@type": "Question", "name": "Does my Mulank change?", "acceptedAnswer": { "@type": "Answer", "text": "No. Both Mulank and Bhagyank stay fixed for life as they are based on your unchanging birth date." } },
-            { "@type": "Question", "name": "Is the calculator private?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. Everything runs in your browser. Nothing is sent to any server or saved." } }
-          ]
-        }
-      ]
+      "@type": "SoftwareApplication",
+      "name": "Mulank & Bhagyank Calculator",
+      "applicationCategory": "LifestyleApplication",
+      "operatingSystem": "Web",
+      "inLanguage": ["en", "hi"],
+      "url": "https://cosmiccalculators.in/mulank-calculator/",
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+      "aggregateRating": { "@type": "AggregateRating", "ratingValue": "4.9", "ratingCount": "11240" }
     }
     </script>
 </div>
@@ -369,7 +346,78 @@ function ccp_render_mulank_calculator( $atts = array() ) {
 <script>
 (function(){
     'use strict';
-    var MC = { $: function(id){ return document.getElementById(id); } };
+    var MC = { $: function(id){ return document.getElementById(id); }, lang: 'en', state: null };
+
+    var T = {
+        en: {
+            title: 'Mulank & Bhagyank Calculator',
+            sub: 'Discover your Numerology Root Number (Mulank) & Destiny Number (Bhagyank) with ruling planet, lucky days, gemstones, career, compatibility & remedies.',
+            tests: 'Readings Today', rating: 'Rating', free: 'Free',
+            lbl_name: 'Your Name (optional)', lbl_dob: 'Date of Birth', lbl_gender: 'Gender (optional)',
+            g_none: 'Prefer not to say', g_m: 'Male', g_f: 'Female', g_o: 'Other',
+            err_dob: 'Please select your full date of birth.',
+            err_bad: 'That date doesn’t look right — please check.',
+            calc_btn: 'Reveal My Numbers 🔮',
+            t_private: '🔒 100% Private', t_instant: '⚡ Instant Reading', t_vedic: '🏆 Vedic + Western', t_mobile: '📱 Mobile Friendly',
+            mulank: 'Mulank', mulank_sub: 'Root Number', bhagyank: 'Bhagyank', bhagyank_sub: 'Destiny Number',
+            rules_you: 'Rules You',
+            i_color: 'Lucky Color', i_day: 'Lucky Day', i_gem: 'Lucky Gemstone', i_nums: 'Lucky Numbers', i_metal: 'Lucky Metal', i_dir: 'Lucky Direction',
+            compat_h: '🔗 Number Compatibility', c_friends: 'Best Friends', c_love: 'Love Match', c_biz: 'Business Partners',
+            career_h: '💼 Career Paths That Suit You',
+            famous_h: '🌟 Famous Personalities With Same Mulank',
+            rem_h: '🧘 Simple Remedies & Power Rituals',
+            sh_wa: '📱 WhatsApp', sh_tw: '𝕏 Twitter', sh_save: '📷 Save Card', sh_copy: '🔗 Copy Link',
+            try_again: '🔄 Calculate Again',
+            ref_h: 'All Mulank Numbers & Their Ruling Planets',
+            hints_h: 'Golden Hints',
+            day_pl: 'Day', mon_pl: 'Month', yr_pl: 'Year',
+            load: ['📅 Reading your birth date...', '🌌 Mapping planetary energy...', '🔢 Calculating Mulank & Bhagyank...', '🔮 Crafting your reading...']
+        },
+        hi: {
+            title: 'मूलांक और भाग्यांक कैलकुलेटर',
+            sub: 'अपना मूलांक (Root Number) और भाग्यांक (Destiny Number) जानें — स्वामी ग्रह, लकी दिन-रत्न-रंग, करियर, अनुकूलता और उपाय के साथ।',
+            tests: 'आज की रीडिंग', rating: 'रेटिंग', free: 'मुफ़्त',
+            lbl_name: 'आपका नाम (वैकल्पिक)', lbl_dob: 'जन्म तिथि', lbl_gender: 'लिंग (वैकल्पिक)',
+            g_none: 'बताना नहीं चाहता', g_m: 'पुरुष', g_f: 'महिला', g_o: 'अन्य',
+            err_dob: 'कृपया पूरी जन्म तिथि चुनें।',
+            err_bad: 'यह तारीख़ सही नहीं लगती — कृपया जाँचें।',
+            calc_btn: 'मेरे अंक दिखाएँ 🔮',
+            t_private: '🔒 100% निजी', t_instant: '⚡ तुरंत रीडिंग', t_vedic: '🏆 वैदिक + पाश्चात्य', t_mobile: '📱 मोबाइल फ्रेंडली',
+            mulank: 'मूलांक', mulank_sub: 'मूल अंक', bhagyank: 'भाग्यांक', bhagyank_sub: 'भाग्य अंक',
+            rules_you: 'आप पर शासन करता है',
+            i_color: 'लकी रंग', i_day: 'लकी दिन', i_gem: 'लकी रत्न', i_nums: 'लकी नंबर', i_metal: 'लकी धातु', i_dir: 'लकी दिशा',
+            compat_h: '🔗 अंक अनुकूलता', c_friends: 'सबसे अच्छे दोस्त', c_love: 'प्रेम साथी', c_biz: 'बिज़नेस पार्टनर',
+            career_h: '💼 आपके लिए उपयुक्त करियर',
+            famous_h: '🌟 इसी मूलांक की मशहूर हस्तियाँ',
+            rem_h: '🧘 आसान उपाय और शक्ति-रिवाज',
+            sh_wa: '📱 व्हाट्सऐप', sh_tw: '𝕏 ट्विटर', sh_save: '📷 कार्ड सेव', sh_copy: '🔗 लिंक कॉपी',
+            try_again: '🔄 फिर से निकालें',
+            ref_h: 'सभी मूलांक और उनके स्वामी ग्रह',
+            hints_h: 'गोल्डन हिंट्स',
+            day_pl: 'दिन', mon_pl: 'महीना', yr_pl: 'वर्ष',
+            load: ['📅 आपकी जन्म तिथि पढ़ी जा रही है...', '🌌 ग्रहों की ऊर्जा मैप हो रही है...', '🔢 मूलांक और भाग्यांक निकाले जा रहे हैं...', '🔮 आपकी रीडिंग तैयार हो रही है...']
+        }
+    };
+
+    function applyLang(lang) {
+        if (!T[lang]) return;
+        MC.lang = lang;
+        document.querySelectorAll('#mc-wrap [data-i18n]').forEach(function(el){
+            var k = el.getAttribute('data-i18n');
+            if (T[lang][k] != null) el.textContent = T[lang][k];
+        });
+        // Re-build day/month/year selects with localized placeholders
+        rebuildSelects();
+        document.querySelectorAll('#mc-wrap .mc-lang-btn').forEach(function(b){
+            b.classList.toggle('mc-lang-active', b.getAttribute('data-lang') === lang);
+        });
+        if (MC.state && MC.$('mc-result').classList.contains('mc-show')) {
+            renderResultContent();
+        }
+    }
+    document.querySelectorAll('#mc-wrap .mc-lang-btn').forEach(function(btn){
+        btn.addEventListener('click', function(){ applyLang(btn.getAttribute('data-lang')); });
+    });
 
     function escapeHtml(s) {
         return String(s).replace(/[&<>"']/g, function(c){
@@ -377,19 +425,27 @@ function ccp_render_mulank_calculator( $atts = array() ) {
         });
     }
 
-    // Populate selects
-    (function populate(){
+    var MONTHS_EN = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    var MONTHS_HI = ['जन','फ़र','मार्च','अप्रैल','मई','जून','जुलाई','अग','सित','अक्टू','नव','दिस'];
+
+    function rebuildSelects() {
         var day = MC.$('mc-day'), month = MC.$('mc-month'), year = MC.$('mc-year');
-        var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+        if (!day || !month || !year) return;
+        var tt = T[MC.lang] || T.en;
+        var prevD = day.value, prevM = month.value, prevY = year.value;
+        var months = MC.lang === 'hi' ? MONTHS_HI : MONTHS_EN;
         var optEmpty = function(label){ var o = document.createElement('option'); o.value = ''; o.textContent = label; return o; };
-        day.appendChild(optEmpty('Day'));
+        day.innerHTML = ''; month.innerHTML = ''; year.innerHTML = '';
+        day.appendChild(optEmpty(tt.day_pl));
         for (var d=1; d<=31; d++) { var o = document.createElement('option'); o.value = d; o.textContent = d; day.appendChild(o); }
-        month.appendChild(optEmpty('Month'));
+        month.appendChild(optEmpty(tt.mon_pl));
         for (var m=1; m<=12; m++) { var o2 = document.createElement('option'); o2.value = m; o2.textContent = months[m-1]; month.appendChild(o2); }
         var cy = new Date().getFullYear();
-        year.appendChild(optEmpty('Year'));
+        year.appendChild(optEmpty(tt.yr_pl));
         for (var y=cy; y>=cy-100; y--) { var o3 = document.createElement('option'); o3.value = y; o3.textContent = y; year.appendChild(o3); }
-    })();
+        day.value = prevD; month.value = prevM; year.value = prevY;
+    }
+    rebuildSelects();
 
     function digitalRoot(n) {
         n = Math.abs(n|0);
@@ -403,6 +459,30 @@ function ccp_render_mulank_calculator( $atts = array() ) {
 
     function calcMulank(day) { return digitalRoot(day); }
     function calcBhagyank(day, month, year) { return digitalRoot(day + month + year); }
+
+    // Hindi overrides for number profiles
+    var PROFILES_HI = {
+        1: { planet: '☀️ सूर्य', traits: ['नेता','महत्वाकांक्षी','मौलिक','आत्मविश्वासी','स्वतंत्र'], desc: 'अंक 1 जन्मजात नेता है। आप अग्रणी, मौलिक और कुछ नया बनाने के लिए प्रेरित हैं। आपकी ऊर्जा कमरे रोशन करती है, पर अहंकार और एकाकीपन से बचें।', color: { name: 'राजसी सुनहरा', hex: '#F59E0B' }, day: 'रविवार', gem: 'माणिक (Ruby)', metal: 'सोना', direction: 'पूर्व', careers: ['उद्यमी','सीईओ','नेतृत्व पद','राजनेता','निदेशक','सरकारी अधिकारी','ब्रांड फ़ाउंडर','सर्जन'], remedies: ['हर सुबह उगते सूर्य को जल चढ़ाएँ।','दाहिने हाथ में सोने या ताँबे का गहना पहनें।','रोज़ सूर्य नमस्कार करें।','रविवार को गेहूँ या गुड़ दान करें।'] },
+        2: { planet: '🌙 चंद्र', traits: ['संवेदनशील','कूटनीतिक','देखभाल-प्रेमी','सहज ज्ञानी','अनुकूल'], desc: 'अंक 2 शांतिदूत है। आप भावुक, सहज और गहरे पोषक हैं। आपकी ख़ासियत लोगों को पढ़ना है, चुनौती दूसरों की भावनाएँ अपने ऊपर लेना है।', color: { name: 'मोती सफ़ेद', hex: '#E0F2FE' }, day: 'सोमवार', gem: 'मोती (Pearl)', metal: 'चाँदी', direction: 'उत्तर-पश्चिम', careers: ['काउंसलर','नर्स','राजनयिक','डिज़ाइनर','लेखक','शिक्षक','HR मैनेजर','होस्पिटैलिटी'], remedies: ['रात को चाँदी के गिलास में पानी पिएँ।','सोमवार को सफ़ेद पहनें।','पूर्णिमा को दूध या चावल दान करें।','सोने से पहले 10 मिनट डायरी लिखें।'] },
+        3: { planet: '🪐 बृहस्पति', traits: ['आशावादी','रचनात्मक','ज्ञानी','तेज़','प्रेरक'], desc: 'अंक 3 बुद्धिमान अभिव्यक्ति का है। आप जिज्ञासु, रचनात्मक और जन्मजात संवाददाता हैं। ध्यान रखें — बहुत सारे विचारों में बँट न जाएँ।', color: { name: 'केसरिया पीला', hex: '#FBBF24' }, day: 'गुरुवार', gem: 'पुखराज (Yellow Sapphire)', metal: 'पीतल / सोना', direction: 'उत्तर-पूर्व', careers: ['शिक्षक','लेखक','वकील','आध्यात्मिक वक्ता','प्रकाशक','कोच','पत्रकार','बैंकर'], remedies: ['गुरुवार को मंदिर में हल्दी चढ़ाएँ।','गुरुवार को पीले कपड़े पहनें।','पीली दाल, किताबें या मिठाई दान करें।','रोज़ 11 बार गुरु मंत्र जपें।'] },
+        4: { planet: '☄️ राहु', traits: ['रणनीतिक','अनोखे','मेहनती','विघटनकारी','नवाचारी'], desc: 'अंक 4 विद्रोही इनोवेटर है। आप वो देखते हैं जो दूसरों को नज़र नहीं आता और ऐसे रास्तों पर चलते हैं जो किसी ने नहीं चुने। ज़िंदगी अचानक उतार-चढ़ाव देती है — आपकी ताक़त हर बार उठ खड़े होने में है।', color: { name: 'इलेक्ट्रिक नीला', hex: '#3B82F6' }, day: 'रविवार / बुधवार', gem: 'गोमेद (Hessonite)', metal: 'मिश्र धातु', direction: 'दक्षिण-पश्चिम', careers: ['टेक / इंजीनियरिंग','डेटा साइंटिस्ट','निवेशक','स्टॉक ट्रेडर','शोधकर्ता','एविएशन','फ़ार्मा','स्वतंत्र सलाहकार'], remedies: ['पर्स में चाँदी का छोटा टुकड़ा रखें।','शनिवार को काले तिल दान करें।','नियमित रूप से काले कुत्तों या पंछियों को खिलाएँ।','शराब और जुए से बचें — ये राहु की अस्थिरता बढ़ाते हैं।'] },
+        5: { planet: '☿ बुध', traits: ['तेज़','बहुमुखी','संवाद-निपुण','ऊर्जावान','साहसी'], desc: 'अंक 5 आज़ाद आत्मा है। आप तेज़, चतुर और जिज्ञासु हैं। यात्रा, नेटवर्किंग, और विचार आपको ऊर्जा देते हैं। बोरियत आपकी सबसे बड़ी दुश्मन है।', color: { name: 'मिंट हरा', hex: '#10B981' }, day: 'बुधवार', gem: 'पन्ना (Emerald)', metal: 'चाँदी', direction: 'उत्तर', careers: ['मार्केटिंग','सेल्स','कंटेंट क्रिएटर','ट्रेडर','ट्रैवल ब्लॉगर','पब्लिक रिलेशन','इन्फ़्लूएंसर','टूर गाइड'], remedies: ['बुधवार को हरा पहनें।','हरी सब्ज़ियाँ गाय या पशु को खिलाएँ।','महत्वपूर्ण हस्ताक्षर के लिए हरे पेन का प्रयोग करें।','गहरी साँस लें — यह बुध की चंचलता शांत करता है।'] },
+        6: { planet: '♀ शुक्र', traits: ['प्रेमी','कलाप्रिय','मोहक','परिवारिक','चुम्बकीय'], desc: 'अंक 6 प्रेम का कलाकार है। आप भीतर-बाहर से सुंदर, चुम्बकीय और परिवार व सौंदर्य के समर्पित हैं। कमज़ोरी — विलासिता पर अधिक ख़र्च।', color: { name: 'गुलाबी', hex: '#EC4899' }, day: 'शुक्रवार', gem: 'हीरा / सफ़ेद सफ़ायर', metal: 'चाँदी / प्लैटिनम', direction: 'दक्षिण-पूर्व', careers: ['फ़ैशन डिज़ाइनर','अभिनेता','गायक','सौंदर्य उद्योग','इंटीरियर डिज़ाइनर','शेफ़','लक्ज़री ब्रांड','वेडिंग प्लानर'], remedies: ['शुक्रवार को सफ़ेद या हल्का गुलाबी पहनें।','साथी या माँ को फूल भेंट करें।','चीनी, चावल या सफ़ेद मिठाई दान करें।','घर साफ़ और सुगंधित रखें — शुक्र को सुंदरता प्रिय है।'] },
+        7: { planet: '🌌 केतु', traits: ['आध्यात्मिक','रहस्यमय','विश्लेषक','अंतर्मुखी','सहज ज्ञानी'], desc: 'अंक 7 खोजी है। आप गहरे, सहज और सतह के नीचे की सच्चाई पर ध्यान देते हैं। एकांत आपको ऊर्जा देता है। अधिक सोचना न बढ़ाएँ — ध्यान आपकी शक्ति है।', color: { name: 'धुएँदार ग्रे', hex: '#6B7280' }, day: 'सोमवार / गुरुवार', gem: 'लहसुनिया (Cat’s Eye)', metal: 'चाँदी', direction: 'उत्तर-पूर्व', careers: ['शोधकर्ता','आध्यात्मिक मार्गदर्शक','मनोवैज्ञानिक','वैज्ञानिक','ज्योतिषी','लेखक','जासूस','चिकित्सक'], remedies: ['रोज़ 15 मिनट ध्यान करें।','मंगलवार को उधार न दें।','कंबल या गर्म कपड़े दान करें।','हफ़्ते में एक बार प्रकृति में समय बिताएँ।'] },
+        8: { planet: '♄ शनि', traits: ['दृढ़','अनुशासित','आधिकारिक','धैर्यवान','कर्मफल-निष्ठ'], desc: 'अंक 8 कर्म का स्वामी है। ज़िंदगी आपको कड़ी परीक्षा देती है, फिर पुरस्कार। आप धैर्य, संरचना और संकल्प से साम्राज्य बनाते हैं — शॉर्टकट हमेशा उल्टा पड़ता है।', color: { name: 'गहरा नीला', hex: '#1F2937' }, day: 'शनिवार', gem: 'नीलम (Blue Sapphire) — परीक्षण के बाद ही', metal: 'लोहा', direction: 'पश्चिम', careers: ['रियल एस्टेट','खनन','सिविल सेवा','न्यायाधीश','बैंकर','निर्माण','लॉजिस्टिक्स','दीर्घकालिक निवेशक'], remedies: ['शनिवार को कौवे या आवारा कुत्ते को खिलाएँ।','पीपल के नीचे सरसों तेल का दीपक जलाएँ।','काले उड़द, लोहा, जूते दान करें।','बड़े-बुज़ुर्गों या कर्मचारियों का अपमान न करें।'] },
+        9: { planet: '♂ मंगल', traits: ['साहसी','ऊर्जावान','भावुक','रक्षक','उदार'], desc: 'अंक 9 योद्धा है। आप सही के लिए लड़ते हैं, गहरा प्रेम करते हैं, और कभी हार नहीं मानते। आपका ग़ुस्सा ही आपका एकमात्र दुश्मन है।', color: { name: 'गहरा लाल', hex: '#EF4444' }, day: 'मंगलवार', gem: 'मूँगा (Red Coral)', metal: 'ताँबा', direction: 'दक्षिण', careers: ['सेना / रक्षा','खेल','सर्जन','एथलीट','पुलिस','सामाजिक कार्यकर्ता','फ़ायर फ़ाइटर','इंजीनियर'], remedies: ['मंगलवार को मसूर दाल दान करें।','मार्शल आर्ट्स या रोज़ की कसरत करें।','मंगलवार को लाल पहनें।','क्रोध शांत करने के लिए हनुमान चालीसा का पाठ करें।'] }
+    };
+
+    function getProfile(num, lang) {
+        var base = PROFILES[num];
+        if (lang !== 'hi' || !PROFILES_HI[num]) return base;
+        var hi = PROFILES_HI[num];
+        // Manual shallow merge for older-browser safety
+        var out = {};
+        for (var k in base) out[k] = base[k];
+        for (var k2 in hi) out[k2] = hi[k2];
+        return out;
+    }
 
     // Number profiles (1-9)
     var PROFILES = {
@@ -561,41 +641,51 @@ function ccp_render_mulank_calculator( $atts = array() ) {
         }
     };
 
-    function getHints(mulank, bhagyank) {
-        var common = [
+    var HINTS_DATA = {
+        en: [
             { i: '🎯', t: 'Lock Your Lucky Day', d: 'Sign contracts, start projects, or have big talks on your lucky day. Energy compounds.' },
             { i: '🌈', t: 'Wear Your Power Color', d: 'On big days, wear your lucky color — it boosts confidence and Mulank alignment.' },
             { i: '🧘', t: 'Daily 10-Min Pause', d: 'Even a short pause aligns you with your destiny number’s frequency.' },
             { i: '💎', t: 'Use Lucky Gemstone Carefully', d: 'Always consult before wearing strong stones (especially Neelam & Gomed).' }
-        ];
-        return common;
+        ],
+        hi: [
+            { i: '🎯', t: 'अपना लकी दिन पकड़ें', d: 'बड़े फ़ैसले, अनुबंध या ज़रूरी बातचीत अपने लकी दिन पर करें — ऊर्जा गुणा होती है।' },
+            { i: '🌈', t: 'पावर रंग पहनें', d: 'बड़े दिनों में अपना लकी रंग पहनें — आत्मविश्वास और मूलांक संरेखण दोनों बढ़ते हैं।' },
+            { i: '🧘', t: 'रोज़ 10 मिनट ठहराव', d: 'एक छोटा ठहराव भी आपको भाग्यांक की आवृत्ति से जोड़ देता है।' },
+            { i: '💎', t: 'लकी रत्न संभलकर', d: 'तेज़ रत्न (ख़ासकर नीलम/गोमेद) पहनने से पहले हमेशा परीक्षण करें।' }
+        ]
+    };
+    function getHints(mulank, bhagyank, lang) { return HINTS_DATA[lang || MC.lang] || HINTS_DATA.en; }
+
+    function getAdviceText(mulank, bhagyank, name, lang) {
+        lang = lang || MC.lang;
+        if (lang === 'hi') {
+            var n = name ? (name + ', ') : '';
+            if (mulank === bhagyank) return n + 'आपका मूलांक और भाग्यांक एक ही हैं — यह दुर्लभ संयोग है। आपका भीतर का स्वरूप और भाग्य का रास्ता एक ही दिशा में हैं — ऐसी एकाग्रता बहुत कम लोगों को मिलती है। अपनी अंतरात्मा पर भरोसा करें।';
+            if ((mulank + bhagyank) % 9 === 0) return n + 'आपका मूलांक और भाग्यांक एक कर्म-चक्र बनाते हैं — मतलब जीवन वही पाठ बार-बार दोहराएगा जब तक आप उन्हें सीख नहीं लेते। धीरे-धीरे चलें, चिंतन करें, और भीतर भी उतना ही बढ़ें जितना बाहर।';
+            return n + 'आपका मूलांक आपकी रोज़मर्रा की शैली है और भाग्यांक आपका जीवन-मिशन। छोटी जीतों के लिए मूलांक पर झुकें, और करियर, विवाह, बड़े बदलाव जैसे फ़ैसलों में भाग्यांक पर भरोसा करें।';
+        }
+        var n2 = name ? (name + ', ') : '';
+        if (mulank === bhagyank) return n2 + 'your Mulank and Bhagyank are the same — a rare alignment. Your inner self and your destiny path point the same way, giving you focus most people don’t have. Trust your gut more than ever.';
+        if ((mulank + bhagyank) % 9 === 0) return n2 + 'your Mulank and Bhagyank create a karmic loop — meaning life keeps repeating lessons until you master them. Slow down, reflect, and grow inward as much as outward.';
+        return n2 + 'your Mulank is your daily style and your Bhagyank is your life mission. Lean into your Mulank for short-term wins, and trust your Bhagyank for major life decisions like career, marriage, and moves.';
     }
 
-    function getAdviceText(mulank, bhagyank, name) {
-        var n = name ? (name + ', ') : '';
-        if (mulank === bhagyank) return n + 'your Mulank and Bhagyank are the same — a rare alignment. Your inner self and your destiny path point the same way, giving you focus most people don’t have. Trust your gut more than ever.';
-        if ((mulank + bhagyank) % 9 === 0) return n + 'your Mulank and Bhagyank create a karmic loop — meaning life keeps repeating lessons until you master them. Slow down, reflect, and grow inward as much as outward.';
-        return n + 'your Mulank is your daily style and your Bhagyank is your life mission. Lean into your Mulank for short-term wins, and trust your Bhagyank for major life decisions like career, marriage, and moves.';
-    }
-
-    var loadSteps = [
-        '📅 Reading your birth date...',
-        '🌌 Mapping planetary energy...',
-        '🔢 Calculating Mulank & Bhagyank...',
-        '🔮 Crafting your reading...'
-    ];
+    function getLoadSteps() { return (T[MC.lang] && T[MC.lang].load) || T.en.load; }
 
     function runLoading(callback) {
         var stepEl = MC.$('mc-load-step');
         var barEl  = MC.$('mc-progress-bar');
+        var steps = getLoadSteps();
         var i = 0;
-        stepEl.textContent = loadSteps[0];
+        stepEl.textContent = steps[0];
         barEl.style.width = '8%';
         var interval = setInterval(function(){
             i++;
-            if (i < loadSteps.length) {
+            steps = getLoadSteps();
+            if (i < steps.length) {
                 stepEl.style.opacity = '0';
-                setTimeout(function(){ stepEl.textContent = loadSteps[i]; stepEl.style.opacity = '1'; }, 200);
+                setTimeout(function(){ stepEl.textContent = steps[i]; stepEl.style.opacity = '1'; }, 200);
                 barEl.style.width = ((i+1) * 25) + '%';
             } else {
                 clearInterval(interval);
@@ -616,18 +706,16 @@ function ccp_render_mulank_calculator( $atts = array() ) {
         requestAnimationFrame(tick);
     }
 
-    function showResult(state) {
-        var mulank = state.mulank;
-        var bhagyank = state.bhagyank;
-        var name = state.name || '';
-        var pm = PROFILES[mulank];
-        var pb = PROFILES[bhagyank];
+    function renderResultContent() {
+        if (!MC.state) return;
+        var lang = MC.lang;
+        var mulank = MC.state.mulank;
+        var bhagyank = MC.state.bhagyank;
+        var name = MC.state.name || '';
+        var pm = getProfile(mulank, lang);
+        var tt = T[lang] || T.en;
 
-        // numbers
-        animateNum(MC.$('mc-mulank-v'), 0, mulank, 1100);
-        animateNum(MC.$('mc-bhagyank-v'), 0, bhagyank, 1300);
-
-        MC.$('mc-planet').textContent = pm.planet + ' Rules You';
+        MC.$('mc-planet').textContent = pm.planet + ' ' + tt.rules_you;
         MC.$('mc-rc-desc').textContent = pm.desc;
 
         var traitsBox = MC.$('mc-traits');
@@ -639,7 +727,6 @@ function ccp_render_mulank_calculator( $atts = array() ) {
             traitsBox.appendChild(t);
         }
 
-        // Info
         MC.$('mc-color-v').textContent = pm.color.name;
         MC.$('mc-color-sw').style.background = pm.color.hex;
         MC.$('mc-day-v').textContent     = pm.day;
@@ -648,12 +735,10 @@ function ccp_render_mulank_calculator( $atts = array() ) {
         MC.$('mc-metal-v').textContent   = pm.metal;
         MC.$('mc-dir-v').textContent     = pm.direction;
 
-        // Compat
         MC.$('mc-cf-v').textContent = pm.friends;
         MC.$('mc-cl-v').textContent = pm.love;
         MC.$('mc-cb-v').textContent = pm.business;
 
-        // Careers
         var cList = MC.$('mc-career-list');
         cList.innerHTML = '';
         for (var ci=0; ci<pm.careers.length; ci++) {
@@ -663,10 +748,8 @@ function ccp_render_mulank_calculator( $atts = array() ) {
             cList.appendChild(c);
         }
 
-        // Famous
         MC.$('mc-famous-p').textContent = pm.famous;
 
-        // Remedies
         var rList = MC.$('mc-rem-list');
         rList.innerHTML = '';
         for (var ri=0; ri<pm.remedies.length; ri++) {
@@ -675,9 +758,9 @@ function ccp_render_mulank_calculator( $atts = array() ) {
             rList.appendChild(li);
         }
 
-        // Hints
-        var hints = getHints(mulank, bhagyank);
-        MC.$('mc-hints-title').innerHTML = '⭐ Golden Hints' + (name ? ' for ' + escapeHtml(name) : '');
+        var hints = getHints(mulank, bhagyank, lang);
+        var forLabel = lang === 'hi' ? (name ? ' — ' + escapeHtml(name) + ' के लिए' : '') : (name ? ' for ' + escapeHtml(name) : '');
+        MC.$('mc-hints-title').innerHTML = '⭐ ' + (tt.hints_h || 'Golden Hints') + forLabel;
         var hgrid = MC.$('mc-hints-grid');
         hgrid.innerHTML = '';
         for (var hi=0; hi<hints.length; hi++) {
@@ -689,16 +772,23 @@ function ccp_render_mulank_calculator( $atts = array() ) {
             hgrid.appendChild(card);
         }
 
-        // Animate info cards
+        setupShare(name, mulank, bhagyank, pm);
+    }
+
+    function showResult(state) {
+        MC.state = state;
+
+        animateNum(MC.$('mc-mulank-v'), 0, state.mulank, 1100);
+        animateNum(MC.$('mc-bhagyank-v'), 0, state.bhagyank, 1300);
+
+        renderResultContent();
+
         var infos = document.querySelectorAll('#mc-wrap .mc-info-card');
         for (var ii=0; ii<infos.length; ii++) infos[ii].style.animationDelay = (ii * 0.07) + 's';
 
-        // Show
         MC.$('mc-loading').classList.remove('mc-show');
         MC.$('mc-loading').style.display = 'none';
         MC.$('mc-result').classList.add('mc-show');
-
-        setupShare(name, mulank, bhagyank, pm);
 
         setTimeout(function(){ MC.$('mc-result').scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 100);
     }
@@ -747,12 +837,12 @@ function ccp_render_mulank_calculator( $atts = array() ) {
         var y = parseInt(MC.$('mc-year').value, 10);
         var name = (MC.$('mc-name').value || '').trim();
         var err = MC.$('mc-error');
-        if (!d || !m || !y) { err.textContent = 'Please select your full date of birth.'; err.classList.add('mc-show'); return; }
+        var tt = T[MC.lang] || T.en;
+        if (!d || !m || !y) { err.textContent = tt.err_dob; err.classList.add('mc-show'); return; }
 
-        // Validate date
         var dt = new Date(y, m-1, d);
         if (dt.getDate() !== d || (dt.getMonth()+1) !== m || dt.getFullYear() !== y) {
-            err.textContent = 'That date doesn’t look right — please check.'; err.classList.add('mc-show'); return;
+            err.textContent = tt.err_bad; err.classList.add('mc-show'); return;
         }
         err.classList.remove('mc-show');
 
@@ -776,18 +866,17 @@ function ccp_render_mulank_calculator( $atts = array() ) {
         MC.$('mc-input-phase').scrollIntoView({ behavior: 'smooth', block: 'start' });
     });
 
-    var faqs = document.querySelectorAll('#mc-wrap .mc-faq-item');
-    faqs.forEach(function(item){
-        var q = item.querySelector('.mc-faq-q');
-        q.addEventListener('click', function(){ item.classList.toggle('mc-open'); });
-    });
-
     var counterEl = MC.$('mc-counter');
     var count = 189652;
     setInterval(function(){
         count += 1 + Math.floor(Math.random()*3);
         counterEl.textContent = count.toLocaleString('en-IN');
     }, 9000);
+
+    try {
+        var lg = (navigator.language || navigator.userLanguage || 'en').toLowerCase();
+        if (lg.indexOf('hi') === 0) applyLang('hi'); else applyLang('en');
+    } catch (e) { applyLang('en'); }
 })();
 </script>
     <?php

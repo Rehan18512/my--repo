@@ -4,15 +4,15 @@ Tags: friendship calculator, mulank, bhagyank, numerology, crush calculator, hor
 Requires at least: 5.0
 Tested up to: 6.5
 Requires PHP: 7.2
-Stable tag: 1.0.0
+Stable tag: 1.1.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-Three premium calculators in one plugin — Friendship Calculator (by name), Mulank & Bhagyank Numerology Calculator (by birthdate), and Crush Calculator with horoscope, soulmate and future-prediction insights. Animated, SEO-optimized, fully self-contained.
+Three premium bilingual (Hindi + English) calculators in one plugin — Friendship Calculator (by name), Mulank & Bhagyank Numerology Calculator (by birthdate), and Crush Calculator with horoscope, soulmate and future-prediction insights. Animated, SEO-optimized, fully self-contained.
 
 == Description ==
 
-Cosmic Calculators Pro bundles three professionally designed, animated, mobile-first calculators into a single WordPress plugin. All three share a unified cosmic color theme (deep purple → magenta → gold), golden-hint cards, personalized advice, share buttons, FAQ accordion, and JSON-LD schema for rich-result SEO.
+Cosmic Calculators Pro bundles three professionally designed, animated, mobile-first calculators into a single WordPress plugin. All three share a unified cosmic color theme (deep purple → magenta → gold), golden-hint cards, personalized advice, share buttons, JSON-LD schema for rich-result SEO, and a built-in **English ↔ हिंदी language toggle** that translates every label, level name, description, hint, advice, and prediction in real-time.
 
 = Tools included =
 
@@ -74,10 +74,16 @@ Yes — each tool ships with a `SoftwareApplication` + `FAQPage` schema block te
 
 == Changelog ==
 
+= 1.1.0 =
+* Bilingual mode: English + हिंदी toggle on every tool (level names, descriptions, hints, advice, predictions, careers, songs, gifts, mantras, zodiacs, months — all translated).
+* Auto-detect browser language (hi-* → Hindi by default).
+* Removed in-tool FAQ section (use your page content for FAQs to avoid duplication).
+* Cleaner JSON-LD: SoftwareApplication schema only, with inLanguage: [en, hi].
+
 = 1.0.0 =
 * Initial release with three calculators: Friendship, Mulank/Bhagyank, Crush.
 
 == Upgrade Notice ==
 
-= 1.0.0 =
-First release. Drop the shortcodes on any page and you are live.
+= 1.1.0 =
+Adds Hindi/English toggle to all 3 tools and removes the duplicate FAQ section. No breaking changes — shortcodes stay the same.
