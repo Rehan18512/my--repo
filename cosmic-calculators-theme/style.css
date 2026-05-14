@@ -1,0 +1,75 @@
+/*
+Theme Name: Cosmic Calculators
+Theme URI: https://cosmiccalculators.in/
+Author: Cosmic Calculators
+Author URI: https://cosmiccalculators.in/
+Description: A premium dark, glass and neon WordPress theme for the Cosmic family of relationship calculators (Love, FLAMES, Crush, Friendship and Mulank Numerology). Beginner friendly, standalone (no parent theme required), responsive, SEO friendly, fast loading, with built-in glassmorphism UI, animations, hero, calculator grid, FAQ and CTA block patterns. Preserves all calculator shortcodes from the matching plugins (cosmic-calculators-pro, love-calculator-pro, flames-calculator-pro). Tested with GeneratePress and Kadence: if you previously ran one of those, this theme replaces them cleanly. Works out of the box on stock WordPress 6.2+.
+Version: 1.0.0
+Requires at least: 6.2
+Tested up to: 6.6
+Requires PHP: 7.4
+License: GNU General Public License v2 or later
+License URI: http://www.gnu.org/licenses/gpl-2.0.html
+Text Domain: cosmic-calculators
+Tags: blog, one-column, two-columns, custom-colors, custom-menu, custom-logo, editor-style, featured-images, full-site-editing, block-patterns, block-styles, threaded-comments, translation-ready, wide-blocks, dark-mode-support, accessibility-ready
+*/
+
+/*
+ * Cosmic Calculators — standalone WordPress theme.
+ *
+ * The visual styles live in:
+ *   - assets/css/cosmic-tokens.css       design tokens (colors, fonts, radii)
+ *   - assets/css/cosmic-shell.css        site shell (header / footer / hero / cards)
+ *   - assets/css/cosmic-calculators.css  shortcode skins
+ *   - assets/css/cosmic-editor.css       editor preview
+ *
+ * They are enqueued in the correct order by functions.php. This file
+ * only carries the WordPress theme header and a minimal baseline that
+ * loads before the rest, so users see no flash of unstyled content
+ * while assets resolve.
+ */
+
+html { background: #07060d; }
+body { margin: 0; background: #07060d; color: #f7f2ff; font-family: 'Geist', system-ui, -apple-system, 'Segoe UI', Roboto, Ubuntu, sans-serif; -webkit-font-smoothing: antialiased; }
+a { color: inherit; }
+img, svg { max-width: 100%; height: auto; }
+
+/* Hide WP admin bar offset glitch on dark theme */
+.admin-bar #cosmic-page { padding-top: 0; }
+
+/* Accessibility — focus visible */
+:focus-visible { outline: 2px solid #ff7ab6; outline-offset: 3px; border-radius: 4px; }
+
+/* Skip link */
+.cosmic-skip-link {
+	position: absolute; left: -9999px; top: 0;
+	background: #ff3d8b; color: #fff; padding: 12px 18px;
+	font-weight: 600; z-index: 9999; border-radius: 0 0 12px 0;
+}
+.cosmic-skip-link:focus { left: 0; }
+
+/* WordPress required alignments */
+.alignleft   { float: left;  margin: 8px 24px 8px 0; }
+.alignright  { float: right; margin: 8px 0 8px 24px; }
+.aligncenter { display: block; margin-left: auto; margin-right: auto; }
+.alignwide   { max-width: 1200px; margin-left: auto; margin-right: auto; }
+.alignfull   { width: 100%; }
+
+/* WordPress required gallery / caption */
+.wp-caption img { max-width: 100%; height: auto; }
+.wp-caption-text, .gallery-caption { font-size: 13px; color: #9a90b3; padding-top: 6px; }
+
+/* Screen reader text */
+.screen-reader-text {
+	border: 0; clip: rect(1px,1px,1px,1px); -webkit-clip-path: inset(50%); clip-path: inset(50%);
+	height: 1px; width: 1px; overflow: hidden; position: absolute !important; word-wrap: normal !important;
+}
+.screen-reader-text:focus {
+	clip: auto !important; -webkit-clip-path: none; clip-path: none;
+	display: block; height: auto; width: auto; padding: 14px 22px;
+	background: #ff3d8b; color: #fff; font-weight: 600; z-index: 100000;
+}
+
+/* Sticky footer */
+#cosmic-page { display: flex; flex-direction: column; min-height: 100vh; }
+#cosmic-content { flex: 1 0 auto; }

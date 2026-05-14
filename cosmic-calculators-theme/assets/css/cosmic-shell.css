@@ -1,0 +1,339 @@
+/* =================================================================
+   Cosmic — Site Shell (header, hero, footer, page chrome, sticky CTA)
+   Scoped under body.cosmic-2026 so it cannot leak into wp-admin.
+   ================================================================= */
+
+body.cosmic-2026 {
+	background: var(--cosmic-bg-0);
+	color: var(--cosmic-ink-100);
+	font-family: var(--cosmic-f-ui);
+	-webkit-font-smoothing: antialiased;
+	text-rendering: optimizeLegibility;
+}
+
+body.cosmic-2026 a { color: inherit; text-decoration: none; }
+
+/* ----- Cosmic background (decoration layer placed in template parts) ---- */
+.cosmic-bg {
+	position: fixed;
+	inset: 0;
+	z-index: 0;
+	pointer-events: none;
+	background:
+		radial-gradient(40% 30% at 18% 12%, rgba(255,61,139,.18), transparent 60%),
+		radial-gradient(36% 28% at 82% 8%,  rgba(168,85,255,.20), transparent 60%),
+		radial-gradient(42% 34% at 50% 95%, rgba(34,224,245,.12), transparent 65%);
+}
+.cosmic-bg::after {
+	content:""; position: absolute; inset: 0;
+	background-image:
+		radial-gradient(rgba(255,255,255,.4) 1px, transparent 1px),
+		radial-gradient(rgba(255,255,255,.2) 1px, transparent 1px);
+	background-size: 180px 180px, 90px 90px;
+	background-position: 0 0, 40px 60px;
+	opacity: .25;
+	-webkit-mask-image: radial-gradient(80% 60% at 50% 40%, #000 0%, transparent 75%);
+	        mask-image: radial-gradient(80% 60% at 50% 40%, #000 0%, transparent 75%);
+}
+
+/* Ensure WordPress content sits above the bg */
+body.cosmic-2026 #page,
+body.cosmic-2026 .site-content,
+body.cosmic-2026 .wp-site-blocks { position: relative; z-index: 1; }
+
+/* ---------- Container ---------- */
+.cosmic-container { max-width: var(--cosmic-container); margin: 0 auto; padding: 0 var(--cosmic-gutter); }
+.cosmic-wide      { max-width: var(--cosmic-wide);      margin: 0 auto; padding: 0 var(--cosmic-gutter); }
+
+/* ---------- Typography helpers ---------- */
+.cosmic-2026 h1, .cosmic-2026 h2, .cosmic-2026 h3 {
+	font-family: var(--cosmic-f-display);
+	font-weight: 400;
+	letter-spacing: -0.02em;
+	line-height: 0.95;
+	margin: 0;
+}
+.cosmic-eyebrow {
+	font-family: var(--cosmic-f-mono);
+	font-size: 12px;
+	letter-spacing: 0.18em;
+	text-transform: uppercase;
+	color: var(--cosmic-ink-60);
+}
+.cosmic-mono { font-family: var(--cosmic-f-mono); }
+.cosmic-gradient-text {
+	background: var(--cosmic-aurora);
+	-webkit-background-clip: text;
+	        background-clip: text;
+	color: transparent;
+}
+.cosmic-gradient-text-rose {
+	background: linear-gradient(100deg,#ff7ab6 0%,#ff3d8b 100%);
+	-webkit-background-clip: text;
+	        background-clip: text;
+	color: transparent;
+}
+
+/* ---------- Glass card ---------- */
+.cosmic-glass {
+	background: linear-gradient(180deg, rgba(255,255,255,.06) 0%, rgba(255,255,255,.02) 100%);
+	backdrop-filter: blur(28px);
+	-webkit-backdrop-filter: blur(28px);
+	border: 1px solid var(--cosmic-glass-border);
+	border-radius: var(--cosmic-r-lg);
+	box-shadow: var(--cosmic-shadow-md), inset 0 1px 0 rgba(255,255,255,.08);
+	position: relative;
+}
+.cosmic-glass-strong {
+	background: linear-gradient(180deg, rgba(255,255,255,.09) 0%, rgba(255,255,255,.03) 100%);
+	border: 1px solid var(--cosmic-glass-border-strong);
+}
+.cosmic-glass-rim::before {
+	content: ""; position: absolute; inset: 0;
+	border-radius: inherit; padding: 1px;
+	background: linear-gradient(135deg, rgba(255,61,139,.6), rgba(168,85,255,0) 40%, rgba(34,224,245,.6) 100%);
+	-webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+	-webkit-mask-composite: xor;
+	        mask-composite: exclude;
+	pointer-events: none;
+}
+
+/* ---------- Buttons ---------- */
+.cosmic-btn {
+	display: inline-flex; align-items: center; gap: 10px;
+	font-family: var(--cosmic-f-ui); font-weight: 600; font-size: 15px;
+	height: 48px; padding: 0 22px;
+	border-radius: var(--cosmic-r-pill);
+	cursor: pointer; border: 1px solid transparent;
+	transition: transform .18s var(--cosmic-ease), box-shadow .18s var(--cosmic-ease);
+	white-space: nowrap; text-decoration: none;
+}
+.cosmic-btn--primary {
+	color: #fff;
+	background: linear-gradient(100deg,#ff3d8b 0%,#a855ff 100%);
+	box-shadow: 0 12px 36px rgba(255,61,139,.45), inset 0 1px 0 rgba(255,255,255,.3);
+}
+.cosmic-btn--primary:hover { transform: translateY(-1px); box-shadow: 0 18px 48px rgba(255,61,139,.55), inset 0 1px 0 rgba(255,255,255,.3); }
+.cosmic-btn--ghost {
+	color: var(--cosmic-ink-100);
+	background: rgba(255,255,255,.04);
+	border-color: rgba(255,255,255,.12);
+	backdrop-filter: blur(20px);
+}
+.cosmic-btn--ghost:hover { background: rgba(255,255,255,.08); }
+.cosmic-btn--lg { height: 58px; padding: 0 30px; font-size: 16px; }
+
+/* ---------- Chips ---------- */
+.cosmic-chip {
+	display: inline-flex; align-items: center; gap: 8px;
+	height: 32px; padding: 0 12px; border-radius: var(--cosmic-r-pill);
+	background: rgba(255,255,255,.05);
+	border: 1px solid rgba(255,255,255,.08);
+	font-size: 12px; color: var(--cosmic-ink-80); font-weight: 500;
+}
+.cosmic-tag {
+	display: inline-flex; align-items: center; gap: 6px;
+	font-family: var(--cosmic-f-mono); font-size: 11px; letter-spacing: .12em;
+	text-transform: uppercase; color: var(--cosmic-ink-80);
+	padding: 6px 10px; border-radius: 6px;
+	background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.08);
+}
+
+/* ---------- Header / Nav ---------- */
+.cosmic-nav {
+	position: sticky; top: 0; z-index: 50;
+	display: flex; justify-content: space-between; align-items: center;
+	padding: 14px var(--cosmic-gutter);
+	background: rgba(7,6,13,.55);
+	backdrop-filter: blur(20px);
+	-webkit-backdrop-filter: blur(20px);
+	border-bottom: 1px solid rgba(255,255,255,.05);
+}
+.cosmic-logo { display: inline-flex; align-items: center; gap: 10px; font-family: var(--cosmic-f-display); font-size: 24px; letter-spacing: -.02em; color: #fff; }
+.cosmic-logo svg { width: 28px; height: 28px; }
+.cosmic-logo b { color: var(--cosmic-rose); font-weight: 400; }
+.cosmic-navlinks { display: flex; gap: 4px; padding: 6px; border-radius: 999px; background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.06); list-style: none; margin: 0; }
+.cosmic-navlinks a { padding: 10px 18px; border-radius: 999px; font-size: 14px; font-weight: 500; color: var(--cosmic-ink-60); }
+.cosmic-navlinks a:hover { color: #fff; }
+.cosmic-navlinks a[aria-current="page"], .cosmic-navlinks a.is-active, .cosmic-navlinks .current-menu-item > a { color:#fff; background: rgba(255,255,255,.08); }
+.cosmic-navlinks .cosmic-menu, .cosmic-navlinks ul.menu { display: flex; gap: 4px; list-style: none; margin: 0; padding: 0; }
+.cosmic-navlinks li { list-style: none; }
+
+/* Hamburger button — hidden on desktop */
+.cosmic-nav-toggle {
+	display: none;
+	width: 44px; height: 44px;
+	padding: 0; margin-left: 12px;
+	background: rgba(255,255,255,.04);
+	border: 1px solid rgba(255,255,255,.08);
+	border-radius: 12px;
+	cursor: pointer;
+	flex-direction: column; justify-content: center; align-items: center; gap: 5px;
+}
+.cosmic-nav-toggle span {
+	width: 20px; height: 2px; background: #fff; border-radius: 2px;
+	transition: transform .25s var(--cosmic-ease), opacity .25s var(--cosmic-ease);
+}
+.cosmic-nav-toggle[aria-expanded="true"] span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.cosmic-nav-toggle[aria-expanded="true"] span:nth-child(2) { opacity: 0; }
+.cosmic-nav-toggle[aria-expanded="true"] span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+@media (max-width: 940px) {
+	.cosmic-nav-toggle { display: inline-flex; order: 3; }
+	.cosmic-navlinks {
+		display: none;
+		position: absolute; top: 100%; left: 0; right: 0;
+		flex-direction: column; align-items: stretch; gap: 0;
+		padding: 14px;
+		background: rgba(7,6,13,.96);
+		backdrop-filter: blur(28px);
+		-webkit-backdrop-filter: blur(28px);
+		border-radius: 0;
+		border: none;
+		border-top: 1px solid rgba(255,255,255,.06);
+	}
+	.cosmic-navlinks.is-open { display: flex; }
+	.cosmic-navlinks .cosmic-menu, .cosmic-navlinks ul.menu { flex-direction: column; gap: 0; }
+	.cosmic-navlinks a { padding: 14px 18px; border-radius: 12px; font-size: 16px; }
+	.cosmic-nav { flex-wrap: wrap; }
+	.cosmic-nav__cta .cosmic-chip { display: none; }
+}
+@media (max-width: 560px) {
+	.cosmic-nav__cta .cosmic-btn { padding: 0 14px; height: 42px; font-size: 13px; }
+}
+
+/* ---------- Hero (homepage + tool page) ---------- */
+.cosmic-hero {
+	padding: 70px var(--cosmic-gutter) 110px;
+	position: relative;
+}
+.cosmic-hero h1 { font-size: clamp(56px, 9vw, 124px); }
+.cosmic-hero p.lead { color: var(--cosmic-ink-60); font-size: clamp(15px, 1.4vw, 19px); line-height: 1.55; max-width: 540px; margin-top: 28px; }
+.cosmic-hero .cosmic-eyebrow { margin-bottom: 22px; }
+
+/* ---------- Calculator grid (homepage) ---------- */
+.cosmic-calc-grid {
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	gap: 20px;
+}
+@media (max-width: 1000px) { .cosmic-calc-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 640px)  { .cosmic-calc-grid { grid-template-columns: 1fr; } }
+
+.cosmic-calc-card {
+	position: relative; overflow: hidden;
+	border-radius: var(--cosmic-r-xl);
+	border: 1px solid var(--cosmic-glass-border);
+	background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.015));
+	padding: 28px; min-height: 280px;
+	display: flex; flex-direction: column; justify-content: space-between;
+	color: inherit; text-decoration: none;
+	transition: transform .25s var(--cosmic-ease), border-color .25s var(--cosmic-ease);
+}
+.cosmic-calc-card:hover { transform: translateY(-3px); border-color: rgba(255,61,139,.35); }
+.cosmic-calc-card .glow {
+	position: absolute; width: 240px; height: 240px;
+	top: -60px; right: -60px;
+	border-radius: 50%; filter: blur(70px); opacity: .65; pointer-events: none;
+}
+.cosmic-calc-card[data-accent="rose"]   .glow { background: var(--cosmic-rose); }
+.cosmic-calc-card[data-accent="violet"] .glow { background: var(--cosmic-violet); }
+.cosmic-calc-card[data-accent="cyan"]   .glow { background: var(--cosmic-cyan); }
+.cosmic-calc-card[data-accent="gold"]   .glow { background: var(--cosmic-gold); }
+.cosmic-calc-card .body { position: relative; z-index: 1; display: flex; flex-direction: column; height: 100%; gap: 18px; }
+.cosmic-calc-card .ico {
+	width: 56px; height: 56px; border-radius: 18px;
+	display: grid; place-items: center; color: #fff;
+}
+.cosmic-calc-card h3 { font-size: 38px; margin: 0 0 8px; }
+
+/* ---------- Footer ---------- */
+.cosmic-footer { padding: 80px var(--cosmic-gutter) 40px; border-top: 1px solid rgba(255,255,255,.06); }
+.cosmic-footer .cols { display: grid; grid-template-columns: 1.4fr 1fr 1fr 1fr; gap: 60px; margin-bottom: 60px; }
+@media (max-width: 840px) { .cosmic-footer .cols { grid-template-columns: 1fr 1fr; } }
+.cosmic-footer h4 { font-family: var(--cosmic-f-mono); font-size: 12px; letter-spacing: .18em; text-transform: uppercase; color: var(--cosmic-ink-60); margin: 0 0 18px; }
+.cosmic-footer ul { list-style: none; padding: 0; margin: 0; display: grid; gap: 10px; }
+.cosmic-footer ul a { color: var(--cosmic-ink-80); font-size: 14px; }
+
+/* ---------- Mobile sticky CTA ---------- */
+.cosmic-sticky-cta {
+	position: fixed; left: 0; right: 0; bottom: 0; z-index: 60;
+	padding: 14px var(--cosmic-gutter) calc(14px + env(safe-area-inset-bottom));
+	background: linear-gradient(180deg, transparent 0%, rgba(7,6,13,.95) 40%);
+	transform: translateY(120%);
+	transition: transform .35s var(--cosmic-ease);
+	pointer-events: none;
+}
+.cosmic-sticky-cta.is-visible { transform: translateY(0); pointer-events: auto; }
+.cosmic-sticky-cta .cosmic-btn { width: 100%; height: 54px; justify-content: center; }
+@media (min-width: 768px) { .cosmic-sticky-cta { display: none; } }
+
+/* ---------- Section helpers (used by dynamic blocks) ---------- */
+.cosmic-section { padding: 80px 0; position: relative; }
+.cosmic-calc-grid-wrap { padding: 60px var(--cosmic-gutter); }
+
+/* ---------- WordPress core block alignment polish ---------- */
+.wp-site-blocks > * { background: transparent; }
+.wp-block-button .wp-block-button__link {
+	background: linear-gradient(100deg,#ff3d8b 0%,#a855ff 100%);
+	color: #fff !important;
+	border-radius: 999px;
+	padding: 14px 26px;
+	font-weight: 600;
+	box-shadow: 0 12px 36px rgba(255,61,139,.4);
+}
+.wp-block-button.is-style-outline .wp-block-button__link {
+	background: transparent;
+	border: 1px solid rgba(255,255,255,.18);
+	color: #fff !important;
+	box-shadow: none;
+}
+
+/* Form polish — comment box, contact forms */
+input[type="text"], input[type="email"], input[type="url"], input[type="search"],
+input[type="tel"], input[type="number"], input[type="password"], textarea {
+	width: 100%;
+	max-width: 100%;
+	padding: 14px 18px;
+	background: rgba(255,255,255,.04);
+	border: 1px solid rgba(255,255,255,.1);
+	border-radius: 14px;
+	color: #fff;
+	font-family: var(--cosmic-f-ui);
+	font-size: 16px;
+}
+input:focus, textarea:focus { outline: none; border-color: rgba(255,61,139,.6); box-shadow: 0 0 0 4px rgba(255,61,139,.15); }
+
+/* Comments list */
+.cosmic-comment-list .comment { background: rgba(255,255,255,.03); border: 1px solid rgba(255,255,255,.06); border-radius: 16px; padding: 18px 20px; margin: 12px 0; }
+.cosmic-comment-list .comment .comment-author { font-weight: 600; }
+.cosmic-comment-list .comment .comment-meta a { color: var(--cosmic-ink-60); font-size: 12px; }
+
+/* Pagination */
+.cosmic-pagination .page-numbers {
+	display: inline-block; margin: 0 4px; padding: 10px 16px;
+	border-radius: 999px; background: rgba(255,255,255,.04);
+	border: 1px solid rgba(255,255,255,.08); color: var(--cosmic-ink-80);
+	font-family: var(--cosmic-f-mono); font-size: 13px;
+}
+.cosmic-pagination .page-numbers.current,
+.cosmic-pagination .page-numbers:hover { color: #fff; background: rgba(255,61,139,.18); border-color: rgba(255,61,139,.4); }
+
+/* Widget */
+.cosmic-widget { margin: 18px 0; }
+.cosmic-widget__title { font-family: var(--cosmic-f-mono); font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--cosmic-ink-60); margin: 0 0 12px; }
+
+/* Footer menu (when active) */
+.cosmic-footer__menu { list-style: none; padding: 0; margin: 0; display: flex; gap: 18px; flex-wrap: wrap; font-size: 13px; color: var(--cosmic-ink-60); }
+.cosmic-footer__menu a { color: var(--cosmic-ink-60); }
+.cosmic-footer__menu a:hover { color: #fff; }
+
+/* Custom logo image */
+.cosmic-logo--custom .custom-logo-link img { max-height: 44px; width: auto; }
+
+/* ---------- Reveal on scroll ---------- */
+[data-cosmic-reveal] { opacity: 0; transform: translateY(20px); transition: opacity .7s var(--cosmic-ease), transform .7s var(--cosmic-ease); }
+[data-cosmic-reveal].is-visible { opacity: 1; transform: none; }
+
+/* ---------- Animated counter ---------- */
+[data-cosmic-count]::after { content: attr(data-suffix); }

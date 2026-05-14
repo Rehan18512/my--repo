@@ -1,0 +1,76 @@
+/* =================================================================
+   Cosmic — Design Tokens
+   Loaded first. Variables only. No element selectors.
+   ================================================================= */
+
+:root {
+	/* Backgrounds */
+	--cosmic-bg-0:   #07060d;
+	--cosmic-bg-1:   #0d0a18;
+	--cosmic-bg-2:   #15102a;
+	--cosmic-bg-3:   #1c1638;
+
+	/* Glass */
+	--cosmic-glass:        rgba(255,255,255,.04);
+	--cosmic-glass-2:      rgba(255,255,255,.07);
+	--cosmic-glass-border: rgba(255,255,255,.09);
+	--cosmic-glass-border-strong: rgba(255,255,255,.18);
+
+	/* Ink */
+	--cosmic-ink-100: #f7f2ff;
+	--cosmic-ink-80:  #cfc6e0;
+	--cosmic-ink-60:  #9a90b3;
+	--cosmic-ink-40:  #6b6485;
+	--cosmic-ink-20:  #3d385a;
+
+	/* Neon accents */
+	--cosmic-rose:    #ff3d8b;
+	--cosmic-rose-2:  #ff7ab6;
+	--cosmic-violet:  #a855ff;
+	--cosmic-violet-2:#c084ff;
+	--cosmic-cyan:    #22e0f5;
+	--cosmic-gold:    #ffd27a;
+
+	/* Gradients */
+	--cosmic-aurora:    linear-gradient(100deg,#ff3d8b 0%,#c084ff 45%,#22e0f5 100%);
+	--cosmic-rose-heat: linear-gradient(135deg,#ff3d8b 0%,#a855ff 100%);
+
+	/* Radii */
+	--cosmic-r-sm: 10px;
+	--cosmic-r-md: 16px;
+	--cosmic-r-lg: 24px;
+	--cosmic-r-xl: 32px;
+	--cosmic-r-2xl: 44px;
+	--cosmic-r-pill: 999px;
+
+	/* Shadows / glows */
+	--cosmic-shadow-sm:  0 4px 16px rgba(0,0,0,.35);
+	--cosmic-shadow-md:  0 12px 40px rgba(0,0,0,.45);
+	--cosmic-shadow-lg:  0 24px 80px rgba(0,0,0,.55);
+	--cosmic-glow-rose:   0 0 60px rgba(255,61,139,.45),0 0 120px rgba(255,61,139,.2);
+	--cosmic-glow-violet: 0 0 60px rgba(168,85,255,.45),0 0 120px rgba(168,85,255,.2);
+	--cosmic-glow-cyan:   0 0 50px rgba(34,224,245,.35);
+
+	/* Fonts */
+	--cosmic-f-display: "Instrument Serif","Cormorant Garamond",serif;
+	--cosmic-f-ui:      "Geist","Inter Tight",system-ui,sans-serif;
+	--cosmic-f-mono:    "JetBrains Mono","IBM Plex Mono",ui-monospace,monospace;
+
+	/* Easing */
+	--cosmic-ease:        cubic-bezier(.2,.7,.3,1);
+	--cosmic-ease-bounce: cubic-bezier(.34,1.56,.64,1);
+
+	/* Container */
+	--cosmic-container: 1200px;
+	--cosmic-wide:      1440px;
+	--cosmic-gutter:    clamp(20px,4vw,56px);
+}
+
+/* Honour reduced motion globally */
+@media (prefers-reduced-motion: reduce) {
+	*, *::before, *::after {
+		animation-duration: .001ms !important;
+		animation-iteration-count: 1 !important;
+		transition-duration: .001ms !important;
+	}
+}

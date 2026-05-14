@@ -1,0 +1,439 @@
+/* =================================================================
+   Cosmic — Calculator plugin overrides
+   ------------------------------------------------------------------
+   Re-skins the rendered DOM of the existing plugins:
+
+     .lcp-wrap   Love Calculator Pro
+     .fcp-wrap   FLAMES Calculator Pro
+     .fc-wrap    Friendship Calculator   (cosmic-calculators-pro)
+     .mc-wrap    Mulank / Numerology     (cosmic-calculators-pro)
+     .cc-wrap    Crush Calculator        (cosmic-calculators-pro)
+
+   We override the plugins' own scoped styles via higher specificity
+   (body.cosmic-2026 + .xxx-wrap). The plugins still calculate, animate,
+   share, store history etc. — we only restyle the surface.
+
+   We DO NOT change any class names, IDs, data-* attributes or
+   DOM structure. SEO content (h2/h3 inside FAQ, JSON-LD blocks,
+   internal links the plugin emits) is preserved as-is.
+   ================================================================= */
+
+/* ---------- Shared base across all 5 plugin wrappers ------------- */
+body.cosmic-2026 .lcp-wrap,
+body.cosmic-2026 .fcp-wrap,
+body.cosmic-2026 .fc-wrap,
+body.cosmic-2026 .mc-wrap,
+body.cosmic-2026 .cc-wrap {
+	position: relative;
+	max-width: 720px;
+	margin: 40px auto;
+	padding: 36px clamp(20px, 4vw, 40px);
+	color: var(--cosmic-ink-100);
+	font-family: var(--cosmic-f-ui);
+	line-height: 1.55;
+
+	background: linear-gradient(180deg, rgba(255,255,255,.06) 0%, rgba(255,255,255,.02) 100%);
+	backdrop-filter: blur(28px);
+	-webkit-backdrop-filter: blur(28px);
+	border: 1px solid var(--cosmic-glass-border);
+	border-radius: var(--cosmic-r-xl);
+	box-shadow: var(--cosmic-shadow-md), inset 0 1px 0 rgba(255,255,255,.08);
+}
+
+/* Aurora rim — same gradient as the design system glass-rim */
+body.cosmic-2026 .lcp-wrap::before,
+body.cosmic-2026 .fcp-wrap::before,
+body.cosmic-2026 .fc-wrap::before,
+body.cosmic-2026 .mc-wrap::before,
+body.cosmic-2026 .cc-wrap::before {
+	content: ""; position: absolute; inset: 0;
+	border-radius: inherit; padding: 1px;
+	background: linear-gradient(135deg, rgba(255,61,139,.6), rgba(168,85,255,0) 40%, rgba(34,224,245,.6) 100%);
+	-webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+	-webkit-mask-composite: xor;
+	        mask-composite: exclude;
+	pointer-events: none;
+}
+
+/* Disable plugin-specific pastel/light backgrounds — we drive the chrome */
+body.cosmic-2026 .lcp-bg,
+body.cosmic-2026 .fcp-bg,
+body.cosmic-2026 .fc-bg,
+body.cosmic-2026 .mc-bg,
+body.cosmic-2026 .cc-bg { display: none !important; }
+
+/* Plugin-emitted floating hearts → toned & coloured to match */
+body.cosmic-2026 .lcp-h,
+body.cosmic-2026 .fcp-h { color: var(--cosmic-rose-2) !important; opacity: .35; filter: drop-shadow(0 0 6px rgba(255,61,139,.6)); }
+
+/* ---------- Typography inside the plugin --------------------------- */
+body.cosmic-2026 .lcp-wrap h1, body.cosmic-2026 .lcp-wrap h2, body.cosmic-2026 .lcp-wrap h3,
+body.cosmic-2026 .fcp-wrap h1, body.cosmic-2026 .fcp-wrap h2, body.cosmic-2026 .fcp-wrap h3,
+body.cosmic-2026 .fc-wrap h1,  body.cosmic-2026 .fc-wrap h2,  body.cosmic-2026 .fc-wrap h3,
+body.cosmic-2026 .mc-wrap h1,  body.cosmic-2026 .mc-wrap h2,  body.cosmic-2026 .mc-wrap h3,
+body.cosmic-2026 .cc-wrap h1,  body.cosmic-2026 .cc-wrap h2,  body.cosmic-2026 .cc-wrap h3 {
+	font-family: var(--cosmic-f-display) !important;
+	color: var(--cosmic-ink-100) !important;
+	letter-spacing: -.02em;
+	font-weight: 400;
+}
+
+body.cosmic-2026 .lcp-title,
+body.cosmic-2026 .fcp-title,
+body.cosmic-2026 .fc-title,
+body.cosmic-2026 .mc-title,
+body.cosmic-2026 .cc-title {
+	background: var(--cosmic-aurora) !important;
+	-webkit-background-clip: text !important;
+	        background-clip: text !important;
+	color: transparent !important;
+	font-size: clamp(34px, 5vw, 56px) !important;
+}
+body.cosmic-2026 .lcp-sub,
+body.cosmic-2026 .fcp-sub,
+body.cosmic-2026 .fc-sub,
+body.cosmic-2026 .mc-sub,
+body.cosmic-2026 .cc-sub { color: var(--cosmic-ink-60) !important; opacity: 1 !important; font-style: normal !important; }
+
+/* ---------- Form inputs ------------------------------------------- */
+body.cosmic-2026 .lcp-wrap input[type="text"],
+body.cosmic-2026 .lcp-wrap input[type="date"],
+body.cosmic-2026 .fcp-wrap input[type="text"],
+body.cosmic-2026 .fc-wrap  input[type="text"],
+body.cosmic-2026 .mc-wrap  input[type="date"],
+body.cosmic-2026 .mc-wrap  input[type="text"],
+body.cosmic-2026 .cc-wrap  input[type="text"],
+body.cosmic-2026 .cc-wrap  input[type="date"],
+body.cosmic-2026 .cc-wrap  select,
+body.cosmic-2026 .mc-wrap  select,
+body.cosmic-2026 .lcp-wrap select {
+	width: 100%;
+	height: 64px;
+	padding: 18px 22px;
+	background: rgba(255,255,255,.04) !important;
+	border: 1px solid rgba(255,255,255,.1) !important;
+	border-radius: 18px !important;
+	color: #fff !important;
+	font-family: var(--cosmic-f-display) !important;
+	font-size: 28px !important;
+	letter-spacing: -.01em;
+	box-shadow: none !important;
+	transition: border-color .2s var(--cosmic-ease), box-shadow .2s var(--cosmic-ease);
+}
+body.cosmic-2026 .lcp-wrap input:focus,
+body.cosmic-2026 .fcp-wrap input:focus,
+body.cosmic-2026 .fc-wrap input:focus,
+body.cosmic-2026 .mc-wrap input:focus, body.cosmic-2026 .mc-wrap select:focus,
+body.cosmic-2026 .cc-wrap input:focus, body.cosmic-2026 .cc-wrap select:focus,
+body.cosmic-2026 .lcp-wrap select:focus {
+	outline: none !important;
+	border-color: rgba(255,61,139,.6) !important;
+	box-shadow: 0 0 0 4px rgba(255,61,139,.15), 0 0 30px rgba(255,61,139,.25) !important;
+}
+
+body.cosmic-2026 .lcp-wrap label,
+body.cosmic-2026 .fcp-wrap label,
+body.cosmic-2026 .fc-wrap label,
+body.cosmic-2026 .mc-wrap label,
+body.cosmic-2026 .cc-wrap label {
+	font-family: var(--cosmic-f-mono) !important;
+	font-size: 11px !important;
+	letter-spacing: .12em !important;
+	text-transform: uppercase !important;
+	color: var(--cosmic-ink-60) !important;
+}
+
+/* ---------- Primary CTA (every plugin renders some flavour) --------- */
+body.cosmic-2026 .lcp-btn,
+body.cosmic-2026 .lcp-cta,
+body.cosmic-2026 .fcp-btn,
+body.cosmic-2026 .fcp-cta,
+body.cosmic-2026 .fc-btn,
+body.cosmic-2026 .mc-btn,
+body.cosmic-2026 .cc-btn,
+body.cosmic-2026 .lcp-wrap button[type="submit"],
+body.cosmic-2026 .fcp-wrap button[type="submit"],
+body.cosmic-2026 .fc-wrap  button[type="submit"],
+body.cosmic-2026 .mc-wrap  button[type="submit"],
+body.cosmic-2026 .cc-wrap  button[type="submit"] {
+	width: 100%;
+	height: 64px !important;
+	padding: 0 30px !important;
+	border-radius: 999px !important;
+	border: none !important;
+	color: #fff !important;
+	font-family: var(--cosmic-f-ui) !important;
+	font-weight: 600 !important;
+	font-size: 17px !important;
+	background: linear-gradient(100deg, #ff3d8b 0%, #a855ff 100%) !important;
+	box-shadow: 0 12px 36px rgba(255,61,139,.45), inset 0 1px 0 rgba(255,255,255,.3) !important;
+	cursor: pointer;
+	transition: transform .18s var(--cosmic-ease), box-shadow .18s var(--cosmic-ease);
+}
+body.cosmic-2026 .lcp-btn:hover,
+body.cosmic-2026 .lcp-cta:hover,
+body.cosmic-2026 .fcp-btn:hover,
+body.cosmic-2026 .fc-btn:hover,
+body.cosmic-2026 .mc-btn:hover,
+body.cosmic-2026 .cc-btn:hover { transform: translateY(-1px); box-shadow: 0 18px 48px rgba(255,61,139,.55) !important; }
+
+/* Secondary buttons (share, download, reset) */
+body.cosmic-2026 .lcp-share-btn,
+body.cosmic-2026 .lcp-reset,
+body.cosmic-2026 .fcp-share-btn,
+body.cosmic-2026 .fcp-reset,
+body.cosmic-2026 .fc-share-btn,
+body.cosmic-2026 .mc-share-btn,
+body.cosmic-2026 .cc-share-btn {
+	background: rgba(255,255,255,.04) !important;
+	border: 1px solid rgba(255,255,255,.12) !important;
+	color: var(--cosmic-ink-100) !important;
+	border-radius: 999px !important;
+	height: 48px !important;
+	font-weight: 600 !important;
+}
+
+/* ---------- Toggles (mode / lang / gender / status) chips ---------- */
+body.cosmic-2026 .lcp-toggle,
+body.cosmic-2026 .lcp-chip,
+body.cosmic-2026 .lcp-gender-chip,
+body.cosmic-2026 .lcp-status-chip,
+body.cosmic-2026 .fcp-toggle,
+body.cosmic-2026 .fcp-chip,
+body.cosmic-2026 .fc-chip,
+body.cosmic-2026 .mc-chip,
+body.cosmic-2026 .cc-chip {
+	display: inline-flex; align-items: center; gap: 8px;
+	height: 38px !important; padding: 0 16px !important;
+	border-radius: 999px !important;
+	background: rgba(255,255,255,.04) !important;
+	border: 1px solid rgba(255,255,255,.08) !important;
+	color: var(--cosmic-ink-80) !important;
+	font-size: 13px !important;
+	cursor: pointer;
+}
+body.cosmic-2026 .lcp-toggle.is-active,
+body.cosmic-2026 .lcp-chip.is-active,
+body.cosmic-2026 .lcp-gender-chip.is-active,
+body.cosmic-2026 .lcp-status-chip.is-active,
+body.cosmic-2026 .fcp-toggle.is-active,
+body.cosmic-2026 .fcp-chip.is-active,
+body.cosmic-2026 .fc-chip.is-active,
+body.cosmic-2026 .mc-chip.is-active,
+body.cosmic-2026 .cc-chip.is-active {
+	background: rgba(255,61,139,.15) !important;
+	border-color: rgba(255,61,139,.45) !important;
+	color: #fff !important;
+}
+
+/* ---------- Result reveal cards ----------------------------------- */
+body.cosmic-2026 .lcp-result,
+body.cosmic-2026 .fcp-result,
+body.cosmic-2026 .fc-result,
+body.cosmic-2026 .mc-result,
+body.cosmic-2026 .cc-result {
+	background: rgba(255,255,255,.03) !important;
+	border: 1px solid rgba(255,255,255,.08) !important;
+	border-radius: 24px !important;
+	padding: 28px !important;
+	margin-top: 28px !important;
+	box-shadow: var(--cosmic-shadow-md);
+}
+
+/* Percentage display — re-skinned to aurora gradient */
+body.cosmic-2026 .lcp-percent,
+body.cosmic-2026 .fcp-percent,
+body.cosmic-2026 .fc-percent,
+body.cosmic-2026 .cc-percent {
+	font-family: var(--cosmic-f-display) !important;
+	font-size: clamp(72px, 12vw, 132px) !important;
+	background: var(--cosmic-aurora) !important;
+	-webkit-background-clip: text !important;
+	        background-clip: text !important;
+	color: transparent !important;
+	text-shadow: none !important;
+	filter: drop-shadow(0 4px 30px rgba(255,61,139,.5));
+}
+
+/* Heart SVG fill (love calculator) — swap to neon aurora */
+body.cosmic-2026 .lcp-heart-fill stop:nth-child(1) { stop-color: #ff3d8b !important; }
+body.cosmic-2026 .lcp-heart-fill stop:nth-child(2) { stop-color: #ff7ab6 !important; }
+body.cosmic-2026 .lcp-heart-fill stop:nth-child(3) { stop-color: #c084ff !important; }
+
+/* Progress / radar bars */
+body.cosmic-2026 .lcp-bar,
+body.cosmic-2026 .fc-bar,
+body.cosmic-2026 .cc-bar,
+body.cosmic-2026 .fcp-bar {
+	background: rgba(255,255,255,.06) !important;
+	border-radius: 999px !important;
+	height: 8px !important;
+	overflow: hidden;
+}
+body.cosmic-2026 .lcp-bar > *,
+body.cosmic-2026 .fc-bar > *,
+body.cosmic-2026 .cc-bar > *,
+body.cosmic-2026 .fcp-bar > * {
+	background: linear-gradient(90deg,#ff3d8b,#a855ff) !important;
+	border-radius: inherit !important;
+}
+
+/* Bar labels */
+body.cosmic-2026 .lcp-bar-label,
+body.cosmic-2026 .fc-bar-label,
+body.cosmic-2026 .cc-bar-label { color: var(--cosmic-ink-80) !important; font-size: 13px !important; font-weight: 500 !important; }
+
+/* ---------- Advice cards (Golden Hint, Pro Tip, Life Lesson…) ----- */
+body.cosmic-2026 .lcp-advice,
+body.cosmic-2026 .lcp-tip,
+body.cosmic-2026 .fcp-advice,
+body.cosmic-2026 .fcp-tip,
+body.cosmic-2026 .fc-tip,
+body.cosmic-2026 .mc-tip,
+body.cosmic-2026 .cc-tip,
+body.cosmic-2026 .ccp-hint {
+	background: rgba(255,255,255,.03) !important;
+	border: 1px solid rgba(255,255,255,.06) !important;
+	border-radius: 18px !important;
+	padding: 20px 22px !important;
+	color: var(--cosmic-ink-80) !important;
+	box-shadow: none !important;
+}
+body.cosmic-2026 .lcp-advice-title,
+body.cosmic-2026 .fcp-advice-title,
+body.cosmic-2026 .ccp-hint-title {
+	font-family: var(--cosmic-f-mono) !important;
+	font-size: 10px !important;
+	letter-spacing: .14em !important;
+	text-transform: uppercase !important;
+	color: var(--cosmic-gold) !important;
+	margin-bottom: 8px !important;
+}
+
+/* ---------- History (localStorage list) --------------------------- */
+body.cosmic-2026 .lcp-history,
+body.cosmic-2026 .fcp-history {
+	background: rgba(255,255,255,.025) !important;
+	border: 1px solid rgba(255,255,255,.06) !important;
+	border-radius: 18px !important;
+	padding: 16px 18px !important;
+}
+body.cosmic-2026 .lcp-history-item,
+body.cosmic-2026 .fcp-history-item {
+	border-bottom: 1px solid rgba(255,255,255,.05) !important;
+	padding: 10px 0 !important;
+	font-size: 13px !important;
+}
+
+/* ---------- FAQ accordion (plugins emit semantic <details>) ------ */
+body.cosmic-2026 .lcp-faq details,
+body.cosmic-2026 .fcp-faq details,
+body.cosmic-2026 .fc-faq details,
+body.cosmic-2026 .mc-faq details,
+body.cosmic-2026 .cc-faq details {
+	background: rgba(255,255,255,.03);
+	border: 1px solid rgba(255,255,255,.06);
+	border-radius: 18px;
+	padding: 18px 22px;
+	margin: 12px 0;
+}
+body.cosmic-2026 .lcp-faq summary,
+body.cosmic-2026 .fcp-faq summary,
+body.cosmic-2026 .fc-faq summary,
+body.cosmic-2026 .mc-faq summary,
+body.cosmic-2026 .cc-faq summary {
+	cursor: pointer; list-style: none;
+	font-size: 17px; font-weight: 600;
+	color: var(--cosmic-ink-100);
+	display: flex; justify-content: space-between; align-items: center;
+}
+body.cosmic-2026 .lcp-faq summary::after,
+body.cosmic-2026 .fcp-faq summary::after,
+body.cosmic-2026 .fc-faq summary::after,
+body.cosmic-2026 .mc-faq summary::after,
+body.cosmic-2026 .cc-faq summary::after {
+	content: "+"; color: var(--cosmic-rose-2);
+	font-family: var(--cosmic-f-mono); font-size: 22px;
+	margin-left: 16px;
+	transition: transform .25s var(--cosmic-ease);
+}
+body.cosmic-2026 .lcp-faq details[open] summary::after,
+body.cosmic-2026 .fcp-faq details[open] summary::after,
+body.cosmic-2026 .fc-faq details[open] summary::after,
+body.cosmic-2026 .mc-faq details[open] summary::after,
+body.cosmic-2026 .cc-faq details[open] summary::after { transform: rotate(45deg); }
+body.cosmic-2026 .lcp-faq details p,
+body.cosmic-2026 .fcp-faq details p,
+body.cosmic-2026 .fc-faq details p,
+body.cosmic-2026 .mc-faq details p,
+body.cosmic-2026 .cc-faq details p {
+	color: var(--cosmic-ink-60); font-size: 14px; line-height: 1.65;
+	margin: 14px 0 0;
+}
+
+/* ---------- AdSense slots — keep but soften background ----------- */
+body.cosmic-2026 .lcp-ad,
+body.cosmic-2026 .fcp-ad,
+body.cosmic-2026 .fc-ad,
+body.cosmic-2026 .mc-ad,
+body.cosmic-2026 .cc-ad {
+	background: rgba(255,255,255,.02);
+	border: 1px dashed rgba(255,255,255,.08);
+	border-radius: 14px;
+	margin: 18px 0;
+}
+
+/* ---------- Per-tool accent overrides ----------------------------- */
+/* Crush — violet leaning */
+body.cosmic-2026 .cc-wrap .cc-percent,
+body.cosmic-2026 .cc-wrap .cc-title { filter: hue-rotate(20deg); }
+
+/* Friendship — cyan leaning */
+body.cosmic-2026 .fc-wrap .fc-percent {
+	background: linear-gradient(100deg,#22e0f5 0%,#a855ff 50%,#ff3d8b 100%) !important;
+	-webkit-background-clip: text !important;
+	        background-clip: text !important;
+	color: transparent !important;
+}
+
+/* Mulank — gold + violet (numerology) */
+body.cosmic-2026 .mc-wrap .mc-number {
+	background: linear-gradient(135deg, var(--cosmic-gold), var(--cosmic-violet)) !important;
+	-webkit-background-clip: text !important;
+	        background-clip: text !important;
+	color: transparent !important;
+}
+
+/* FLAMES — letter wheel */
+body.cosmic-2026 .fcp-wheel-letter {
+	color: var(--cosmic-ink-60) !important;
+}
+body.cosmic-2026 .fcp-wheel-letter.is-active {
+	color: var(--cosmic-rose) !important;
+	text-shadow: 0 0 20px rgba(255,61,139,.7);
+}
+
+/* ---------- Mobile tightening ------------------------------------ */
+@media (max-width: 640px) {
+	body.cosmic-2026 .lcp-wrap,
+	body.cosmic-2026 .fcp-wrap,
+	body.cosmic-2026 .fc-wrap,
+	body.cosmic-2026 .mc-wrap,
+	body.cosmic-2026 .cc-wrap {
+		margin: 24px 12px;
+		padding: 24px 18px;
+		border-radius: 24px;
+	}
+	body.cosmic-2026 .lcp-wrap input,
+	body.cosmic-2026 .fcp-wrap input,
+	body.cosmic-2026 .fc-wrap input,
+	body.cosmic-2026 .mc-wrap input,
+	body.cosmic-2026 .cc-wrap input { font-size: 22px !important; height: 56px; }
+}
+
+/* ---------- Skin attribute fallbacks ----------------------------- */
+/* If the user has set .lcp-skin-rose / sunset / royal in plugin
+   admin, we still drive the dark cosmic look — but we keep the
+   plugin's hint of accent via the rim gradient hue rotation. */
+body.cosmic-2026 .lcp-skin-sunset::before { filter: hue-rotate(-15deg); }
+body.cosmic-2026 .lcp-skin-royal::before  { filter: hue-rotate(20deg) saturate(1.1); }
