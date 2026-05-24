@@ -267,8 +267,13 @@ if ( ! function_exists( 'lm_pro_render_generator' ) ) {
     }
     </script>
 </div>
+        <?php
+        $lm_html = ob_get_clean();
 
-<script>
+        // Deliver the behavioral JS via the footer so WordPress content
+        // filters (wpautop) can never inject tags that break the script.
+        ob_start();
+        ?>
 (function(){
     'use strict';
     var $ = function(id){ return document.getElementById(id); };
@@ -616,10 +621,21 @@ if ( ! function_exists( 'lm_pro_render_generator' ) ) {
     var counterEl = $('lm-counter'); var count = 746201;
     setInterval(function(){ count += 1 + Math.floor(Math.random()*4); counterEl.textContent = count.toLocaleString('en-IN'); }, 8000);
 })();
-</script>
         <?php
-        return ob_get_clean();
+        $lm_js = ob_get_clean();
+
+        if ( ! wp_script_is( 'lm-pro-inline', 'enqueued' ) ) {
+            wp_register_script( 'lm-pro-inline', '', array(), '1.0.0', true );
+            wp_enqueue_script( 'lm-pro-inline' );
+            wp_add_inline_script( 'lm-pro-inline', $lm_js );
+        }
+
+        return $lm_html;
     }
 
     add_shortcode( 'love_message_generator', 'lm_pro_render_generator' );
+
+    // Aliases so the tool still works if a different shortcode name is used.
+    add_shortcode( 'love_message', 'lm_pro_render_generator' );
+    add_shortcode( 'romantic_message_generator', 'lm_pro_render_generator' );
 }

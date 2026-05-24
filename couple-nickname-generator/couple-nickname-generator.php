@@ -283,8 +283,13 @@ if ( ! function_exists( 'cn_pro_render_generator' ) ) {
     }
     </script>
 </div>
+        <?php
+        $cn_html = ob_get_clean();
 
-<script>
+        // Deliver the behavioral JS via the footer so WordPress content
+        // filters (wpautop) can never inject tags that break the script.
+        ob_start();
+        ?>
 (function(){
     'use strict';
     var $ = function(id){ return document.getElementById(id); };
@@ -512,10 +517,21 @@ if ( ! function_exists( 'cn_pro_render_generator' ) ) {
     var counterEl = $('cn-counter'); var count = 512883;
     setInterval(function(){ count += 1 + Math.floor(Math.random()*3); counterEl.textContent = count.toLocaleString('en-IN'); }, 8000);
 })();
-</script>
         <?php
-        return ob_get_clean();
+        $cn_js = ob_get_clean();
+
+        if ( ! wp_script_is( 'cn-pro-inline', 'enqueued' ) ) {
+            wp_register_script( 'cn-pro-inline', '', array(), '1.0.0', true );
+            wp_enqueue_script( 'cn-pro-inline' );
+            wp_add_inline_script( 'cn-pro-inline', $cn_js );
+        }
+
+        return $cn_html;
     }
 
     add_shortcode( 'couple_nickname_generator', 'cn_pro_render_generator' );
+
+    // Aliases so the tool still works if a different shortcode name is used.
+    add_shortcode( 'couple_nickname', 'cn_pro_render_generator' );
+    add_shortcode( 'couple_name_generator', 'cn_pro_render_generator' );
 }

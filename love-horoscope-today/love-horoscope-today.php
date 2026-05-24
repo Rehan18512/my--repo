@@ -381,8 +381,13 @@ if ( ! function_exists( 'lh_pro_render_horoscope' ) ) {
     }
     </script>
 </div>
+        <?php
+        $lh_html = ob_get_clean();
 
-<script>
+        // Deliver the behavioral JS via the footer so WordPress content
+        // filters (wpautop) can never inject tags that break the script.
+        ob_start();
+        ?>
 (function(){
     'use strict';
     var $ = function(id){ return document.getElementById(id); };
@@ -702,10 +707,21 @@ if ( ! function_exists( 'lh_pro_render_horoscope' ) ) {
     var counterEl = $('lh-counter'); var count = 218640;
     setInterval(function(){ count += 1 + Math.floor(Math.random()*4); counterEl.textContent = count.toLocaleString('en-IN'); }, 8000);
 })();
-</script>
         <?php
-        return ob_get_clean();
+        $lh_js = ob_get_clean();
+
+        if ( ! wp_script_is( 'lh-pro-inline', 'enqueued' ) ) {
+            wp_register_script( 'lh-pro-inline', '', array(), '1.0.0', true );
+            wp_enqueue_script( 'lh-pro-inline' );
+            wp_add_inline_script( 'lh-pro-inline', $lh_js );
+        }
+
+        return $lh_html;
     }
 
     add_shortcode( 'love_horoscope', 'lh_pro_render_horoscope' );
+
+    // Aliases so the tool still works if a different shortcode name is used.
+    add_shortcode( 'love_horoscope_today', 'lh_pro_render_horoscope' );
+    add_shortcode( 'daily_love_horoscope', 'lh_pro_render_horoscope' );
 }
