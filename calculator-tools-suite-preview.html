@@ -1,0 +1,1612 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Calculator Tools Suite — Preview</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>body{background:#f3eefb;margin:0;padding:24px 0;} .sep{max-width:900px;margin:40px auto;border:0;border-top:2px dashed #cbb6e6;}</style>
+</head><body>
+<style id="cts-theme">
+    .cts-wrap, .cts-wrap *, .cts-wrap *::before, .cts-wrap *::after { box-sizing: border-box; }
+    .cts-wrap {
+        /* One unified palette shared by all three calculators */
+        --c-deep1: #1a0b3d; --c-deep2: #3b1566; --c-deep3: #6b2b8f;
+        --c-gold:  #f4c430; --c-gold2: #e0a91b; --c-gold-soft: #fff7da;
+        --c-ink:   #251a3d; --c-muted: #6a5e85; --c-soft: #faf7ff; --c-line: #ece6f6;
+        font-family: 'DM Sans','Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+        color: var(--c-ink); max-width: 900px; margin: 0 auto; padding: 12px; line-height: 1.55;
+    }
+    .cts-wrap h1,.cts-wrap h2,.cts-wrap h3,.cts-wrap h4 { font-family:'Poppins','Syne',system-ui,sans-serif; font-weight:800; letter-spacing:-0.01em; margin:0; }
+
+    /* Toolbar: language + advanced toggles */
+    .cts-toolbar { display:flex; justify-content:flex-end; gap:8px; flex-wrap:wrap; margin-bottom:10px; }
+    .cts-toggle { display:inline-flex; align-items:center; gap:6px; background:#fff; border:2px solid var(--c-line); border-radius:999px; padding:6px 6px; min-height:40px; }
+    .cts-seg { border:none; background:transparent; font-family:'Poppins',sans-serif; font-weight:700; font-size:13px; color:var(--c-muted); padding:6px 12px; border-radius:999px; cursor:pointer; transition:all .2s; }
+    .cts-seg.cts-on { background:linear-gradient(135deg,var(--c-gold),var(--c-gold2)); color:#3a2600; box-shadow:0 6px 16px rgba(224,169,27,.35); }
+    .cts-adv-btn { display:inline-flex; align-items:center; gap:6px; background:#fff; border:2px solid var(--c-line); border-radius:999px; padding:8px 14px; min-height:40px; font-family:'Poppins',sans-serif; font-weight:700; font-size:13px; color:var(--c-muted); cursor:pointer; transition:all .2s; }
+    .cts-adv-btn.cts-on { border-color:var(--c-gold2); color:#7a5a05; background:var(--c-gold-soft); }
+
+    /* Header */
+    .cts-header { background:linear-gradient(135deg,var(--c-deep1) 0%,var(--c-deep2) 55%,var(--c-deep3) 100%); border-radius:22px; padding:28px 20px; color:#fff; text-align:center; box-shadow:0 20px 60px rgba(60,15,90,.28); position:relative; overflow:hidden; }
+    .cts-header::before { content:""; position:absolute; inset:-50%; background:radial-gradient(circle at 28% 18%,rgba(244,196,48,.20),transparent 60%),radial-gradient(circle at 75% 82%,rgba(123,45,139,.30),transparent 60%); pointer-events:none; }
+    .cts-h-icon { font-size:50px; line-height:1; display:inline-block; animation:cts-bob 2.4s ease-in-out infinite; }
+    .cts-header h1 { font-size:36px; margin:8px 0 6px; color:#fff; position:relative; z-index:1; }
+    .cts-h-sub { opacity:.88; font-size:15px; margin:0; position:relative; z-index:1; }
+    .cts-stats { display:flex; align-items:center; justify-content:center; margin-top:18px; flex-wrap:wrap; position:relative; z-index:1; }
+    .cts-stat { padding:4px 14px; min-width:96px; }
+    .cts-stat-num { font-weight:800; font-family:'Poppins',sans-serif; font-size:18px; color:var(--c-gold); }
+    .cts-stat-lbl { font-size:11px; opacity:.8; text-transform:uppercase; letter-spacing:.06em; }
+    .cts-stat + .cts-stat { border-left:1px solid rgba(255,255,255,.22); }
+
+    /* Card */
+    .cts-card { background:#fff; border-radius:22px; padding:24px 20px; margin-top:18px; box-shadow:0 20px 60px rgba(0,0,0,.08); border:1px solid var(--c-line); }
+
+    /* Inputs */
+    .cts-inputs { display:grid; grid-template-columns:1fr auto 1fr; gap:14px; align-items:center; }
+    .cts-field { display:flex; flex-direction:column; align-items:center; gap:10px; }
+    .cts-avatar { width:64px; height:64px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-family:'Poppins',sans-serif; font-weight:800; font-size:26px; color:#fff; box-shadow:0 8px 24px rgba(0,0,0,.18); transition:transform .25s; }
+    .cts-avatar.cts-a { background:linear-gradient(135deg,#7B2D8B,#b558d6); }
+    .cts-avatar.cts-b { background:linear-gradient(135deg,var(--c-gold2),var(--c-gold)); color:#3a2600; }
+    .cts-avatar:hover { transform:scale(1.05); }
+    .cts-input,.cts-select { width:100%; min-height:52px; padding:12px 14px; font-size:16px; border:2px solid var(--c-line); border-radius:14px; outline:none; background:var(--c-soft); transition:border-color .2s,background .2s,box-shadow .2s; font-family:inherit; color:var(--c-ink); }
+    .cts-input:focus,.cts-select:focus { border-color:var(--c-gold2); background:#fff; box-shadow:0 0 0 4px rgba(244,196,48,.18); }
+    .cts-label { font-size:12.5px; font-weight:700; color:var(--c-muted); align-self:flex-start; }
+    .cts-vs { width:56px; height:56px; border-radius:50%; background:linear-gradient(135deg,var(--c-deep3),var(--c-gold2)); color:#fff; display:flex; align-items:center; justify-content:center; font-size:22px; font-weight:800; font-family:'Poppins',sans-serif; box-shadow:0 10px 24px rgba(107,43,143,.35); animation:cts-pulse 1.6s ease-in-out infinite; }
+    .cts-single { max-width:420px; margin:0 auto; display:flex; flex-direction:column; gap:8px; }
+    .cts-row { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+
+    .cts-btn { display:inline-flex; align-items:center; justify-content:center; gap:8px; min-height:56px; padding:18px 22px; font-size:17px; font-weight:700; font-family:'Poppins',sans-serif; border:none; border-radius:14px; cursor:pointer; width:100%; transition:transform .15s,box-shadow .2s,opacity .2s; }
+    .cts-btn-primary { background:linear-gradient(135deg,var(--c-gold),var(--c-gold2)); color:#3a2600; box-shadow:0 14px 32px rgba(224,169,27,.40); margin-top:18px; }
+    .cts-btn-primary:hover { transform:translateY(-2px); box-shadow:0 18px 40px rgba(224,169,27,.52); }
+    .cts-btn-primary:active { transform:translateY(0); }
+    .cts-trust { display:flex; gap:10px; justify-content:center; flex-wrap:wrap; margin-top:14px; }
+    .cts-trust span { font-size:12.5px; color:var(--c-muted); background:var(--c-soft); padding:6px 12px; border-radius:999px; min-height:30px; display:inline-flex; align-items:center; border:1px solid var(--c-line); }
+    .cts-error { display:none; background:#fff1f2; color:#b3162a; border:1px solid #ffd6db; padding:10px 14px; border-radius:12px; margin-top:12px; font-size:14px; text-align:center; }
+    .cts-error.cts-show { display:block; animation:cts-shake .4s; }
+
+    /* Loading */
+    .cts-loading { display:none; text-align:center; padding:14px 8px 6px; }
+    .cts-loading.cts-show { display:block; }
+    .cts-rings { position:relative; width:160px; height:160px; margin:6px auto 18px; }
+    .cts-ring { position:absolute; inset:0; border-radius:50%; border:3px solid rgba(244,196,48,.40); animation:cts-ring 2s ease-out infinite; }
+    .cts-ring:nth-child(2){ animation-delay:.5s; border-color:rgba(123,45,139,.42); }
+    .cts-ring:nth-child(3){ animation-delay:1s; border-color:rgba(224,169,27,.5); }
+    .cts-ring-emoji { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-size:58px; animation:cts-pulse 1.2s ease-in-out infinite; }
+    .cts-load-title { font-size:18px; font-weight:700; font-family:'Poppins',sans-serif; color:var(--c-deep2); margin-bottom:12px; }
+    .cts-load-step { font-size:15px; color:var(--c-muted); min-height:24px; transition:opacity .25s; }
+    .cts-progress { height:8px; background:var(--c-line); border-radius:999px; overflow:hidden; margin:14px auto 4px; max-width:360px; }
+    .cts-progress-bar { height:100%; width:0%; background:linear-gradient(90deg,var(--c-gold2),var(--c-deep3)); border-radius:999px; transition:width .3s ease; }
+
+    /* Result */
+    .cts-result { display:none; }
+    .cts-result.cts-show { display:block; animation:cts-fadeUp .55s ease both; }
+    .cts-rcard { background:linear-gradient(135deg,var(--c-deep1),var(--c-deep2),var(--c-deep3)); color:#fff; border-radius:22px; padding:28px 20px; text-align:center; box-shadow:0 20px 60px rgba(0,0,0,.25); position:relative; overflow:hidden; }
+    .cts-rcard::after { content:""; position:absolute; inset:0; background:radial-gradient(circle at 20% 10%,rgba(244,196,48,.25),transparent 50%),radial-gradient(circle at 80% 90%,rgba(181,88,214,.18),transparent 55%); pointer-events:none; }
+    .cts-rc-top { display:flex; align-items:center; justify-content:center; gap:14px; flex-wrap:wrap; margin-bottom:6px; position:relative; z-index:1; }
+    .cts-rc-name { display:flex; align-items:center; gap:10px; font-weight:700; font-family:'Poppins',sans-serif; font-size:17px; }
+    .cts-rc-name .cts-avatar { width:44px; height:44px; font-size:18px; }
+    .cts-rc-mid { font-size:22px; opacity:.9; }
+    .cts-ring-wrap { position:relative; width:220px; height:220px; margin:14px auto 10px; z-index:1; }
+    .cts-ring-wrap svg { transform:rotate(-90deg); width:100%; height:100%; }
+    .cts-ring-bg { fill:none; stroke:rgba(255,255,255,.12); stroke-width:12; }
+    .cts-ring-fg { fill:none; stroke-width:12; stroke-linecap:round; transition:stroke-dashoffset 1.8s cubic-bezier(.22,.9,.3,1); }
+    .cts-percent { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; flex-direction:column; }
+    .cts-percent-num { font-size:62px; font-weight:800; font-family:'Poppins',sans-serif; line-height:1; }
+    .cts-percent-sym { font-size:22px; font-weight:700; opacity:.85; }
+    .cts-percent-sub { font-size:12px; opacity:.75; margin-top:2px; letter-spacing:.04em; }
+    .cts-level { display:inline-block; background:rgba(255,255,255,.12); border:1px solid rgba(255,255,255,.22); padding:8px 18px; border-radius:999px; font-weight:700; font-family:'Poppins',sans-serif; font-size:15px; margin:6px 0 10px; position:relative; z-index:1; }
+    .cts-rc-desc { max-width:600px; margin:0 auto; opacity:.92; font-size:15px; position:relative; z-index:1; }
+    .cts-watermark { margin-top:14px; font-size:12.5px; opacity:.72; position:relative; z-index:1; }
+
+    /* Bars */
+    .cts-bars { margin-top:8px; }
+    .cts-bar-row { margin:14px 0; }
+    .cts-bar-top { display:flex; justify-content:space-between; font-size:14px; font-weight:600; color:var(--c-ink); margin-bottom:6px; }
+    .cts-bar-top span:last-child { color:var(--c-deep3); font-family:'Poppins',sans-serif; font-weight:800; }
+    .cts-bar { height:10px; background:var(--c-line); border-radius:999px; overflow:hidden; }
+    .cts-bar-fill { height:100%; width:0%; border-radius:999px; background:linear-gradient(90deg,var(--c-gold2),var(--c-deep3)); transition:width 1.5s cubic-bezier(.22,.9,.3,1); }
+
+    /* Golden hints */
+    .cts-hints { background:linear-gradient(135deg,#fff8dc,#fff1c1); border-radius:18px; padding:20px; margin-top:18px; border:1px solid #f7e190; }
+    .cts-hints h3 { font-size:19px; color:#7a5a05; margin-bottom:12px; }
+    .cts-hints-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:12px; }
+    .cts-hint { background:#fff; border-radius:14px; padding:14px; border-left:4px solid var(--c-gold2); box-shadow:0 8px 20px rgba(0,0,0,.05); opacity:0; transform:translateY(8px); animation:cts-fadeUp .5s ease forwards; }
+    .cts-hint-icon { font-size:22px; margin-bottom:4px; }
+    .cts-hint h4 { font-size:14.5px; color:var(--c-deep2); margin-bottom:4px; }
+    .cts-hint p { font-size:13px; color:var(--c-muted); margin:0; }
+
+    /* Extras (emoji / song / pet / career / horoscope / soulmate cards) */
+    .cts-extras { display:grid; grid-template-columns:repeat(2,1fr); gap:12px; margin-top:16px; }
+    .cts-x { background:#fff; border-radius:16px; padding:16px; box-shadow:0 10px 24px rgba(0,0,0,.06); border-top:4px solid var(--c-gold2); opacity:0; transform:translateY(8px); animation:cts-fadeUp .5s ease forwards; }
+    .cts-x-head { display:flex; align-items:center; gap:8px; margin-bottom:6px; }
+    .cts-x-emoji { font-size:24px; }
+    .cts-x-title { font-size:13px; font-weight:800; font-family:'Poppins',sans-serif; color:var(--c-deep3); text-transform:uppercase; letter-spacing:.04em; }
+    .cts-x-val { font-size:16px; font-weight:700; color:var(--c-ink); margin:0 0 2px; }
+    .cts-x-note { font-size:13px; color:var(--c-muted); margin:0; }
+
+    /* Advice */
+    .cts-advice { background:linear-gradient(135deg,#f3e9ff,#e7d6ff); border-radius:18px; padding:20px; margin-top:16px; border:1px solid #d8c1f0; }
+    .cts-advice h3 { font-size:18px; color:#5a1f8a; margin-bottom:8px; }
+    .cts-advice p { font-style:italic; color:#3a2057; margin:0 0 12px; }
+    .cts-tags { display:flex; flex-wrap:wrap; gap:8px; }
+    .cts-tag { background:#fff; padding:6px 12px; border-radius:999px; font-size:12.5px; font-weight:600; color:#5a1f8a; border:1px solid #d8c1f0; }
+
+    /* Advanced details */
+    .cts-adv-panel { display:none; background:#fff; border-radius:18px; padding:20px; margin-top:16px; box-shadow:0 10px 24px rgba(0,0,0,.06); border:1px dashed var(--c-gold2); }
+    .cts-adv-panel.cts-show { display:block; animation:cts-fadeUp .45s ease both; }
+    .cts-adv-panel h3 { font-size:18px; color:var(--c-deep2); margin-bottom:12px; display:flex; align-items:center; gap:8px; }
+    .cts-adv-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:10px; }
+    .cts-adv-item { background:var(--c-soft); border-radius:12px; padding:12px 14px; border:1px solid var(--c-line); }
+    .cts-adv-item .k { font-size:11.5px; text-transform:uppercase; letter-spacing:.05em; color:var(--c-muted); font-weight:700; }
+    .cts-adv-item .v { font-size:15px; font-weight:700; color:var(--c-ink); margin-top:2px; }
+
+    /* Share + download */
+    .cts-share { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin-top:18px; }
+    .cts-share-btn { display:inline-flex; align-items:center; justify-content:center; gap:6px; min-height:48px; padding:12px 8px; font-size:14px; font-weight:700; font-family:'Poppins',sans-serif; border-radius:12px; border:none; cursor:pointer; color:#fff; text-decoration:none; transition:transform .15s,box-shadow .15s; }
+    .cts-share-btn:hover { transform:translateY(-2px); box-shadow:0 12px 26px rgba(0,0,0,.15); }
+    .cts-sb-wa { background:#25d366; }
+    .cts-sb-tw { background:#111; }
+    .cts-sb-dl { background:linear-gradient(135deg,var(--c-gold2),var(--c-deep3)); }
+    .cts-sb-copy { background:#5b5b6e; }
+    .cts-try { margin-top:14px; background:#fff; color:var(--c-deep2); border:2px solid var(--c-line); }
+    .cts-try:hover { border-color:var(--c-deep3); color:var(--c-deep3); }
+
+    /* Confetti */
+    .cts-confetti { position:fixed; inset:0; pointer-events:none; z-index:9999; overflow:hidden; }
+    .cts-confetti i { position:absolute; top:-20px; width:10px; height:14px; opacity:.95; animation:cts-fall linear forwards; border-radius:2px; }
+
+    /* Levels reference */
+    .cts-levels { display:grid; grid-template-columns:repeat(5,1fr); gap:10px; margin-top:22px; }
+    .cts-lvl { background:#fff; border-radius:16px; padding:14px 10px; text-align:center; box-shadow:0 10px 24px rgba(0,0,0,.06); border-top:4px solid var(--c-gold2); }
+    .cts-lvl-icon { font-size:26px; }
+    .cts-lvl h4 { font-size:14px; color:var(--c-ink); margin:4px 0; }
+    .cts-lvl-range { font-size:12px; color:var(--c-deep3); font-weight:700; }
+    .cts-lvl-desc { font-size:12px; color:var(--c-muted); margin:4px 0 0; }
+
+    /* Related tools */
+    .cts-related { margin-top:22px; }
+    .cts-related h2 { font-size:22px; color:var(--c-deep2); margin-bottom:12px; }
+    .cts-related-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; }
+    .cts-rt { display:block; text-decoration:none; background:#fff; border-radius:16px; padding:16px 12px; text-align:center; box-shadow:0 10px 24px rgba(0,0,0,.06); border-top:4px solid var(--c-gold2); color:inherit; transition:transform .15s,box-shadow .2s; }
+    .cts-rt:hover { transform:translateY(-3px); box-shadow:0 16px 32px rgba(0,0,0,.1); }
+    .cts-rt-icon { font-size:28px; }
+    .cts-rt h4 { font-size:14.5px; color:var(--c-ink); margin:6px 0 4px; }
+    .cts-rt p { font-size:12.5px; color:var(--c-muted); margin:0; }
+
+    .cts-foot { text-align:center; font-size:12.5px; color:var(--c-muted); margin-top:18px; }
+
+    /* Animations */
+    @keyframes cts-pulse { 0%,100%{ transform:scale(1);} 50%{ transform:scale(1.08);} }
+    @keyframes cts-bob { 0%,100%{ transform:translateY(0);} 50%{ transform:translateY(-6px);} }
+    @keyframes cts-ring { 0%{ transform:scale(.6); opacity:.9;} 100%{ transform:scale(1.4); opacity:0;} }
+    @keyframes cts-fadeUp { from{ opacity:0; transform:translateY(12px);} to{ opacity:1; transform:translateY(0);} }
+    @keyframes cts-shake { 0%,100%{ transform:translateX(0);} 25%{ transform:translateX(-4px);} 75%{ transform:translateX(4px);} }
+    @keyframes cts-fall { 0%{ transform:translateY(-20px) rotate(0); opacity:1;} 100%{ transform:translateY(110vh) rotate(720deg); opacity:.3;} }
+    @media (prefers-reduced-motion: reduce) { .cts-wrap *{ animation-duration:.001s !important; transition-duration:.05s !important; } }
+
+    /* Mobile */
+    @media (max-width:640px){
+        .cts-wrap{ padding:8px; }
+        .cts-header{ padding:22px 16px; border-radius:18px; }
+        .cts-header h1{ font-size:28px; }
+        .cts-h-icon{ font-size:44px; }
+        .cts-card{ padding:20px 16px; border-radius:18px; }
+        .cts-inputs{ grid-template-columns:1fr; gap:12px; }
+        .cts-vs{ margin:-4px auto; }
+        .cts-percent-num{ font-size:54px; }
+        .cts-ring-wrap{ width:200px; height:200px; }
+        .cts-share{ grid-template-columns:repeat(2,1fr); }
+        .cts-levels{ grid-template-columns:repeat(2,1fr); }
+        .cts-related-grid{ grid-template-columns:1fr; }
+        .cts-hints-grid,.cts-extras,.cts-adv-grid{ grid-template-columns:1fr; }
+        .cts-row{ grid-template-columns:1fr; }
+    }
+</style>
+
+<script id="cts-helpers">
+(function(){
+    'use strict';
+    if (window.CTS) { return; }
+
+    var CTS = window.CTS = {};
+
+    CTS.$ = function(root, id){ return root.querySelector('#' + id); };
+    CTS.qa = function(root, sel){ return Array.prototype.slice.call(root.querySelectorAll(sel)); };
+
+    CTS.escapeHtml = function(s){
+        return String(s).replace(/[&<>"']/g, function(c){
+            return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c];
+        });
+    };
+
+    /* Deterministic 32-bit seed from a string */
+    CTS.seed = function(str){
+        var s = 0; str = String(str);
+        for (var i=0;i<str.length;i++){ s = ((s<<5)-s + str.charCodeAt(i))|0; }
+        return s;
+    };
+
+    /* Seeded 0..1 generator */
+    CTS.rng = function(seed){
+        return function(off){ return Math.abs(Math.sin(seed + (off||0)*97.13)) % 1; };
+    };
+
+    /* Pick deterministically from an array */
+    CTS.pick = function(arr, seed, off){
+        if (!arr || !arr.length) { return null; }
+        var r = Math.abs(Math.sin(seed + (off||0)*53.7)) % 1;
+        return arr[Math.floor(r * arr.length) % arr.length];
+    };
+
+    /* Reduce a number to a single digit (numerology), keeping 1..9 */
+    CTS.reduceDigit = function(n){
+        n = Math.abs(parseInt(n,10) || 0);
+        while (n > 9){
+            var t = 0; while (n > 0){ t += n % 10; n = Math.floor(n/10); } n = t;
+        }
+        return n === 0 ? 9 : n;
+    };
+
+    /* Count-up animation */
+    CTS.animateNum = function(el, from, to, duration){
+        var start = performance.now();
+        function tick(now){
+            var p = Math.min(1, (now - start)/duration);
+            var eased = 1 - Math.pow(1 - p, 3);
+            el.textContent = Math.round(from + (to - from)*eased);
+            if (p < 1) requestAnimationFrame(tick);
+        }
+        requestAnimationFrame(tick);
+    };
+
+    /* Confetti burst */
+    CTS.confetti = function(){
+        var colors = ['#f4c430','#e0a91b','#b558d6','#7B2D8B','#fff'];
+        var box = document.createElement('div'); box.className = 'cts-confetti';
+        for (var i=0;i<64;i++){
+            var p = document.createElement('i');
+            p.style.left = (Math.random()*100)+'%';
+            p.style.background = colors[Math.floor(Math.random()*colors.length)];
+            p.style.animationDuration = (1.5 + Math.random()*2)+'s';
+            p.style.animationDelay = (Math.random()*.5)+'s';
+            p.style.transform = 'rotate('+(Math.random()*360)+'deg)';
+            box.appendChild(p);
+        }
+        document.body.appendChild(box);
+        setTimeout(function(){ box.remove(); }, 4000);
+    };
+
+    /* Multi-step loading then callback */
+    CTS.runLoading = function(stepEl, barEl, steps, callback){
+        var i = 0; stepEl.textContent = steps[0]; barEl.style.width = '8%';
+        var iv = setInterval(function(){
+            i++;
+            if (i < steps.length){
+                stepEl.style.opacity = '0';
+                setTimeout(function(){ stepEl.textContent = steps[i]; stepEl.style.opacity = '1'; }, 200);
+                barEl.style.width = Math.round(((i+1)/steps.length)*100)+'%';
+            } else {
+                clearInterval(iv); barEl.style.width = '100%';
+                setTimeout(callback, 350);
+            }
+        }, 650);
+    };
+
+    /* Copy current URL */
+    CTS.copyLink = function(btn, okLabel){
+        var orig = btn.innerHTML, url = window.location.href;
+        function done(){ btn.innerHTML = okLabel; setTimeout(function(){ btn.innerHTML = orig; }, 1800); }
+        try {
+            if (navigator.clipboard){ navigator.clipboard.writeText(url).then(done, done); }
+            else {
+                var ta = document.createElement('textarea'); ta.value = url; document.body.appendChild(ta);
+                ta.select(); document.execCommand('copy'); ta.remove(); done();
+            }
+        } catch(e){ done(); }
+    };
+
+    CTS.shareWhatsApp = function(text){ return 'https://wa.me/?text=' + encodeURIComponent(text); };
+    CTS.shareTwitter = function(text, url){ return 'https://twitter.com/intent/tweet?text=' + encodeURIComponent(text) + '&url=' + encodeURIComponent(url); };
+
+    /* Draw a branded result card to canvas and download as PNG (no libraries) */
+    CTS.downloadCard = function(opts){
+        var W = 1080, H = 1350, c = document.createElement('canvas');
+        c.width = W; c.height = H; var x = c.getContext('2d');
+        var g = x.createLinearGradient(0,0,W,H);
+        g.addColorStop(0,'#1a0b3d'); g.addColorStop(.55,'#3b1566'); g.addColorStop(1,'#6b2b8f');
+        x.fillStyle = g; x.fillRect(0,0,W,H);
+        // soft gold glow
+        var rg = x.createRadialGradient(W*0.25,H*0.18,40, W*0.25,H*0.18,520);
+        rg.addColorStop(0,'rgba(244,196,48,.28)'); rg.addColorStop(1,'rgba(244,196,48,0)');
+        x.fillStyle = rg; x.fillRect(0,0,W,H);
+        x.textAlign = 'center';
+        x.fillStyle = '#f4c430'; x.font = '700 44px Poppins, Arial, sans-serif';
+        x.fillText(opts.brand || '', W/2, 120);
+        x.fillStyle = '#ffffff'; x.font = '800 64px Poppins, Arial, sans-serif';
+        CTS._wrapText(x, opts.title || '', W/2, 230, W-160, 70);
+        // big metric ring
+        var cx = W/2, cy = 620, r = 230;
+        x.lineWidth = 34; x.strokeStyle = 'rgba(255,255,255,.14)';
+        x.beginPath(); x.arc(cx,cy,r,0,Math.PI*2); x.stroke();
+        var pct = Math.max(0, Math.min(100, opts.percent||0));
+        var grad = x.createLinearGradient(cx-r,cy-r,cx+r,cy+r);
+        grad.addColorStop(0,'#f4c430'); grad.addColorStop(1,'#b558d6');
+        x.strokeStyle = grad; x.lineCap = 'round';
+        x.beginPath(); x.arc(cx,cy,r,-Math.PI/2, -Math.PI/2 + Math.PI*2*pct/100); x.stroke();
+        x.fillStyle = '#fff'; x.font = '800 150px Poppins, Arial, sans-serif';
+        x.fillText((opts.centerText!=null?opts.centerText:pct), cx, cy+40);
+        if (opts.centerSub){ x.fillStyle='rgba(255,255,255,.8)'; x.font='600 34px Poppins, Arial, sans-serif'; x.fillText(opts.centerSub, cx, cy+100); }
+        // level pill
+        x.fillStyle = '#f4c430'; x.font = '700 46px Poppins, Arial, sans-serif';
+        x.fillText(opts.level || '', W/2, 970);
+        // description
+        x.fillStyle = 'rgba(255,255,255,.92)'; x.font = '400 36px Arial, sans-serif';
+        CTS._wrapText(x, opts.desc || '', W/2, 1060, W-180, 50);
+        // footer
+        x.fillStyle = 'rgba(255,255,255,.7)'; x.font = '600 30px Arial, sans-serif';
+        x.fillText(opts.footer || '', W/2, H-70);
+        try {
+            var url = c.toDataURL('image/png');
+            var a = document.createElement('a'); a.href = url;
+            a.download = (opts.file || 'result') + '.png';
+            document.body.appendChild(a); a.click(); a.remove();
+            return true;
+        } catch(e){ return false; }
+    };
+
+    CTS._wrapText = function(ctx, text, x, y, maxW, lh){
+        var words = String(text).split(' '), line = '', lines = [];
+        for (var i=0;i<words.length;i++){
+            var test = line + words[i] + ' ';
+            if (ctx.measureText(test).width > maxW && line){ lines.push(line); line = words[i] + ' '; }
+            else { line = test; }
+        }
+        lines.push(line);
+        for (var j=0;j<lines.length && j<6;j++){ ctx.fillText(lines[j].trim(), x, y + j*lh); }
+    };
+
+    /* Apply language to a root: updates [data-en]/[data-hi] text + placeholders */
+    CTS.applyLang = function(root, lang){
+        CTS.qa(root, '[data-en]').forEach(function(el){
+            var t = el.getAttribute('data-'+lang);
+            if (t != null){ el.textContent = t; }
+        });
+        CTS.qa(root, '[data-ph-en]').forEach(function(el){
+            var t = el.getAttribute('data-ph-'+lang);
+            if (t != null){ el.setAttribute('placeholder', t); }
+        });
+    };
+
+    /* Live counter with Indian formatting */
+    CTS.liveCounter = function(el, start){
+        var count = start;
+        setInterval(function(){
+            count += 1 + Math.floor(Math.random()*3);
+            el.textContent = count.toLocaleString('en-IN');
+        }, 8000);
+    };
+})();
+</script>
+        <div class="cts-wrap cts-friendship" id="fc-7015" data-tool="friendship">
+
+    <div class="cts-toolbar">
+        <div class="cts-toggle" role="group" aria-label="Language">
+            <button type="button" class="cts-seg cts-on" data-lang="en">EN</button>
+            <button type="button" class="cts-seg" data-lang="hi">हिंदी</button>
+        </div>
+        <button type="button" class="cts-adv-btn" data-role="adv-toggle">
+            <span>&#9881;</span><span data-en="Advanced" data-hi="एडवांस्ड">Advanced</span>
+        </button>
+    </div>
+
+    <header class="cts-header">
+        <div class="cts-h-icon">&#129309;</div>
+        <h1 data-en="Friendship Calculator" data-hi="फ्रेंडशिप कैलकुलेटर">Friendship Calculator</h1>
+        <p class="cts-h-sub" data-en="Discover how strong your friendship truly is" data-hi="जानिए आपकी दोस्ती कितनी मज़बूत है">Discover how strong your friendship truly is</p>
+        <div class="cts-stats">
+            <div class="cts-stat"><div class="cts-stat-num" data-role="counter">2,71,540</div><div class="cts-stat-lbl" data-en="Tests Today" data-hi="आज टेस्ट">Tests Today</div></div>
+            <div class="cts-stat"><div class="cts-stat-num">4.9&#9733;</div><div class="cts-stat-lbl" data-en="Rating" data-hi="रेटिंग">Rating</div></div>
+            <div class="cts-stat"><div class="cts-stat-num">100%</div><div class="cts-stat-lbl" data-en="Free" data-hi="फ्री">Free</div></div>
+        </div>
+    </header>
+
+    <section class="cts-card">
+        <!-- Input -->
+        <div data-role="input">
+            <div class="cts-inputs">
+                <div class="cts-field">
+                    <div class="cts-avatar cts-a" data-role="av-a">?</div>
+                    <input type="text" class="cts-input" data-role="name-a" maxlength="30" autocomplete="off" placeholder="Your name" data-ph-en="Your name" data-ph-hi="आपका नाम" />
+                </div>
+                <div class="cts-vs" aria-hidden="true">&#129309;</div>
+                <div class="cts-field">
+                    <div class="cts-avatar cts-b" data-role="av-b">?</div>
+                    <input type="text" class="cts-input" data-role="name-b" maxlength="30" autocomplete="off" placeholder="Friend's name" data-ph-en="Friend's name" data-ph-hi="दोस्त का नाम" />
+                </div>
+            </div>
+            <div class="cts-error" data-role="error" data-en="Please enter both names to continue." data-hi="कृपया दोनों नाम दर्ज करें।">Please enter both names to continue.</div>
+            <button type="button" class="cts-btn cts-btn-primary" data-role="calc" data-en="Check Friendship &#129309;" data-hi="दोस्ती जांचें &#129309;">Check Friendship &#129309;</button>
+            <div class="cts-trust">
+                <span data-en="&#128274; Private" data-hi="&#128274; प्राइवेट">&#128274; Private</span>
+                <span data-en="&#9889; Instant" data-hi="&#9889; इंस्टेंट">&#9889; Instant</span>
+                <span data-en="&#127942; Accurate" data-hi="&#127942; सटीक">&#127942; Accurate</span>
+            </div>
+        </div>
+
+        <!-- Loading -->
+        <div class="cts-loading" data-role="loading">
+            <div class="cts-rings"><div class="cts-ring"></div><div class="cts-ring"></div><div class="cts-ring"></div><div class="cts-ring-emoji">&#129309;</div></div>
+            <div class="cts-load-title" data-role="load-title">&#129309;</div>
+            <div class="cts-load-step" data-role="load-step"></div>
+            <div class="cts-progress"><div class="cts-progress-bar" data-role="bar"></div></div>
+        </div>
+
+        <!-- Result -->
+        <div class="cts-result" data-role="result">
+            <div class="cts-rcard">
+                <div class="cts-rc-top">
+                    <div class="cts-rc-name"><div class="cts-avatar cts-a" data-role="rc-av-a">?</div><span data-role="rc-n-a"></span></div>
+                    <div class="cts-rc-mid">&#129309;</div>
+                    <div class="cts-rc-name"><div class="cts-avatar cts-b" data-role="rc-av-b">?</div><span data-role="rc-n-b"></span></div>
+                </div>
+                <div class="cts-ring-wrap">
+                    <svg viewBox="0 0 200 200" aria-hidden="true">
+                        <defs><linearGradient id="fc-7015-g" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#f4c430"/><stop offset="100%" stop-color="#b558d6"/></linearGradient></defs>
+                        <circle class="cts-ring-bg" cx="100" cy="100" r="86"/>
+                        <circle class="cts-ring-fg" data-role="ring" cx="100" cy="100" r="86" stroke="url(#fc-7015-g)" stroke-dasharray="540.35" stroke-dashoffset="540.35"/>
+                    </svg>
+                    <div class="cts-percent"><div><span class="cts-percent-num" data-role="pct">0</span><span class="cts-percent-sym">%</span></div><div class="cts-percent-sub" data-en="Friendship" data-hi="दोस्ती">Friendship</div></div>
+                </div>
+                <div class="cts-level" data-role="level"></div>
+                <p class="cts-rc-desc" data-role="desc"></p>
+                <div class="cts-watermark" data-role="wm"></div>
+            </div>
+
+            <!-- Metric bars -->
+            <div class="cts-bars">
+                <div class="cts-bar-row"><div class="cts-bar-top"><span data-en="&#128591; Loyalty" data-hi="&#128591; वफ़ादारी">&#128591; Loyalty</span><span data-role="b1-v">0%</span></div><div class="cts-bar"><div class="cts-bar-fill" data-role="b1"></div></div></div>
+                <div class="cts-bar-row"><div class="cts-bar-top"><span data-en="&#128172; Understanding" data-hi="&#128172; समझ">&#128172; Understanding</span><span data-role="b2-v">0%</span></div><div class="cts-bar"><div class="cts-bar-fill" data-role="b2"></div></div></div>
+                <div class="cts-bar-row"><div class="cts-bar-top"><span data-en="&#128526; Fun Vibes" data-hi="&#128526; मस्ती">&#128526; Fun Vibes</span><span data-role="b3-v">0%</span></div><div class="cts-bar"><div class="cts-bar-fill" data-role="b3"></div></div></div>
+                <div class="cts-bar-row"><div class="cts-bar-top"><span data-en="&#9854; Long-term Bond" data-hi="&#9854; लंबा साथ">&#9854; Long-term Bond</span><span data-role="b4-v">0%</span></div><div class="cts-bar"><div class="cts-bar-fill" data-role="b4"></div></div></div>
+            </div>
+
+            <!-- Extras: emoji / career / pet / song -->
+            <div class="cts-extras" data-role="extras"></div>
+
+            <!-- Golden hints -->
+            <div class="cts-hints">
+                <h3 data-role="hints-title">&#11088; <span data-en="Golden Hints" data-hi="गोल्डन हिंट्स">Golden Hints</span></h3>
+                <div class="cts-hints-grid" data-role="hints"></div>
+            </div>
+
+            <!-- Advice -->
+            <div class="cts-advice">
+                <h3>&#129302; <span data-en="Friendship Advice" data-hi="दोस्ती की सलाह">Friendship Advice</span></h3>
+                <p data-role="advice"></p>
+                <div class="cts-tags" data-role="tags"></div>
+            </div>
+
+            <!-- Advanced -->
+            <div class="cts-adv-panel" data-role="adv-panel">
+                <h3>&#128302; <span data-en="Advanced Friendship Report" data-hi="एडवांस्ड फ्रेंडशिप रिपोर्ट">Advanced Friendship Report</span></h3>
+                <div class="cts-adv-grid" data-role="adv-grid"></div>
+            </div>
+
+            <!-- Share + download -->
+            <div class="cts-share">
+                <a href="#" class="cts-share-btn cts-sb-wa" data-role="wa" target="_blank" rel="noopener">&#128241; WhatsApp</a>
+                <a href="#" class="cts-share-btn cts-sb-tw" data-role="tw" target="_blank" rel="noopener">&#119991; Twitter</a>
+                <button type="button" class="cts-share-btn cts-sb-dl" data-role="dl">&#11015; <span data-en="Download" data-hi="डाउनलोड">Download</span></button>
+                <button type="button" class="cts-share-btn cts-sb-copy" data-role="copy">&#128279; <span data-en="Copy Link" data-hi="लिंक कॉपी">Copy Link</span></button>
+            </div>
+
+            <button type="button" class="cts-btn cts-try" data-role="try">&#128260; <span data-en="Try Again" data-hi="दोबारा करें">Try Again</span></button>
+        </div>
+    </section>
+
+    <!-- Levels -->
+    <section class="cts-levels">
+        <div class="cts-lvl"><div class="cts-lvl-icon">&#128081;</div><h4 data-en="Soul Friends" data-hi="सोल फ्रेंड्स">Soul Friends</h4><div class="cts-lvl-range">90-100%</div><p class="cts-lvl-desc" data-en="Friends for life" data-hi="ज़िंदगी भर के दोस्त">Friends for life</p></div>
+        <div class="cts-lvl"><div class="cts-lvl-icon">&#129505;</div><h4 data-en="Best Buddies" data-hi="बेस्ट बडीज़">Best Buddies</h4><div class="cts-lvl-range">70-89%</div><p class="cts-lvl-desc" data-en="Unbreakable bond" data-hi="अटूट रिश्ता">Unbreakable bond</p></div>
+        <div class="cts-lvl"><div class="cts-lvl-icon">&#129309;</div><h4 data-en="Good Friends" data-hi="अच्छे दोस्त">Good Friends</h4><div class="cts-lvl-range">50-69%</div><p class="cts-lvl-desc" data-en="Solid friendship" data-hi="मज़बूत दोस्ती">Solid friendship</p></div>
+        <div class="cts-lvl"><div class="cts-lvl-icon">&#127793;</div><h4 data-en="Growing Bond" data-hi="बढ़ता रिश्ता">Growing Bond</h4><div class="cts-lvl-range">30-49%</div><p class="cts-lvl-desc" data-en="Give it time" data-hi="वक्त दें">Give it time</p></div>
+        <div class="cts-lvl"><div class="cts-lvl-icon">&#128075;</div><h4 data-en="New Spark" data-hi="नई शुरुआत">New Spark</h4><div class="cts-lvl-range">0-29%</div><p class="cts-lvl-desc" data-en="Just getting started" data-hi="अभी शुरुआत">Just getting started</p></div>
+    </section>
+
+    <!-- Related -->
+    <section class="cts-related">
+        <h2 data-en="Try More Fun Calculators" data-hi="और मज़ेदार कैलकुलेटर">Try More Fun Calculators</h2>
+        <div class="cts-related-grid">
+            <a class="cts-rt" href="/crush-calculator/"><div class="cts-rt-icon">&#128150;</div><h4 data-en="Crush Calculator" data-hi="क्रश कैलकुलेटर">Crush Calculator</h4><p data-en="Does your crush like you back?" data-hi="क्या आपका क्रश आपको पसंद करता है?">Does your crush like you back?</p></a>
+            <a class="cts-rt" href="/mulank-calculator/"><div class="cts-rt-icon">&#128302;</div><h4 data-en="Mulank Calculator" data-hi="मूलांक कैलकुलेटर">Mulank Calculator</h4><p data-en="Numerology by date of birth" data-hi="जन्मतिथि से अंक ज्योतिष">Numerology by date of birth</p></a>
+            <a class="cts-rt" href="/love-calculator/"><div class="cts-rt-icon">&#10084;</div><h4 data-en="Love Calculator" data-hi="लव कैलकुलेटर">Love Calculator</h4><p data-en="Test your love compatibility" data-hi="अपनी लव कम्पैटिबिलिटी जांचें">Test your love compatibility</p></a>
+        </div>
+    </section>
+
+    <p class="cts-foot" data-en="100% private &middot; works in your browser &middot; no data is stored" data-hi="100% प्राइवेट &middot; आपके ब्राउज़र में चलता है &middot; कोई डेटा सेव नहीं होता">100% private &middot; works in your browser &middot; no data is stored</p>
+
+    <script type="application/ld+json">
+    {"@context":"https://schema.org","@type":"SoftwareApplication","name":"Friendship Calculator","applicationCategory":"LifestyleApplication","operatingSystem":"Web","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"aggregateRating":{"@type":"AggregateRating","ratingValue":"4.9","ratingCount":"9421"}}
+    </script>
+</div>
+
+<script>
+(function(){
+    'use strict';
+    var C = window.CTS;
+    var root = document.getElementById('fc-7015');
+    if (!root || !C) { return; }
+    var $ = function(r){ return root.querySelector('[data-role="'+r+'"]'); };
+    var lang = 'en';
+
+    var T = {
+        en: {
+            steps: ['🔍 Reading your names...','🤝 Measuring the bond...','✨ Checking the vibes...','🎉 Almost there...'],
+            calculating: 'Calculating...',
+            levels: [
+                {min:90, e:'👑', n:'Soul Friends'},
+                {min:70, e:'💞', n:'Best Buddies'},
+                {min:50, e:'🤝', n:'Good Friends'},
+                {min:30, e:'🌱', n:'Growing Bond'},
+                {min:0,  e:'👋', n:'New Spark'}
+            ],
+            desc: {
+                90: '{a} & {b}, this is a once-in-a-lifetime friendship. You finish each other’s sentences and show up without being asked. Guard this bond — it is pure gold.',
+                70: '{a} & {b}, you two are the real deal. Trust runs deep and laughter comes easy. Keep making memories — this friendship is built to last.',
+                50: '{a} & {b}, there is a warm, genuine bond here. A little more time together and a few honest talks will take it to the next level.',
+                30: '{a} & {b}, your friendship is still finding its rhythm. Reach out more often — the best bonds grow from small, consistent moments.',
+                0:  '{a} & {b}, every great friendship starts somewhere. Say hi, share a laugh, and let the connection breathe. The spark is just beginning.'
+            },
+            hints: {
+                hi: [
+                    {i:'🎁',t:'Surprise Often',d:'A small surprise gift keeps the friendship alive and warm.'},
+                    {i:'📞',t:'Stay in Touch',d:'A quick call beats a hundred texts. Hear each other’s voice.'},
+                    {i:'🤐',t:'Keep Secrets',d:'Be the friend who never breaks a confidence. Trust is everything.'},
+                    {i:'🎉',t:'Show Up',d:'Be there on the big days — and the ordinary ones too.'}
+                ],
+                mid: [
+                    {i:'☕',t:'Plan a Meetup',d:'Fix a coffee or game night this week. Real time builds real bonds.'},
+                    {i:'👂',t:'Listen More',d:'Ask one good question and truly listen to the answer.'},
+                    {i:'🙏',t:'Forgive Fast',d:'Don’t let small things grow big. Clear the air early.'},
+                    {i:'🌟',t:'Celebrate Them',d:'Cheer their wins loudly. Friends lift each other up.'}
+                ],
+                low: [
+                    {i:'👋',t:'Break the Ice',d:'Send the first message. Most great friendships start with a hello.'},
+                    {i:'🎯',t:'Find Common Ground',d:'Discover one shared hobby and build from there.'},
+                    {i:'😊',t:'Be Yourself',d:'Real friends are drawn to the real you. No masks needed.'},
+                    {i:'⏳',t:'Give it Time',d:'Trust grows slowly. Stay patient and keep showing up.'}
+                ]
+            },
+            advice: {
+                hi: {text:'{a} & {b}, you have something rare — a friendship that feels like family. Protect it with honesty, presence, and the occasional silly adventure. The best friendships are not perfect; they are loyal.', tags:['Loyal Bond','Lifetime Friends','Deep Trust','Pure Vibes']},
+                mid:{text:'{a} & {b}, your friendship has a strong, steady heart. Water it with quality time and honest conversations and watch it bloom into something unbreakable.', tags:['Growing Strong','Good Energy','Worth It','True Bond']},
+                low:{text:'{a} & {b}, every legendary friendship started as two strangers. Take the first step, stay genuine, and let the bond build naturally. Magic takes a little time.', tags:['Fresh Start','New Connection','Be Patient','Stay Real']}
+            },
+            extras: {
+                emojiTitle:'Friendship Emoji', careerTitle:'Dream Team Career', petTitle:'Perfect Pet', songTitle:'Your Anthem',
+                emojis:['🤝 💛 ✨','🫶 🌟 💫','😎 🎉 🔥','🧩 🌈 💞','☕ 📚 😌'],
+                careers:['Co-founders of a startup','A travel-vlogging duo','Partners in a cafe','A comedy podcast team','Event planners extraordinaire'],
+                pets:['A loyal Golden Retriever 🐕','A playful pair of cats 🐈','A cheeky parrot 🦜','A bunny duo 🐰','A husky for adventures 🐺'],
+                songs:['"Count on Me" – Bruno Mars','"Yaaron" – KK','"You’ve Got a Friend" – Carole King','"Dil Dhadakne Do" – ZNMD','"Lean on Me" – Bill Withers']
+            },
+            advLabels:{compat:'Compatibility Number',element:'Shared Element',meetup:'Best Hangout',gift:'Ideal Gift',duration:'Bond Forecast',keyword:'Friendship Keyword'},
+            wm:'friendship-calculator', share:'🤝 Friendship Result!'
+        },
+        hi: {
+            steps: ['🔍 आपके नाम पढ़ रहे हैं...','🤝 रिश्ता माप रहे हैं...','✨ वाइब्स चेक कर रहे हैं...','🎉 बस हो गया...'],
+            calculating: 'गणना हो रही है...',
+            levels: [
+                {min:90, e:'👑', n:'सोल फ्रेंड्स'},
+                {min:70, e:'💞', n:'बेस्ट बडीज़'},
+                {min:50, e:'🤝', n:'अच्छे दोस्त'},
+                {min:30, e:'🌱', n:'बढ़ता रिश्ता'},
+                {min:0,  e:'👋', n:'नई शुरुआत'}
+            ],
+            desc: {
+                90: '{a} और {b}, यह ज़िंदगी में एक बार मिलने वाली दोस्ती है। बिना कहे एक-दूसरे का साथ देते हैं। इस रिश्ते को संभालकर रखें — यह सोना है।',
+                70: '{a} और {b}, आप दोनों सच्चे दोस्त हैं। भरोसा गहरा है और हंसी आसान। यादें बनाते रहिए — यह दोस्ती लंबी चलेगी।',
+                50: '{a} और {b}, यहां एक सच्चा और गर्मजोशी भरा रिश्ता है। थोड़ा और वक्त और कुछ खुली बातें इसे और ऊपर ले जाएंगी।',
+                30: '{a} और {b}, आपकी दोस्ती अभी लय पकड़ रही है। अक्सर बात करें — छोटे पलों से ही बड़े रिश्ते बनते हैं।',
+                0:  '{a} और {b}, हर शानदार दोस्ती कहीं से शुरू होती है। हाय कहिए, हंसी बांटिए और रिश्ते को सांस लेने दीजिए।'
+            },
+            hints: {
+                hi: [
+                    {i:'🎁',t:'सरप्राइज़ दें',d:'छोटा सा तोहफ़ा दोस्ती को हमेशा गर्म रखता है।'},
+                    {i:'📞',t:'संपर्क में रहें',d:'सौ मैसेज से अच्छा एक कॉल। आवाज़ सुनिए।'},
+                    {i:'🤐',t:'राज़ रखें',d:'ऐसे दोस्त बनें जो भरोसा कभी न तोड़े।'},
+                    {i:'🎉',t:'साथ निभाएं',d:'बड़े दिनों पर — और आम दिनों पर भी — साथ रहें।'}
+                ],
+                mid: [
+                    {i:'☕',t:'मुलाक़ात तय करें',d:'इस हफ्ते कॉफी या गेम नाइट रखें।'},
+                    {i:'👂',t:'सुनिए ज़्यादा',d:'एक अच्छा सवाल पूछें और सच में सुनिए।'},
+                    {i:'🙏',t:'जल्दी माफ़ करें',d:'छोटी बातों को बड़ा न बनने दें।'},
+                    {i:'🌟',t:'उन्हें सराहें',d:'उनकी जीत पर खुलकर खुश हों।'}
+                ],
+                low: [
+                    {i:'👋',t:'बातचीत शुरू करें',d:'पहला मैसेज आप भेजें। दोस्ती हाय से शुरू होती है।'},
+                    {i:'🎯',t:'समान रुचि खोजें',d:'एक कॉमन शौक ढूंढें और वहीं से बढ़ें।'},
+                    {i:'😊',t:'खुद बने रहें',d:'सच्चे दोस्त असली आपको पसंद करते हैं।'},
+                    {i:'⏳',t:'वक्त दें',d:'भरोसा धीरे बनता है। धैर्य रखें।'}
+                ]
+            },
+            advice: {
+                hi: {text:'{a} और {b}, आपके पास कुछ दुर्लभ है — ऐसी दोस्ती जो परिवार जैसी लगे। ईमानदारी और साथ से इसे संभालें। सबसे अच्छी दोस्ती परफेक्ट नहीं, वफ़ादार होती है।', tags:['वफ़ादार रिश्ता','उम्र भर के दोस्त','गहरा भरोसा','शुद्ध वाइब']},
+                mid:{text:'{a} और {b}, आपकी दोस्ती का दिल मज़बूत है। क्वालिटी टाइम और खुली बातों से इसे और अटूट बनाइए।', tags:['मज़बूत होता रिश्ता','अच्छी एनर्जी','क़ीमती','सच्चा बंधन']},
+                low:{text:'{a} और {b}, हर मशहूर दोस्ती दो अजनबियों से शुरू हुई थी। पहला कदम उठाइए और रिश्ते को बनने दीजिए।', tags:['नई शुरुआत','नया रिश्ता','धैर्य रखें','असली रहें']}
+            },
+            extras: {
+                emojiTitle:'दोस्ती इमोजी', careerTitle:'ड्रीम टीम करियर', petTitle:'परफेक्ट पेट', songTitle:'आपका गाना',
+                emojis:['🤝 💛 ✨','🫶 🌟 💫','😎 🎉 🔥','🧩 🌈 💞','☕ 📚 😌'],
+                careers:['स्टार्टअप के को-फाउंडर','ट्रैवल-व्लॉगिंग जोड़ी','कैफे के पार्टनर','कॉमेडी पॉडकास्ट टीम','बेहतरीन इवेंट प्लानर'],
+                pets:['वफ़ादार गोल्डन रिट्रीवर 🐕','दो शरारती बिल्लियां 🐈','एक चंचल तोता 🦜','खरगोश की जोड़ी 🐰','एडवेंचर के लिए हस्की 🐺'],
+                songs:['"यारों" – KK','"दिल धड़कने दो" – ZNMD','"तेरे जैसा यार कहां" – रफ़ी','"मेरे यार" – Various','"Count on Me" – Bruno Mars']
+            },
+            advLabels:{compat:'कम्पैटिबिलिटी नंबर',element:'साझा तत्व',meetup:'बेस्ट हैंगआउट',gift:'आदर्श तोहफ़ा',duration:'रिश्ते का भविष्य',keyword:'दोस्ती कीवर्ड'},
+            wm:'friendship-calculator', share:'🤝 फ्रेंडशिप रिज़ल्ट!'
+        }
+    };
+
+    var ELEMENTS = {en:['Fire 🔥','Water 💧','Earth 🌍','Air 🌬'], hi:['अग्नि 🔥','जल 💧','पृथ्वी 🌍','वायु 🌬']};
+    var MEET = {en:['Coffee shop ☕','Road trip 🚗','Movie night 🎬','Gaming session 🎮'], hi:['कॉफी शॉप ☕','रोड ट्रिप 🚗','मूवी नाइट 🎬','गेमिंग 🎮']};
+    var GIFTS = {en:['Handwritten letter ✍️','Concert tickets 🎟','Custom playlist 🎵','Matching bracelets 📿'], hi:['हाथ से लिखा पत्र ✍️','कॉन्सर्ट टिकट 🎟','कस्टम प्लेलिस्ट 🎵','मैचिंग ब्रेसलेट 📿']};
+    var DURATION = {en:['A lifetime 💫','Many golden years ✨','Growing every year 🌱','A bright road ahead 🛣'], hi:['उम्र भर 💫','कई सुनहरे साल ✨','हर साल बढ़ता 🌱','उज्ज्वल राह 🛣']};
+    var KEYWORD = {en:['Loyalty','Laughter','Trust','Adventure'], hi:['वफ़ादारी','हंसी','भरोसा','एडवेंचर']};
+
+    /* --- algorithm --- */
+    function clean(s){ return (s||'').toLowerCase().replace(/[^a-zऀ-ॿ]/g,''); }
+    function score(n1,n2){
+        var a = clean(n1), b = clean(n2);
+        if (!a || !b) { return 50; }
+        var fa={}, fb={}, i;
+        for (i=0;i<a.length;i++){ fa[a[i]]=(fa[a[i]]||0)+1; }
+        for (i=0;i<b.length;i++){ fb[b[i]]=(fb[b[i]]||0)+1; }
+        var keys={}, k, ov=0, tot=0;
+        for (k in fa){ keys[k]=1; } for (k in fb){ keys[k]=1; }
+        for (k in keys){ ov+=Math.min(fa[k]||0,fb[k]||0); tot+=Math.max(fa[k]||0,fb[k]||0); }
+        var overlap = tot? (ov/tot)*100 : 50;
+        var sa=0, sb=0;
+        for (i=0;i<a.length;i++){ sa+=a.charCodeAt(i); }
+        for (i=0;i<b.length;i++){ sb+=b.charCodeAt(i); }
+        var num = C.reduceDigit(sa+sb)*10;
+        var diff = Math.abs(a.length-b.length);
+        var len = Math.max(0,100-diff*10);
+        var sd = C.seed(a+'|'+b);
+        var rand = Math.abs(Math.sin(sd))*30;
+        var raw = overlap*0.38 + num*0.24 + len*0.18 + rand*0.6;
+        var sc = Math.round(raw);
+        if (sc<15){ sc = 15 + (Math.abs(sd)%20); }
+        if (sc>99){ sc = 99; }
+        return sc;
+    }
+    function metrics(n1,n2,sc){
+        var sd = C.seed(clean(n1)+'~'+clean(n2));
+        function v(off){ var r=Math.abs(Math.sin(sd+off))*22-11; return Math.max(20,Math.min(99,Math.round(sc+r))); }
+        return {b1:v(1),b2:v(2),b3:v(3),b4:v(4)};
+    }
+    function levelFor(sc){ var L=T[lang].levels; for (var i=0;i<L.length;i++){ if (sc>=L[i].min){ return L[i]; } } return L[L.length-1]; }
+    function tier(sc){ return sc>=70?'hi':(sc>=40?'mid':'low'); }
+    function band(sc){ return sc>=90?90:sc>=70?70:sc>=50?50:sc>=30?30:0; }
+
+    var state = {};
+
+    function render(){
+        var t = T[lang], n1 = state.n1, n2 = state.n2, sc = state.sc, m = state.m;
+        var lvl = levelFor(sc), tr = tier(sc), sd = C.seed(clean(n1)+clean(n2));
+        $('rc-n-a').textContent = n1; $('rc-n-b').textContent = n2;
+        $('rc-av-a').textContent = n1.charAt(0).toUpperCase();
+        $('rc-av-b').textContent = n2.charAt(0).toUpperCase();
+        $('level').textContent = lvl.e + ' ' + lvl.n;
+        $('desc').textContent = t.desc[band(sc)].replace('{a}',n1).replace('{b}',n2);
+        $('wm').textContent = t.wm + ' ❤';
+
+        C.animateNum($('pct'),0,sc,1700);
+        var circ = 2*Math.PI*86;
+        setTimeout(function(){ $('ring').style.strokeDashoffset = circ-(circ*sc/100); },80);
+        setTimeout(function(){
+            $('b1').style.width=m.b1+'%'; $('b2').style.width=m.b2+'%'; $('b3').style.width=m.b3+'%'; $('b4').style.width=m.b4+'%';
+            $('b1-v').textContent=m.b1+'%'; $('b2-v').textContent=m.b2+'%'; $('b3-v').textContent=m.b3+'%'; $('b4-v').textContent=m.b4+'%';
+        },200);
+
+        // extras
+        var ex = t.extras;
+        var cards = [
+            {e:'😍', ti:ex.emojiTitle, v:C.pick(ex.emojis,sd,1), note:''},
+            {e:'💼', ti:ex.careerTitle, v:C.pick(ex.careers,sd,2), note:''},
+            {e:'🐾', ti:ex.petTitle, v:C.pick(ex.pets,sd,3), note:''},
+            {e:'🎵', ti:ex.songTitle, v:C.pick(ex.songs,sd,4), note:''}
+        ];
+        var eg = $('extras'); eg.innerHTML='';
+        cards.forEach(function(c,i){
+            var d=document.createElement('div'); d.className='cts-x'; d.style.animationDelay=(i*0.08)+'s';
+            d.innerHTML='<div class="cts-x-head"><span class="cts-x-emoji">'+c.e+'</span><span class="cts-x-title">'+C.escapeHtml(c.ti)+'</span></div><p class="cts-x-val">'+C.escapeHtml(c.v)+'</p>';
+            eg.appendChild(d);
+        });
+
+        // hints
+        var hints = t.hints[tr], hg = $('hints'); hg.innerHTML='';
+        hints.forEach(function(h,i){
+            var d=document.createElement('div'); d.className='cts-hint'; d.style.animationDelay=(i*0.1)+'s';
+            d.innerHTML='<div class="cts-hint-icon">'+h.i+'</div><h4>'+C.escapeHtml(h.t)+'</h4><p>'+C.escapeHtml(h.d)+'</p>';
+            hg.appendChild(d);
+        });
+
+        // advice
+        var adv = t.advice[tr];
+        $('advice').textContent = adv.text.replace('{a}',n1).replace('{b}',n2);
+        var tags=$('tags'); tags.innerHTML='';
+        adv.tags.forEach(function(tg){ var s=document.createElement('span'); s.className='cts-tag'; s.textContent=tg; tags.appendChild(s); });
+
+        // advanced
+        var al = t.advLabels;
+        var advData = [
+            [al.compat, C.reduceDigit(C.seed(clean(n1))+C.seed(clean(n2)))],
+            [al.element, C.pick(ELEMENTS[lang],sd,5)],
+            [al.meetup, C.pick(MEET[lang],sd,6)],
+            [al.gift, C.pick(GIFTS[lang],sd,7)],
+            [al.duration, C.pick(DURATION[lang],sd,8)],
+            [al.keyword, C.pick(KEYWORD[lang],sd,9)]
+        ];
+        var ag=$('adv-grid'); ag.innerHTML='';
+        advData.forEach(function(p){ var d=document.createElement('div'); d.className='cts-adv-item'; d.innerHTML='<div class="k">'+C.escapeHtml(p[0])+'</div><div class="v">'+C.escapeHtml(String(p[1]))+'</div>'; ag.appendChild(d); });
+        if (root.classList.contains('cts-adv-active')) { $('adv-panel').classList.add('cts-show'); }
+
+        // share
+        var url = window.location.href;
+        var msg = t.share+'\n\n'+n1+' 🤝 '+n2+' = '+sc+'%\n'+lvl.e+' '+lvl.n+'\n\n'+url;
+        $('wa').href = C.shareWhatsApp(msg);
+        $('tw').href = C.shareTwitter(n1+' 🤝 '+n2+' = '+sc+'% '+lvl.n, url);
+
+        if (sc>=70){ setTimeout(C.confetti,600); }
+        setTimeout(function(){ $('result').scrollIntoView({behavior:'smooth',block:'start'}); },100);
+    }
+
+    function go(){
+        var n1=($('name-a').value||'').trim(), n2=($('name-b').value||'').trim();
+        var err=$('error');
+        if (!n1||!n2){ err.classList.add('cts-show'); return; }
+        if (n1.length<2||n2.length<2){ err.textContent = lang==='hi'?'नाम कम से कम 2 अक्षर का हो।':'Names should be at least 2 characters.'; err.classList.add('cts-show'); return; }
+        err.classList.remove('cts-show');
+        state.n1=n1; state.n2=n2; state.sc=score(n1,n2); state.m=metrics(n1,n2,state.sc);
+        $('input').style.display='none';
+        var ld=$('loading'); ld.style.display='block'; ld.classList.add('cts-show');
+        $('load-title').textContent = n1+' 🤝 '+n2;
+        $('bar').style.width='0%';
+        C.runLoading($('load-step'),$('bar'),T[lang].steps,function(){
+            ld.classList.remove('cts-show'); ld.style.display='none';
+            $('result').classList.add('cts-show'); render();
+        });
+    }
+
+    function reset(){
+        $('result').classList.remove('cts-show');
+        $('loading').classList.remove('cts-show'); $('loading').style.display='none';
+        $('input').style.display='block';
+        $('name-a').value=''; $('name-b').value=''; $('av-a').textContent='?'; $('av-b').textContent='?';
+        $('pct').textContent='0'; $('ring').style.strokeDashoffset=540.35;
+        ['b1','b2','b3','b4'].forEach(function(id){ $(id).style.width='0%'; });
+        $('adv-panel').classList.toggle('cts-show', root.classList.contains('cts-adv-active'));
+        $('input').scrollIntoView({behavior:'smooth',block:'start'});
+        setTimeout(function(){ $('name-a').focus(); },400);
+    }
+
+    // avatars
+    function av(input,avatar){ var v=(input.value||'').trim(); avatar.textContent=v?v.charAt(0).toUpperCase():'?'; $('error').classList.remove('cts-show'); }
+    $('name-a').addEventListener('input',function(){ av($('name-a'),$('av-a')); });
+    $('name-b').addEventListener('input',function(){ av($('name-b'),$('av-b')); });
+    [$('name-a'),$('name-b')].forEach(function(el){ el.addEventListener('keydown',function(e){ if (e.key==='Enter'){ e.preventDefault(); go(); } }); });
+
+    $('calc').addEventListener('click',go);
+    $('try').addEventListener('click',reset);
+    $('copy').addEventListener('click',function(){ C.copyLink(this, lang==='hi'?'✅ कॉपी हुआ!':'✅ Copied!'); });
+    $('dl').addEventListener('click',function(){
+        var lvl=levelFor(state.sc);
+        var ok=C.downloadCard({
+            brand:'Friendship Calculator', title:state.n1+' & '+state.n2,
+            percent:state.sc, centerText:state.sc+'%', centerSub:lang==='hi'?'दोस्ती':'Friendship',
+            level:lvl.e+' '+lvl.n, desc:T[lang].desc[band(state.sc)].replace('{a}',state.n1).replace('{b}',state.n2),
+            footer:'friendship-calculator', file:'friendship-'+state.sc
+        });
+        if (!ok){ alert(lang==='hi'?'स्क्रीनशॉट लेकर सेव करें!':'Take a screenshot to save your result!'); }
+    });
+
+    // language
+    C.qa(root,'.cts-seg').forEach(function(b){
+        b.addEventListener('click',function(){
+            lang=b.getAttribute('data-lang');
+            C.qa(root,'.cts-seg').forEach(function(x){ x.classList.toggle('cts-on', x===b); });
+            C.applyLang(root,lang);
+            if ($('result').classList.contains('cts-show')){ render(); }
+        });
+    });
+
+    // advanced toggle
+    $('adv-toggle').addEventListener('click',function(){
+        var on=root.classList.toggle('cts-adv-active');
+        this.classList.toggle('cts-on',on);
+        if ($('result').classList.contains('cts-show')){ $('adv-panel').classList.toggle('cts-show',on); }
+    });
+
+    C.applyLang(root,'en');
+    C.liveCounter($('counter'),271540);
+})();
+</script>
+        <div class="cts-wrap cts-mulank" id="mk-2756" data-tool="mulank">
+
+    <div class="cts-toolbar">
+        <div class="cts-toggle" role="group" aria-label="Language">
+            <button type="button" class="cts-seg cts-on" data-lang="en">EN</button>
+            <button type="button" class="cts-seg" data-lang="hi">हिंदी</button>
+        </div>
+        <button type="button" class="cts-adv-btn" data-role="adv-toggle">
+            <span>&#9881;</span><span data-en="Advanced" data-hi="एडवांस्ड">Advanced</span>
+        </button>
+    </div>
+
+    <header class="cts-header">
+        <div class="cts-h-icon">&#128302;</div>
+        <h1 data-en="Mulank &amp; Bhagyank Calculator" data-hi="मूलांक एवं भाग्यांक कैलकुलेटर">Mulank &amp; Bhagyank Calculator</h1>
+        <p class="cts-h-sub" data-en="Reveal your numerology numbers from your date of birth" data-hi="अपनी जन्मतिथि से अंक ज्योतिष जानें">Reveal your numerology numbers from your date of birth</p>
+        <div class="cts-stats">
+            <div class="cts-stat"><div class="cts-stat-num" data-role="counter">1,94,830</div><div class="cts-stat-lbl" data-en="Readings Today" data-hi="आज रीडिंग">Readings Today</div></div>
+            <div class="cts-stat"><div class="cts-stat-num">4.9&#9733;</div><div class="cts-stat-lbl" data-en="Rating" data-hi="रेटिंग">Rating</div></div>
+            <div class="cts-stat"><div class="cts-stat-num">100%</div><div class="cts-stat-lbl" data-en="Free" data-hi="फ्री">Free</div></div>
+        </div>
+    </header>
+
+    <section class="cts-card">
+        <!-- Input -->
+        <div data-role="input">
+            <div class="cts-single">
+                <label class="cts-label" data-en="Enter your Date of Birth" data-hi="अपनी जन्मतिथि दर्ज करें">Enter your Date of Birth</label>
+                <input type="date" class="cts-input" data-role="dob" max="2026-05-29" min="1920-01-01" />
+                <label class="cts-label" data-en="Your name (optional)" data-hi="आपका नाम (वैकल्पिक)">Your name (optional)</label>
+                <input type="text" class="cts-input" data-role="name" maxlength="30" autocomplete="off" placeholder="Your name" data-ph-en="Your name" data-ph-hi="आपका नाम" />
+            </div>
+            <div class="cts-error" data-role="error" data-en="Please select a valid date of birth." data-hi="कृपया सही जन्मतिथि चुनें।">Please select a valid date of birth.</div>
+            <button type="button" class="cts-btn cts-btn-primary" data-role="calc" data-en="Calculate My Numbers &#128302;" data-hi="मेरे अंक निकालें &#128302;">Calculate My Numbers &#128302;</button>
+            <div class="cts-trust">
+                <span data-en="&#128274; Private" data-hi="&#128274; प्राइवेट">&#128274; Private</span>
+                <span data-en="&#9889; Instant" data-hi="&#9889; इंस्टेंट">&#9889; Instant</span>
+                <span data-en="&#128214; Vedic Numerology" data-hi="&#128214; वैदिक अंक ज्योतिष">&#128214; Vedic Numerology</span>
+            </div>
+        </div>
+
+        <!-- Loading -->
+        <div class="cts-loading" data-role="loading">
+            <div class="cts-rings"><div class="cts-ring"></div><div class="cts-ring"></div><div class="cts-ring"></div><div class="cts-ring-emoji">&#128302;</div></div>
+            <div class="cts-load-title" data-role="load-title">&#128302;</div>
+            <div class="cts-load-step" data-role="load-step"></div>
+            <div class="cts-progress"><div class="cts-progress-bar" data-role="bar"></div></div>
+        </div>
+
+        <!-- Result -->
+        <div class="cts-result" data-role="result">
+            <div class="cts-rcard">
+                <div class="cts-ring-wrap">
+                    <svg viewBox="0 0 200 200" aria-hidden="true">
+                        <defs><linearGradient id="mk-2756-g" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#f4c430"/><stop offset="100%" stop-color="#b558d6"/></linearGradient></defs>
+                        <circle class="cts-ring-bg" cx="100" cy="100" r="86"/>
+                        <circle class="cts-ring-fg" data-role="ring" cx="100" cy="100" r="86" stroke="url(#mk-2756-g)" stroke-dasharray="540.35" stroke-dashoffset="540.35"/>
+                    </svg>
+                    <div class="cts-percent"><div><span class="cts-percent-num" data-role="mulank">0</span></div><div class="cts-percent-sub" data-en="Mulank" data-hi="मूलांक">Mulank</div></div>
+                </div>
+                <div class="cts-level" data-role="level"></div>
+                <p class="cts-rc-desc" data-role="desc"></p>
+                <div class="cts-watermark" data-role="wm"></div>
+            </div>
+
+            <!-- Number chips -->
+            <div class="cts-extras" data-role="numbers"></div>
+
+            <!-- Strength bars -->
+            <div class="cts-bars">
+                <div class="cts-bar-row"><div class="cts-bar-top"><span data-en="&#128081; Leadership" data-hi="&#128081; नेतृत्व">&#128081; Leadership</span><span data-role="b1-v">0%</span></div><div class="cts-bar"><div class="cts-bar-fill" data-role="b1"></div></div></div>
+                <div class="cts-bar-row"><div class="cts-bar-top"><span data-en="&#127912; Creativity" data-hi="&#127912; रचनात्मकता">&#127912; Creativity</span><span data-role="b2-v">0%</span></div><div class="cts-bar"><div class="cts-bar-fill" data-role="b2"></div></div></div>
+                <div class="cts-bar-row"><div class="cts-bar-top"><span data-en="&#127808; Luck" data-hi="&#127808; भाग्य">&#127808; Luck</span><span data-role="b3-v">0%</span></div><div class="cts-bar"><div class="cts-bar-fill" data-role="b3"></div></div></div>
+                <div class="cts-bar-row"><div class="cts-bar-top"><span data-en="&#129309; Relationships" data-hi="&#129309; रिश्ते">&#129309; Relationships</span><span data-role="b4-v">0%</span></div><div class="cts-bar"><div class="cts-bar-fill" data-role="b4"></div></div></div>
+            </div>
+
+            <!-- Lucky extras -->
+            <div class="cts-extras" data-role="lucky"></div>
+
+            <!-- Golden hints / remedies -->
+            <div class="cts-hints">
+                <h3>&#11088; <span data-en="Golden Tips &amp; Remedies" data-hi="गोल्डन टिप्स एवं उपाय">Golden Tips &amp; Remedies</span></h3>
+                <div class="cts-hints-grid" data-role="hints"></div>
+            </div>
+
+            <!-- Advice -->
+            <div class="cts-advice">
+                <h3>&#129302; <span data-en="Numerology Guidance" data-hi="अंक ज्योतिष मार्गदर्शन">Numerology Guidance</span></h3>
+                <p data-role="advice"></p>
+                <div class="cts-tags" data-role="tags"></div>
+            </div>
+
+            <!-- Advanced -->
+            <div class="cts-adv-panel" data-role="adv-panel">
+                <h3>&#128302; <span data-en="Advanced Numerology Report" data-hi="एडवांस्ड अंक ज्योतिष रिपोर्ट">Advanced Numerology Report</span></h3>
+                <div class="cts-adv-grid" data-role="adv-grid"></div>
+            </div>
+
+            <!-- Share + download -->
+            <div class="cts-share">
+                <a href="#" class="cts-share-btn cts-sb-wa" data-role="wa" target="_blank" rel="noopener">&#128241; WhatsApp</a>
+                <a href="#" class="cts-share-btn cts-sb-tw" data-role="tw" target="_blank" rel="noopener">&#119991; Twitter</a>
+                <button type="button" class="cts-share-btn cts-sb-dl" data-role="dl">&#11015; <span data-en="Download" data-hi="डाउनलोड">Download</span></button>
+                <button type="button" class="cts-share-btn cts-sb-copy" data-role="copy">&#128279; <span data-en="Copy Link" data-hi="लिंक कॉपी">Copy Link</span></button>
+            </div>
+
+            <button type="button" class="cts-btn cts-try" data-role="try">&#128260; <span data-en="Try Again" data-hi="दोबारा करें">Try Again</span></button>
+        </div>
+    </section>
+
+    <!-- Number guide -->
+    <section class="cts-levels">
+        <div class="cts-lvl"><div class="cts-lvl-icon">&#9728;</div><h4 data-en="1 &middot; Sun" data-hi="1 &middot; सूर्य">1 &middot; Sun</h4><div class="cts-lvl-range" data-en="Leader" data-hi="नेता">Leader</div></div>
+        <div class="cts-lvl"><div class="cts-lvl-icon">&#127769;</div><h4 data-en="2 &middot; Moon" data-hi="2 &middot; चंद्र">2 &middot; Moon</h4><div class="cts-lvl-range" data-en="Gentle" data-hi="कोमल">Gentle</div></div>
+        <div class="cts-lvl"><div class="cts-lvl-icon">&#129518;</div><h4 data-en="3 &middot; Jupiter" data-hi="3 &middot; गुरु">3 &middot; Jupiter</h4><div class="cts-lvl-range" data-en="Wise" data-hi="ज्ञानी">Wise</div></div>
+        <div class="cts-lvl"><div class="cts-lvl-icon">&#127756;</div><h4 data-en="4 &middot; Rahu" data-hi="4 &middot; राहु">4 &middot; Rahu</h4><div class="cts-lvl-range" data-en="Rebel" data-hi="विद्रोही">Rebel</div></div>
+        <div class="cts-lvl"><div class="cts-lvl-icon">&#128172;</div><h4 data-en="5 &middot; Mercury" data-hi="5 &middot; बुध">5 &middot; Mercury</h4><div class="cts-lvl-range" data-en="Clever" data-hi="चतुर">Clever</div></div>
+        <div class="cts-lvl"><div class="cts-lvl-icon">&#10084;</div><h4 data-en="6 &middot; Venus" data-hi="6 &middot; शुक्र">6 &middot; Venus</h4><div class="cts-lvl-range" data-en="Loving" data-hi="प्रेमी">Loving</div></div>
+        <div class="cts-lvl"><div class="cts-lvl-icon">&#128302;</div><h4 data-en="7 &middot; Ketu" data-hi="7 &middot; केतु">7 &middot; Ketu</h4><div class="cts-lvl-range" data-en="Mystic" data-hi="रहस्यमय">Mystic</div></div>
+        <div class="cts-lvl"><div class="cts-lvl-icon">&#9889;</div><h4 data-en="8 &middot; Saturn" data-hi="8 &middot; शनि">8 &middot; Saturn</h4><div class="cts-lvl-range" data-en="Worker" data-hi="कर्मठ">Worker</div></div>
+        <div class="cts-lvl"><div class="cts-lvl-icon">&#128293;</div><h4 data-en="9 &middot; Mars" data-hi="9 &middot; मंगल">9 &middot; Mars</h4><div class="cts-lvl-range" data-en="Warrior" data-hi="योद्धा">Warrior</div></div>
+    </section>
+
+    <!-- Related -->
+    <section class="cts-related">
+        <h2 data-en="Try More Calculators" data-hi="और कैलकुलेटर आज़माएं">Try More Calculators</h2>
+        <div class="cts-related-grid">
+            <a class="cts-rt" href="/friendship-calculator/"><div class="cts-rt-icon">&#129309;</div><h4 data-en="Friendship Calculator" data-hi="फ्रेंडशिप कैलकुलेटर">Friendship Calculator</h4><p data-en="How strong is your bond?" data-hi="आपकी दोस्ती कितनी मज़बूत है?">How strong is your bond?</p></a>
+            <a class="cts-rt" href="/crush-calculator/"><div class="cts-rt-icon">&#128150;</div><h4 data-en="Crush Calculator" data-hi="क्रश कैलकुलेटर">Crush Calculator</h4><p data-en="Does your crush like you?" data-hi="क्या आपका क्रश आपको पसंद करता है?">Does your crush like you?</p></a>
+            <a class="cts-rt" href="/love-calculator/"><div class="cts-rt-icon">&#10084;</div><h4 data-en="Love Calculator" data-hi="लव कैलकुलेटर">Love Calculator</h4><p data-en="Test love compatibility" data-hi="लव कम्पैटिबिलिटी जांचें">Test love compatibility</p></a>
+        </div>
+    </section>
+
+    <p class="cts-foot" data-en="Based on Vedic numerology &middot; 100% private &middot; for guidance &amp; fun" data-hi="वैदिक अंक ज्योतिष पर आधारित &middot; 100% प्राइवेट &middot; मार्गदर्शन एवं मनोरंजन हेतु">Based on Vedic numerology &middot; 100% private &middot; for guidance &amp; fun</p>
+
+    <script type="application/ld+json">
+    {"@context":"https://schema.org","@type":"SoftwareApplication","name":"Mulank and Bhagyank Calculator","applicationCategory":"LifestyleApplication","operatingSystem":"Web","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"aggregateRating":{"@type":"AggregateRating","ratingValue":"4.9","ratingCount":"7630"}}
+    </script>
+</div>
+
+<script>
+(function(){
+    'use strict';
+    var C = window.CTS;
+    var root = document.getElementById('mk-2756');
+    if (!root || !C) { return; }
+    var $ = function(r){ return root.querySelector('[data-role="'+r+'"]'); };
+    var lang = 'en';
+
+    // Numerology data 1..9
+    var DATA = {
+        en: {
+            steps:['🔢 Reading your date of birth...','🪐 Mapping your ruling planet...','✨ Decoding your destiny...','📜 Preparing your report...'],
+            mulankLbl:'Mulank', bhagyankLbl:'Bhagyank', planetLbl:'Ruling Planet',
+            n:{
+                1:{planet:'Sun (Surya)',title:'The Natural Leader',desc:'You are a born leader — bold, independent and ambitious. People naturally look up to you. Your willpower can move mountains when you stay focused.',color:'Golden / Orange',day:'Sunday',gem:'Ruby',career:'Leadership, Government, Business, Administration',dir:'East',element:'Fire',friends:'1, 2, 3, 9',tough:'8, 4',mantra:'Om Suryaya Namah',keywords:['Leadership','Confidence','Ambition','Originality'],
+                    hints:[{i:'🌅',t:'Greet the Sun',d:'Offer water to the rising sun on Sundays to boost energy.'},{i:'🟡',t:'Wear Gold tones',d:'Yellow & golden shades amplify your natural charisma.'},{i:'🎯',t:'Lead, don’t dominate',d:'Your power grows when you lift others, not control them.'},{i:'🌞',t:'Sunday is yours',d:'Start big plans on Sunday for the best outcomes.'}],
+                    advice:'Your number is ruled by the Sun — the king of all planets. Lead with warmth and humility and success will follow you everywhere.'},
+                2:{planet:'Moon (Chandra)',title:'The Gentle Soul',desc:'You are emotional, intuitive and caring. You read people effortlessly and bring peace wherever you go. Your sensitivity is a superpower, not a weakness.',color:'White / Cream / Silver',day:'Monday',gem:'Pearl',career:'Counselling, Arts, Healthcare, Hospitality',dir:'North-West',element:'Water',friends:'1, 2, 4, 7',tough:'8, 9',mantra:'Om Chandraya Namah',keywords:['Intuition','Empathy','Diplomacy','Calm'],
+                    hints:[{i:'🌝',t:'Honour the Moon',d:'Keep a small silver item with you for emotional balance.'},{i:'🤍',t:'Wear soft whites',d:'White & cream shades soothe your sensitive nature.'},{i:'🧘',t:'Guard your energy',d:'Meditate often — your moods rise and fall like tides.'},{i:'💧',t:'Stay near water',d:'Time near rivers or the sea recharges your spirit.'}],
+                    advice:'The Moon makes you deeply intuitive. Trust your gut feelings — they are rarely wrong. Protect your peace and your gifts will shine.'},
+                3:{planet:'Jupiter (Guru)',title:'The Wise Optimist',desc:'You are wise, cheerful and full of knowledge. Teaching, guiding and inspiring come naturally. Your optimism lights up every room you enter.',color:'Yellow',day:'Thursday',gem:'Yellow Sapphire',career:'Teaching, Law, Writing, Spirituality, Finance',dir:'North-East',element:'Ether',friends:'3, 6, 9',tough:'6 (excess)',mantra:'Om Brihaspataye Namah',keywords:['Wisdom','Optimism','Discipline','Generosity'],
+                    hints:[{i:'📚',t:'Keep learning',d:'A new skill each year keeps your lucky planet strong.'},{i:'💛',t:'Wear yellow',d:'Yellow on Thursdays attracts wisdom and wealth.'},{i:'🙏',t:'Give back',d:'Donate or teach — generosity multiplies your luck.'},{i:'🪔',t:'Respect elders',d:'Blessings from elders and teachers fuel your growth.'}],
+                    advice:'Jupiter blesses you with wisdom and luck. Share your knowledge freely and the universe will keep refilling your cup.'},
+                4:{planet:'Rahu (Uranus)',title:'The Unconventional Mind',desc:'You think differently and see what others miss. Rules feel limiting to you. Channel your rebel energy into innovation and you become unstoppable.',color:'Grey / Electric Blue',day:'Saturday',gem:'Hessonite (Gomed)',career:'Technology, Research, Innovation, Engineering',dir:'South-West',element:'Air',friends:'1, 2, 7, 8',tough:'5',mantra:'Om Rahave Namah',keywords:['Innovation','Courage','Uniqueness','Resilience'],
+                    hints:[{i:'⚙️',t:'Build something new',d:'Your mind thrives on solving unusual problems.'},{i:'🔵',t:'Choose blue-grey',d:'Cool tones steady your restless energy.'},{i:'🧱',t:'Create structure',d:'Routines turn your wild ideas into real results.'},{i:'🌌',t:'Trust the unusual',d:'The path others avoid is often where you win.'}],
+                    advice:'Rahu gives you a rare, original mind. Embrace your uniqueness — what makes you different is exactly what makes you powerful.'},
+                5:{planet:'Mercury (Budh)',title:'The Clever Communicator',desc:'You are quick, witty and adaptable. Business and communication are your playgrounds. You can talk your way into any opportunity and out of any trouble.',color:'Green',day:'Wednesday',gem:'Emerald',career:'Business, Marketing, Media, Trading, Sales',dir:'North',element:'Earth',friends:'5, 6, 9, 1',tough:'4',mantra:'Om Budhaya Namah',keywords:['Communication','Adaptability','Wit','Charm'],
+                    hints:[{i:'💬',t:'Use your voice',d:'Speak up — words are your strongest superpower.'},{i:'💚',t:'Wear green',d:'Green on Wednesdays sharpens your mind & deals.'},{i:'📈',t:'Trade smart',d:'Your instinct for business is gold — act on it.'},{i:'🧠',t:'Stay flexible',d:'Adapt fast and you will always land on your feet.'}],
+                    advice:'Mercury gifts you charm and a sharp mind. Use your words to build bridges, not walls, and doors will open everywhere.'},
+                6:{planet:'Venus (Shukra)',title:'The Lover of Beauty',desc:'You are charming, artistic and deeply loving. Beauty, harmony and relationships matter most to you. People are naturally drawn to your warmth.',color:'White / Sky Blue / Pink',day:'Friday',gem:'Diamond / Opal',career:'Art, Design, Fashion, Hospitality, Entertainment',dir:'South-East',element:'Water',friends:'3, 6, 9',tough:'8',mantra:'Om Shukraya Namah',keywords:['Love','Charm','Creativity','Harmony'],
+                    hints:[{i:'🌸',t:'Surround with beauty',d:'A beautiful space lifts your mood and luck.'},{i:'🤍',t:'Wear pastels',d:'Soft pinks & whites magnify your magnetic charm.'},{i:'🎨',t:'Create art',d:'Express yourself — creativity is your fuel.'},{i:'💝',t:'Love generously',d:'Your relationships are your greatest treasure.'}],
+                    advice:'Venus blesses you with love and beauty. Lead with your heart, create freely, and let your warmth attract the right people.'},
+                7:{planet:'Ketu (Neptune)',title:'The Spiritual Seeker',desc:'You are introspective, mystical and wise beyond your years. You seek deeper meaning in everything. Solitude recharges you and intuition guides you.',color:'White / Light Green',day:'Monday',gem:'Cat\'s Eye',career:'Research, Spirituality, Psychology, Writing, Healing',dir:'West',element:'Water',friends:'2, 4, 7',tough:'1',mantra:'Om Ketave Namah',keywords:['Intuition','Wisdom','Mystery','Depth'],
+                    hints:[{i:'🧘',t:'Embrace solitude',d:'Quiet time unlocks your deepest insights.'},{i:'🤍',t:'Wear white',d:'White & light tones calm your active mind.'},{i:'📿',t:'Practice spirituality',d:'Meditation or prayer aligns your energy.'},{i:'🌙',t:'Trust intuition',d:'Your inner voice knows before your mind does.'}],
+                    advice:'Ketu makes you an old soul. Honour your need for depth and solitude — your wisdom is a gift the noisy world badly needs.'},
+                8:{planet:'Saturn (Shani)',title:'The Disciplined Achiever',desc:'You are hardworking, patient and destined for big success — earned slowly but solidly. Saturn tests you, then rewards you richly. Discipline is your magic.',color:'Dark Blue / Black',day:'Saturday',gem:'Blue Sapphire',career:'Law, Finance, Real Estate, Leadership, Engineering',dir:'West',element:'Air',friends:'4, 8, 5',tough:'1, 2',mantra:'Om Shanaye Namah',keywords:['Discipline','Patience','Justice','Endurance'],
+                    hints:[{i:'⏳',t:'Be patient',d:'Your rewards come later — but they come big.'},{i:'🔵',t:'Wear dark blue',d:'Deep blues steady your focus and karma.'},{i:'⚖️',t:'Stay honest',d:'Saturn rewards integrity above all else.'},{i:'🛠',t:'Work hard quietly',d:'Consistent effort beats luck for you every time.'}],
+                    advice:'Saturn is a strict but fair teacher. Stay disciplined and ethical — every bit of honest effort you make is being recorded and rewarded.'},
+                9:{planet:'Mars (Mangal)',title:'The Fearless Warrior',desc:'You are energetic, brave and passionate. You fight for what is right and never give up. Your courage inspires everyone around you to be bolder.',color:'Red / Coral',day:'Tuesday',gem:'Red Coral',career:'Defence, Sports, Surgery, Engineering, Leadership',dir:'South',element:'Fire',friends:'3, 6, 9',tough:'2',mantra:'Om Mangalaya Namah',keywords:['Courage','Energy','Passion','Loyalty'],
+                    hints:[{i:'🔥',t:'Channel your fire',d:'Exercise daily to burn off restless energy.'},{i:'🔴',t:'Wear red',d:'Red on Tuesdays boosts your courage & drive.'},{i:'🧯',t:'Tame your temper',d:'Pause before reacting — your power needs control.'},{i:'🏆',t:'Aim high',d:'You were built to win — set bold goals.'}],
+                    advice:'Mars fills you with fire and courage. Direct that energy with patience and you will conquer every challenge life throws at you.'}
+            },
+            luckyT:{color:'Lucky Color',day:'Lucky Day',num:'Lucky Numbers',gem:'Lucky Gemstone'},
+            advLabels:{mulank:'Mulank (Root)',bhagyank:'Bhagyank (Destiny)',planet:'Ruling Planet',friends:'Friendly Numbers',tough:'Challenging Numbers',dir:'Lucky Direction',element:'Element',mantra:'Beej Mantra',career:'Ideal Careers'},
+            barLbl:['Leadership','Creativity','Luck','Relationships'],
+            wm:'mulank-calculator'
+        },
+        hi: {
+            steps:['🔢 आपकी जन्मतिथि पढ़ रहे हैं...','🪐 आपका स्वामी ग्रह देख रहे हैं...','✨ आपका भाग्य खोल रहे हैं...','📜 रिपोर्ट तैयार हो रही है...'],
+            mulankLbl:'मूलांक', bhagyankLbl:'भाग्यांक', planetLbl:'स्वामी ग्रह',
+            n:{
+                1:{planet:'सूर्य',title:'जन्मजात नेता',desc:'आप एक जन्मजात नेता हैं — साहसी, स्वतंत्र और महत्वाकांक्षी। लोग स्वाभाविक रूप से आपका अनुसरण करते हैं। आपकी इच्छाशक्ति पहाड़ हिला सकती है।',color:'सुनहरा / नारंगी',day:'रविवार',gem:'माणिक (Ruby)',career:'नेतृत्व, सरकारी सेवा, व्यापार, प्रशासन',dir:'पूर्व',element:'अग्नि',friends:'1, 2, 3, 9',tough:'8, 4',mantra:'ॐ सूर्याय नमः',keywords:['नेतृत्व','आत्मविश्वास','महत्वाकांक्षा','मौलिकता'],
+                    hints:[{i:'🌅',t:'सूर्य को अर्घ्य',d:'रविवार को उगते सूर्य को जल चढ़ाएं — ऊर्जा बढ़ेगी।'},{i:'🟡',t:'सुनहरे रंग पहनें',d:'पीला व सुनहरा रंग आपका आकर्षण बढ़ाता है।'},{i:'🎯',t:'नेतृत्व करें',d:'दूसरों को ऊपर उठाएं, नियंत्रण न करें — शक्ति बढ़ेगी।'},{i:'🌞',t:'रविवार शुभ',d:'बड़े काम रविवार को शुरू करें।'}],
+                    advice:'आपका अंक सूर्य द्वारा शासित है — सभी ग्रहों का राजा। विनम्रता से नेतृत्व करें, सफलता हर जगह आपका पीछा करेगी।'},
+                2:{planet:'चंद्र',title:'कोमल हृदय',desc:'आप भावुक, सहज-ज्ञानी और देखभाल करने वाले हैं। आप लोगों को आसानी से पढ़ लेते हैं और शांति लाते हैं। आपकी संवेदनशीलता एक शक्ति है।',color:'सफेद / क्रीम / चांदी',day:'सोमवार',gem:'मोती (Pearl)',career:'काउंसलिंग, कला, स्वास्थ्य, आतिथ्य',dir:'वायव्य',element:'जल',friends:'1, 2, 4, 7',tough:'8, 9',mantra:'ॐ चंद्राय नमः',keywords:['अंतर्ज्ञान','सहानुभूति','कूटनीति','शांति'],
+                    hints:[{i:'🌝',t:'चंद्र का सम्मान',d:'भावनात्मक संतुलन हेतु चांदी की वस्तु रखें।'},{i:'🤍',t:'सफेद पहनें',d:'सफेद व क्रीम रंग आपके मन को शांत करते हैं।'},{i:'🧘',t:'ऊर्जा बचाएं',d:'ध्यान करें — आपका मन लहरों जैसा बदलता है।'},{i:'💧',t:'जल के पास रहें',d:'नदी या समुद्र के पास समय बिताएं।'}],
+                    advice:'चंद्र आपको गहरा अंतर्ज्ञान देता है। अपनी अंदरूनी आवाज़ पर भरोसा करें — वह शायद ही गलत होती है।'},
+                3:{planet:'गुरु (बृहस्पति)',title:'ज्ञानी आशावादी',desc:'आप बुद्धिमान, प्रसन्न और ज्ञान से भरपूर हैं। सिखाना और प्रेरित करना आपका स्वभाव है। आपका आशावाद हर जगह उजाला फैलाता है।',color:'पीला',day:'गुरुवार',gem:'पुखराज (Yellow Sapphire)',career:'शिक्षण, कानून, लेखन, अध्यात्म, वित्त',dir:'ईशान',element:'आकाश',friends:'3, 6, 9',tough:'6 (अधिकता)',mantra:'ॐ बृहस्पतये नमः',keywords:['ज्ञान','आशावाद','अनुशासन','उदारता'],
+                    hints:[{i:'📚',t:'सीखते रहें',d:'हर साल नया कौशल आपके भाग्य ग्रह को मज़बूत रखता है।'},{i:'💛',t:'पीला पहनें',d:'गुरुवार को पीला रंग ज्ञान व धन लाता है।'},{i:'🙏',t:'दान करें',d:'दान या शिक्षा देना भाग्य को कई गुना बढ़ाता है।'},{i:'🪔',t:'बड़ों का सम्मान',d:'गुरुजनों का आशीर्वाद आपको आगे बढ़ाता है।'}],
+                    advice:'गुरु आपको ज्ञान और भाग्य देता है। अपना ज्ञान खुलकर बांटें, ब्रह्मांड आपका पात्र भरता रहेगा।'},
+                4:{planet:'राहु',title:'अनोखी सोच',desc:'आप अलग सोचते हैं और वह देखते हैं जो दूसरे चूक जाते हैं। नियम आपको सीमित लगते हैं। अपनी विद्रोही ऊर्जा को नवाचार में लगाएं।',color:'धूसर / नीला',day:'शनिवार',gem:'गोमेद (Hessonite)',career:'तकनीक, शोध, नवाचार, इंजीनियरिंग',dir:'नैऋत्य',element:'वायु',friends:'1, 2, 7, 8',tough:'5',mantra:'ॐ राहवे नमः',keywords:['नवाचार','साहस','विशिष्टता','दृढ़ता'],
+                    hints:[{i:'⚙️',t:'नया बनाएं',d:'आपका मन अनोखी समस्याएं हल करने में खिलता है।'},{i:'🔵',t:'नीला-धूसर चुनें',d:'ठंडे रंग आपकी बेचैन ऊर्जा को स्थिर करते हैं।'},{i:'🧱',t:'व्यवस्था बनाएं',d:'दिनचर्या आपके विचारों को परिणाम में बदलती है।'},{i:'🌌',t:'अनोखे पर भरोसा',d:'जिस राह से लोग बचते हैं, वहीं आपकी जीत है।'}],
+                    advice:'राहु आपको दुर्लभ, मौलिक दिमाग देता है। अपनी विशिष्टता अपनाएं — जो आपको अलग बनाता है वही आपकी ताकत है।'},
+                5:{planet:'बुध',title:'चतुर वक्ता',desc:'आप तेज़, हाज़िरजवाब और अनुकूलनशील हैं। व्यापार और संवाद आपके मैदान हैं। आप बातों से कोई भी अवसर पा सकते हैं।',color:'हरा',day:'बुधवार',gem:'पन्ना (Emerald)',career:'व्यापार, मार्केटिंग, मीडिया, ट्रेडिंग, सेल्स',dir:'उत्तर',element:'पृथ्वी',friends:'5, 6, 9, 1',tough:'4',mantra:'ॐ बुधाय नमः',keywords:['संवाद','अनुकूलन','हाज़िरजवाबी','आकर्षण'],
+                    hints:[{i:'💬',t:'अपनी आवाज़ उठाएं',d:'बोलें — शब्द आपकी सबसे बड़ी शक्ति हैं।'},{i:'💚',t:'हरा पहनें',d:'बुधवार को हरा रंग दिमाग व सौदे तेज़ करता है।'},{i:'📈',t:'समझदारी से व्यापार',d:'व्यापार की आपकी समझ सोना है — उस पर काम करें।'},{i:'🧠',t:'लचीले रहें',d:'जल्दी ढलें, आप हमेशा अपने पैरों पर खड़े रहेंगे।'}],
+                    advice:'बुध आपको आकर्षण और तेज़ दिमाग देता है। अपने शब्दों से पुल बनाएं, दीवारें नहीं — हर जगह दरवाज़े खुलेंगे।'},
+                6:{planet:'शुक्र',title:'सौंदर्य प्रेमी',desc:'आप आकर्षक, कलात्मक और प्रेमपूर्ण हैं। सुंदरता, सामंजस्य और रिश्ते आपके लिए सबसे अहम हैं। लोग आपकी गर्मजोशी की ओर खिंचते हैं।',color:'सफेद / आसमानी / गुलाबी',day:'शुक्रवार',gem:'हीरा / ओपल',career:'कला, डिज़ाइन, फैशन, आतिथ्य, मनोरंजन',dir:'आग्नेय',element:'जल',friends:'3, 6, 9',tough:'8',mantra:'ॐ शुक्राय नमः',keywords:['प्रेम','आकर्षण','रचनात्मकता','सामंजस्य'],
+                    hints:[{i:'🌸',t:'सुंदरता से घिरें',d:'सुंदर वातावरण आपका मूड व भाग्य बढ़ाता है।'},{i:'🤍',t:'हल्के रंग पहनें',d:'गुलाबी व सफेद आपका आकर्षण बढ़ाते हैं।'},{i:'🎨',t:'कला रचें',d:'खुद को व्यक्त करें — रचनात्मकता आपका ईंधन है।'},{i:'💝',t:'खुलकर प्रेम करें',d:'आपके रिश्ते आपकी सबसे बड़ी पूंजी हैं।'}],
+                    advice:'शुक्र आपको प्रेम और सौंदर्य देता है। दिल से चलें, स्वतंत्र रूप से रचें, और अपनी गर्मजोशी से सही लोगों को आकर्षित करें।'},
+                7:{planet:'केतु',title:'आध्यात्मिक खोजी',desc:'आप अंतर्मुखी, रहस्यमय और उम्र से अधिक समझदार हैं। आप हर चीज़ में गहरा अर्थ ढूंढते हैं। एकांत आपको ऊर्जा देता है।',color:'सफेद / हल्का हरा',day:'सोमवार',gem:'लहसुनिया (Cat\'s Eye)',career:'शोध, अध्यात्म, मनोविज्ञान, लेखन, चिकित्सा',dir:'पश्चिम',element:'जल',friends:'2, 4, 7',tough:'1',mantra:'ॐ केतवे नमः',keywords:['अंतर्ज्ञान','ज्ञान','रहस्य','गहराई'],
+                    hints:[{i:'🧘',t:'एकांत अपनाएं',d:'शांत समय आपकी गहरी समझ खोलता है।'},{i:'🤍',t:'सफेद पहनें',d:'सफेद व हल्के रंग आपके मन को शांत करते हैं।'},{i:'📿',t:'अध्यात्म करें',d:'ध्यान या प्रार्थना आपकी ऊर्जा संतुलित करती है।'},{i:'🌙',t:'अंतर्ज्ञान पर भरोसा',d:'आपकी अंदरूनी आवाज़ दिमाग से पहले जानती है।'}],
+                    advice:'केतु आपको पुरानी आत्मा बनाता है। गहराई और एकांत की अपनी ज़रूरत का सम्मान करें — आपका ज्ञान दुनिया के लिए तोहफ़ा है।'},
+                8:{planet:'शनि',title:'अनुशासित सफलता',desc:'आप मेहनती, धैर्यवान और बड़ी सफलता के लिए बने हैं — धीरे पर पक्की। शनि पहले परखता है, फिर भरपूर देता है। अनुशासन आपका जादू है।',color:'गहरा नीला / काला',day:'शनिवार',gem:'नीलम (Blue Sapphire)',career:'कानून, वित्त, रियल एस्टेट, नेतृत्व, इंजीनियरिंग',dir:'पश्चिम',element:'वायु',friends:'4, 8, 5',tough:'1, 2',mantra:'ॐ शनैश्चराय नमः',keywords:['अनुशासन','धैर्य','न्याय','सहनशक्ति'],
+                    hints:[{i:'⏳',t:'धैर्य रखें',d:'आपका इनाम देर से पर बड़ा आता है।'},{i:'🔵',t:'गहरा नीला पहनें',d:'गहरे नीले रंग आपका फोकस व कर्म स्थिर करते हैं।'},{i:'⚖️',t:'ईमानदार रहें',d:'शनि सबसे ज़्यादा ईमानदारी को पुरस्कृत करता है।'},{i:'🛠',t:'चुपचाप मेहनत',d:'लगातार प्रयास आपके लिए भाग्य से बेहतर है।'}],
+                    advice:'शनि सख्त पर न्यायप्रिय गुरु है। अनुशासित व नैतिक रहें — आपकी हर ईमानदार मेहनत दर्ज हो रही है और पुरस्कृत होगी।'},
+                9:{planet:'मंगल',title:'निडर योद्धा',desc:'आप ऊर्जावान, बहादुर और जुनूनी हैं। आप सही के लिए लड़ते हैं और कभी हार नहीं मानते। आपका साहस सबको प्रेरित करता है।',color:'लाल / मूंगा',day:'मंगलवार',gem:'मूंगा (Red Coral)',career:'रक्षा, खेल, सर्जरी, इंजीनियरिंग, नेतृत्व',dir:'दक्षिण',element:'अग्नि',friends:'3, 6, 9',tough:'2',mantra:'ॐ मंगलाय नमः',keywords:['साहस','ऊर्जा','जुनून','वफ़ादारी'],
+                    hints:[{i:'🔥',t:'ऊर्जा लगाएं',d:'रोज़ व्यायाम करके बेचैन ऊर्जा निकालें।'},{i:'🔴',t:'लाल पहनें',d:'मंगलवार को लाल रंग साहस व जोश बढ़ाता है।'},{i:'🧯',t:'गुस्से पर काबू',d:'प्रतिक्रिया से पहले रुकें — शक्ति को नियंत्रण चाहिए।'},{i:'🏆',t:'ऊंचा लक्ष्य',d:'आप जीतने के लिए बने हैं — बड़े लक्ष्य रखें।'}],
+                    advice:'मंगल आपको आग और साहस से भरता है। उस ऊर्जा को धैर्य से दिशा दें, आप हर चुनौती जीत लेंगे।'}
+            },
+            luckyT:{color:'शुभ रंग',day:'शुभ दिन',num:'शुभ अंक',gem:'शुभ रत्न'},
+            advLabels:{mulank:'मूलांक',bhagyank:'भाग्यांक',planet:'स्वामी ग्रह',friends:'मित्र अंक',tough:'चुनौती अंक',dir:'शुभ दिशा',element:'तत्व',mantra:'बीज मंत्र',career:'आदर्श करियर'},
+            barLbl:['नेतृत्व','रचनात्मकता','भाग्य','रिश्ते'],
+            wm:'mulank-calculator'
+        }
+    };
+
+    // per-number base strengths [leadership, creativity, luck, relationships]
+    var STR = {1:[95,70,75,65],2:[60,80,70,92],3:[80,88,90,82],4:[72,90,60,62],5:[78,85,80,80],6:[70,92,82,95],7:[65,85,72,68],8:[88,68,65,60],9:[92,78,80,75]};
+
+    var state = {};
+
+    function compute(dob){
+        var parts = dob.split('-'); // YYYY-MM-DD
+        var y = parts[0], m = parts[1], d = parts[2];
+        var day = parseInt(d,10);
+        var mulank = C.reduceDigit(day);
+        var allDigits = (y+m+d).split('').reduce(function(s,ch){ return s + (parseInt(ch,10)||0); },0);
+        var bhagyank = C.reduceDigit(allDigits);
+        return {mulank:mulank, bhagyank:bhagyank, dob:dob};
+    }
+
+    function render(){
+        var T = DATA[lang], n = state.mulank, b = state.bhagyank, info = T.n[n], binfo = T.n[b];
+        var sd = C.seed(state.dob);
+        $('mulank').textContent = n;
+        $('level').textContent = '🪐 ' + info.planet + ' · ' + info.title;
+        $('desc').textContent = info.desc;
+        $('wm').textContent = T.wm + ' 🔮';
+
+        // ring shows mulank proportion
+        var circ = 2*Math.PI*86;
+        setTimeout(function(){ $('ring').style.strokeDashoffset = circ-(circ*n/9); },80);
+
+        // number chips
+        var ng = $('numbers'); ng.innerHTML='';
+        var chips = [
+            {e:'🔢', ti:T.mulankLbl, v:String(n), note:info.planet},
+            {e:'🌟', ti:T.bhagyankLbl, v:String(b), note:binfo.planet}
+        ];
+        chips.forEach(function(c,i){
+            var d=document.createElement('div'); d.className='cts-x'; d.style.animationDelay=(i*0.08)+'s';
+            d.innerHTML='<div class="cts-x-head"><span class="cts-x-emoji">'+c.e+'</span><span class="cts-x-title">'+C.escapeHtml(c.ti)+'</span></div><p class="cts-x-val">'+C.escapeHtml(c.v)+'</p><p class="cts-x-note">'+C.escapeHtml(c.note)+'</p>';
+            ng.appendChild(d);
+        });
+
+        // bars
+        var base = STR[n];
+        function v(i){ var r=Math.abs(Math.sin(sd+i))*10-3; return Math.max(40,Math.min(99,Math.round(base[i]+r))); }
+        var m=[v(0),v(1),v(2),v(3)];
+        setTimeout(function(){
+            for (var i=0;i<4;i++){ $('b'+(i+1)).style.width=m[i]+'%'; $('b'+(i+1)+'-v').textContent=m[i]+'%'; }
+        },200);
+
+        // lucky extras
+        var L=T.luckyT, lg=$('lucky'); lg.innerHTML='';
+        var lucky=[
+            {e:'🎨', ti:L.color, v:info.color},
+            {e:'📅', ti:L.day, v:info.day},
+            {e:'🔟', ti:L.num, v:info.friends},
+            {e:'💎', ti:L.gem, v:info.gem}
+        ];
+        lucky.forEach(function(c,i){
+            var d=document.createElement('div'); d.className='cts-x'; d.style.animationDelay=(i*0.07)+'s';
+            d.innerHTML='<div class="cts-x-head"><span class="cts-x-emoji">'+c.e+'</span><span class="cts-x-title">'+C.escapeHtml(c.ti)+'</span></div><p class="cts-x-val">'+C.escapeHtml(c.v)+'</p>';
+            lg.appendChild(d);
+        });
+
+        // hints
+        var hg=$('hints'); hg.innerHTML='';
+        info.hints.forEach(function(h,i){
+            var d=document.createElement('div'); d.className='cts-hint'; d.style.animationDelay=(i*0.1)+'s';
+            d.innerHTML='<div class="cts-hint-icon">'+h.i+'</div><h4>'+C.escapeHtml(h.t)+'</h4><p>'+C.escapeHtml(h.d)+'</p>';
+            hg.appendChild(d);
+        });
+
+        // advice + keywords
+        $('advice').textContent = info.advice;
+        var tags=$('tags'); tags.innerHTML='';
+        info.keywords.forEach(function(k){ var s=document.createElement('span'); s.className='cts-tag'; s.textContent=k; tags.appendChild(s); });
+
+        // advanced
+        var al=T.advLabels;
+        var advData=[
+            [al.mulank, n+' · '+info.planet],
+            [al.bhagyank, b+' · '+binfo.planet],
+            [al.dir!==undefined?al.dir:'Direction', info.dir],
+            [al.element, info.element],
+            [al.friends, info.friends],
+            [al.tough, info.tough],
+            [al.mantra, info.mantra],
+            [al.career, info.career]
+        ];
+        var ag=$('adv-grid'); ag.innerHTML='';
+        advData.forEach(function(p){ var d=document.createElement('div'); d.className='cts-adv-item'; d.innerHTML='<div class="k">'+C.escapeHtml(p[0])+'</div><div class="v">'+C.escapeHtml(String(p[1]))+'</div>'; ag.appendChild(d); });
+        if (root.classList.contains('cts-adv-active')) { $('adv-panel').classList.add('cts-show'); }
+
+        // share
+        var url=window.location.href;
+        var shareTxt=(lang==='hi'?'🔮 मेरा मूलांक ':'🔮 My Mulank ')+n+' · '+(lang==='hi'?'भाग्यांक ':'Bhagyank ')+b+' ('+info.planet+')\n'+url;
+        $('wa').href=C.shareWhatsApp(shareTxt);
+        $('tw').href=C.shareTwitter('My Mulank '+n+' & Bhagyank '+b+' ('+info.planet+')', url);
+
+        setTimeout(C.confetti,500);
+        setTimeout(function(){ $('result').scrollIntoView({behavior:'smooth',block:'start'}); },100);
+    }
+
+    function go(){
+        var dob=($('dob').value||'').trim(), err=$('error');
+        if (!dob || !/^\d{4}-\d{2}-\d{2}$/.test(dob)){ err.textContent=lang==='hi'?'कृपया सही जन्मतिथि चुनें।':'Please select a valid date of birth.'; err.classList.add('cts-show'); return; }
+        var dt=new Date(dob);
+        if (isNaN(dt.getTime()) || dt > new Date()){ err.textContent=lang==='hi'?'जन्मतिथि भविष्य की नहीं हो सकती।':'Date of birth cannot be in the future.'; err.classList.add('cts-show'); return; }
+        err.classList.remove('cts-show');
+        var r=compute(dob); state.mulank=r.mulank; state.bhagyank=r.bhagyank; state.dob=dob;
+        state.name=($('name').value||'').trim();
+        $('input').style.display='none';
+        var ld=$('loading'); ld.style.display='block'; ld.classList.add('cts-show');
+        $('load-title').textContent = state.name ? state.name : '🔮';
+        $('bar').style.width='0%';
+        C.runLoading($('load-step'),$('bar'),DATA[lang].steps,function(){
+            ld.classList.remove('cts-show'); ld.style.display='none';
+            $('result').classList.add('cts-show'); render();
+        });
+    }
+
+    function reset(){
+        $('result').classList.remove('cts-show');
+        $('loading').classList.remove('cts-show'); $('loading').style.display='none';
+        $('input').style.display='block';
+        $('dob').value=''; $('name').value='';
+        $('mulank').textContent='0'; $('ring').style.strokeDashoffset=540.35;
+        ['b1','b2','b3','b4'].forEach(function(id){ $(id).style.width='0%'; });
+        $('adv-panel').classList.toggle('cts-show', root.classList.contains('cts-adv-active'));
+        $('input').scrollIntoView({behavior:'smooth',block:'start'});
+    }
+
+    $('dob').addEventListener('input',function(){ $('error').classList.remove('cts-show'); });
+    $('calc').addEventListener('click',go);
+    $('try').addEventListener('click',reset);
+    $('copy').addEventListener('click',function(){ C.copyLink(this, lang==='hi'?'✅ कॉपी हुआ!':'✅ Copied!'); });
+    $('dl').addEventListener('click',function(){
+        var T=DATA[lang], info=T.n[state.mulank];
+        var ok=C.downloadCard({
+            brand:'Mulank Calculator', title:(state.name||'')+(state.name?' · ':'')+info.planet,
+            percent:Math.round(state.mulank/9*100), centerText:String(state.mulank), centerSub:T.mulankLbl,
+            level:'🌟 '+T.bhagyankLbl+' '+state.bhagyank, desc:info.desc,
+            footer:'mulank-calculator', file:'mulank-'+state.mulank
+        });
+        if (!ok){ alert(lang==='hi'?'स्क्रीनशॉट लेकर सेव करें!':'Take a screenshot to save your result!'); }
+    });
+
+    C.qa(root,'.cts-seg').forEach(function(btn){
+        btn.addEventListener('click',function(){
+            lang=btn.getAttribute('data-lang');
+            C.qa(root,'.cts-seg').forEach(function(x){ x.classList.toggle('cts-on', x===btn); });
+            C.applyLang(root,lang);
+            if ($('result').classList.contains('cts-show')){ render(); }
+        });
+    });
+
+    $('adv-toggle').addEventListener('click',function(){
+        var on=root.classList.toggle('cts-adv-active');
+        this.classList.toggle('cts-on',on);
+        if ($('result').classList.contains('cts-show')){ $('adv-panel').classList.toggle('cts-show',on); }
+    });
+
+    C.applyLang(root,'en');
+    C.liveCounter($('counter'),194830);
+})();
+</script>
+        <div class="cts-wrap cts-crush" id="cc-8864" data-tool="crush">
+
+    <div class="cts-toolbar">
+        <div class="cts-toggle" role="group" aria-label="Language">
+            <button type="button" class="cts-seg cts-on" data-lang="en">EN</button>
+            <button type="button" class="cts-seg" data-lang="hi">हिंदी</button>
+        </div>
+        <button type="button" class="cts-adv-btn" data-role="adv-toggle">
+            <span>&#9881;</span><span data-en="Advanced" data-hi="एडवांस्ड">Advanced</span>
+        </button>
+    </div>
+
+    <header class="cts-header">
+        <div class="cts-h-icon">&#128150;</div>
+        <h1 data-en="Crush Calculator" data-hi="क्रश कैलकुलेटर">Crush Calculator</h1>
+        <p class="cts-h-sub" data-en="Find out if your crush secretly likes you back" data-hi="जानिए क्या आपका क्रश भी आपको पसंद करता है">Find out if your crush secretly likes you back</p>
+        <div class="cts-stats">
+            <div class="cts-stat"><div class="cts-stat-num" data-role="counter">3,12,760</div><div class="cts-stat-lbl" data-en="Tests Today" data-hi="आज टेस्ट">Tests Today</div></div>
+            <div class="cts-stat"><div class="cts-stat-num">4.9&#9733;</div><div class="cts-stat-lbl" data-en="Rating" data-hi="रेटिंग">Rating</div></div>
+            <div class="cts-stat"><div class="cts-stat-num">100%</div><div class="cts-stat-lbl" data-en="Free" data-hi="फ्री">Free</div></div>
+        </div>
+    </header>
+
+    <section class="cts-card">
+        <!-- Input -->
+        <div data-role="input">
+            <div class="cts-inputs">
+                <div class="cts-field">
+                    <div class="cts-avatar cts-a" data-role="av-a">?</div>
+                    <input type="text" class="cts-input" data-role="name-a" maxlength="30" autocomplete="off" placeholder="Your name" data-ph-en="Your name" data-ph-hi="आपका नाम" />
+                </div>
+                <div class="cts-vs" aria-hidden="true">&#128150;</div>
+                <div class="cts-field">
+                    <div class="cts-avatar cts-b" data-role="av-b">?</div>
+                    <input type="text" class="cts-input" data-role="name-b" maxlength="30" autocomplete="off" placeholder="Crush's name" data-ph-en="Crush's name" data-ph-hi="क्रश का नाम" />
+                </div>
+            </div>
+            <div class="cts-error" data-role="error" data-en="Please enter both names to continue." data-hi="कृपया दोनों नाम दर्ज करें।">Please enter both names to continue.</div>
+            <button type="button" class="cts-btn cts-btn-primary" data-role="calc" data-en="Reveal My Crush Score &#128150;" data-hi="मेरा क्रश स्कोर देखें &#128150;">Reveal My Crush Score &#128150;</button>
+            <div class="cts-trust">
+                <span data-en="&#128274; Secret" data-hi="&#128274; गुप्त">&#128274; Secret</span>
+                <span data-en="&#9889; Instant" data-hi="&#9889; इंस्टेंट">&#9889; Instant</span>
+                <span data-en="&#128302; Astro-powered" data-hi="&#128302; ज्योतिष आधारित">&#128302; Astro-powered</span>
+            </div>
+        </div>
+
+        <!-- Loading -->
+        <div class="cts-loading" data-role="loading">
+            <div class="cts-rings"><div class="cts-ring"></div><div class="cts-ring"></div><div class="cts-ring"></div><div class="cts-ring-emoji">&#128150;</div></div>
+            <div class="cts-load-title" data-role="load-title">&#128150;</div>
+            <div class="cts-load-step" data-role="load-step"></div>
+            <div class="cts-progress"><div class="cts-progress-bar" data-role="bar"></div></div>
+        </div>
+
+        <!-- Result -->
+        <div class="cts-result" data-role="result">
+            <div class="cts-rcard">
+                <div class="cts-rc-top">
+                    <div class="cts-rc-name"><div class="cts-avatar cts-a" data-role="rc-av-a">?</div><span data-role="rc-n-a"></span></div>
+                    <div class="cts-rc-mid">&#128150;</div>
+                    <div class="cts-rc-name"><div class="cts-avatar cts-b" data-role="rc-av-b">?</div><span data-role="rc-n-b"></span></div>
+                </div>
+                <div class="cts-ring-wrap">
+                    <svg viewBox="0 0 200 200" aria-hidden="true">
+                        <defs><linearGradient id="cc-8864-g" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#f4c430"/><stop offset="100%" stop-color="#b558d6"/></linearGradient></defs>
+                        <circle class="cts-ring-bg" cx="100" cy="100" r="86"/>
+                        <circle class="cts-ring-fg" data-role="ring" cx="100" cy="100" r="86" stroke="url(#cc-8864-g)" stroke-dasharray="540.35" stroke-dashoffset="540.35"/>
+                    </svg>
+                    <div class="cts-percent"><div><span class="cts-percent-num" data-role="pct">0</span><span class="cts-percent-sym">%</span></div><div class="cts-percent-sub" data-en="Crush Match" data-hi="क्रश मैच">Crush Match</div></div>
+                </div>
+                <div class="cts-level" data-role="level"></div>
+                <p class="cts-rc-desc" data-role="desc"></p>
+                <div class="cts-watermark" data-role="wm"></div>
+            </div>
+
+            <!-- Metric bars -->
+            <div class="cts-bars">
+                <div class="cts-bar-row"><div class="cts-bar-top"><span data-en="&#128064; Attraction" data-hi="&#128064; आकर्षण">&#128064; Attraction</span><span data-role="b1-v">0%</span></div><div class="cts-bar"><div class="cts-bar-fill" data-role="b1"></div></div></div>
+                <div class="cts-bar-row"><div class="cts-bar-top"><span data-en="&#10024; Chemistry" data-hi="&#10024; केमिस्ट्री">&#10024; Chemistry</span><span data-role="b2-v">0%</span></div><div class="cts-bar"><div class="cts-bar-fill" data-role="b2"></div></div></div>
+                <div class="cts-bar-row"><div class="cts-bar-top"><span data-en="&#128172; Connection" data-hi="&#128172; जुड़ाव">&#128172; Connection</span><span data-role="b3-v">0%</span></div><div class="cts-bar"><div class="cts-bar-fill" data-role="b3"></div></div></div>
+                <div class="cts-bar-row"><div class="cts-bar-top"><span data-en="&#128293; Spark" data-hi="&#128293; स्पार्क">&#128293; Spark</span><span data-role="b4-v">0%</span></div><div class="cts-bar"><div class="cts-bar-fill" data-role="b4"></div></div></div>
+            </div>
+
+            <!-- Extras: emoji / future / soulmate / horoscope -->
+            <div class="cts-extras" data-role="extras"></div>
+
+            <!-- Golden hints -->
+            <div class="cts-hints">
+                <h3>&#11088; <span data-en="Golden Hints" data-hi="गोल्डन हिंट्स">Golden Hints</span></h3>
+                <div class="cts-hints-grid" data-role="hints"></div>
+            </div>
+
+            <!-- Advice -->
+            <div class="cts-advice">
+                <h3>&#129302; <span data-en="Your Crush Advice" data-hi="आपके क्रश की सलाह">Your Crush Advice</span></h3>
+                <p data-role="advice"></p>
+                <div class="cts-tags" data-role="tags"></div>
+            </div>
+
+            <!-- Advanced -->
+            <div class="cts-adv-panel" data-role="adv-panel">
+                <h3>&#128302; <span data-en="Advanced Love Report" data-hi="एडवांस्ड लव रिपोर्ट">Advanced Love Report</span></h3>
+                <div class="cts-adv-grid" data-role="adv-grid"></div>
+            </div>
+
+            <!-- Share + download -->
+            <div class="cts-share">
+                <a href="#" class="cts-share-btn cts-sb-wa" data-role="wa" target="_blank" rel="noopener">&#128241; WhatsApp</a>
+                <a href="#" class="cts-share-btn cts-sb-tw" data-role="tw" target="_blank" rel="noopener">&#119991; Twitter</a>
+                <button type="button" class="cts-share-btn cts-sb-dl" data-role="dl">&#11015; <span data-en="Download" data-hi="डाउनलोड">Download</span></button>
+                <button type="button" class="cts-share-btn cts-sb-copy" data-role="copy">&#128279; <span data-en="Copy Link" data-hi="लिंक कॉपी">Copy Link</span></button>
+            </div>
+
+            <button type="button" class="cts-btn cts-try" data-role="try">&#128260; <span data-en="Try Again" data-hi="दोबारा करें">Try Again</span></button>
+        </div>
+    </section>
+
+    <!-- Levels -->
+    <section class="cts-levels">
+        <div class="cts-lvl"><div class="cts-lvl-icon">&#128293;</div><h4 data-en="Soulmates" data-hi="सोलमेट्स">Soulmates</h4><div class="cts-lvl-range">90-100%</div><p class="cts-lvl-desc" data-en="Written in stars" data-hi="तारों में लिखा">Written in stars</p></div>
+        <div class="cts-lvl"><div class="cts-lvl-icon">&#128150;</div><h4 data-en="Strong Crush" data-hi="स्ट्रॉन्ग क्रश">Strong Crush</h4><div class="cts-lvl-range">70-89%</div><p class="cts-lvl-desc" data-en="They like you!" data-hi="वे आपको पसंद करते हैं!">They like you!</p></div>
+        <div class="cts-lvl"><div class="cts-lvl-icon">&#128151;</div><h4 data-en="Sweet Spark" data-hi="स्वीट स्पार्क">Sweet Spark</h4><div class="cts-lvl-range">50-69%</div><p class="cts-lvl-desc" data-en="Real potential" data-hi="असली संभावना">Real potential</p></div>
+        <div class="cts-lvl"><div class="cts-lvl-icon">&#128524;</div><h4 data-en="Shy Vibes" data-hi="शाई वाइब्स">Shy Vibes</h4><div class="cts-lvl-range">30-49%</div><p class="cts-lvl-desc" data-en="Take it slow" data-hi="धीरे चलें">Take it slow</p></div>
+        <div class="cts-lvl"><div class="cts-lvl-icon">&#129303;</div><h4 data-en="Friend Zone" data-hi="फ्रेंड ज़ोन">Friend Zone</h4><div class="cts-lvl-range">0-29%</div><p class="cts-lvl-desc" data-en="For now..." data-hi="अभी के लिए...">For now...</p></div>
+    </section>
+
+    <!-- Related -->
+    <section class="cts-related">
+        <h2 data-en="Try More Love Tools" data-hi="और लव टूल्स आज़माएं">Try More Love Tools</h2>
+        <div class="cts-related-grid">
+            <a class="cts-rt" href="/friendship-calculator/"><div class="cts-rt-icon">&#129309;</div><h4 data-en="Friendship Calculator" data-hi="फ्रेंडशिप कैलकुलेटर">Friendship Calculator</h4><p data-en="How strong is your bond?" data-hi="आपकी दोस्ती कितनी मज़बूत है?">How strong is your bond?</p></a>
+            <a class="cts-rt" href="/mulank-calculator/"><div class="cts-rt-icon">&#128302;</div><h4 data-en="Mulank Calculator" data-hi="मूलांक कैलकुलेटर">Mulank Calculator</h4><p data-en="Numerology by date of birth" data-hi="जन्मतिथि से अंक ज्योतिष">Numerology by date of birth</p></a>
+            <a class="cts-rt" href="/love-calculator/"><div class="cts-rt-icon">&#10084;</div><h4 data-en="Love Calculator" data-hi="लव कैलकुलेटर">Love Calculator</h4><p data-en="Test your love compatibility" data-hi="लव कम्पैटिबिलिटी जांचें">Test your love compatibility</p></a>
+        </div>
+    </section>
+
+    <p class="cts-foot" data-en="100% private &middot; just for fun &middot; no data is stored" data-hi="100% प्राइवेट &middot; सिर्फ मनोरंजन हेतु &middot; कोई डेटा सेव नहीं होता">100% private &middot; just for fun &middot; no data is stored</p>
+
+    <script type="application/ld+json">
+    {"@context":"https://schema.org","@type":"SoftwareApplication","name":"Crush Calculator","applicationCategory":"LifestyleApplication","operatingSystem":"Web","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"aggregateRating":{"@type":"AggregateRating","ratingValue":"4.9","ratingCount":"10238"}}
+    </script>
+</div>
+
+<script>
+(function(){
+    'use strict';
+    var C = window.CTS;
+    var root = document.getElementById('cc-8864');
+    if (!root || !C) { return; }
+    var $ = function(r){ return root.querySelector('[data-role="'+r+'"]'); };
+    var lang = 'en';
+
+    var T = {
+        en: {
+            steps:['💘 Reading the signals...','🔮 Consulting the stars...','✨ Decoding the vibes...','💌 Revealing the truth...'],
+            levels:[{min:90,e:'🔥',n:'Soulmates'},{min:70,e:'💖',n:'Strong Crush'},{min:50,e:'💗',n:'Sweet Spark'},{min:30,e:'😊',n:'Shy Vibes'},{min:0,e:'🤗',n:'Friend Zone'}],
+            desc:{
+                90:'{a} & {b}, the stars are practically screaming! This is a rare, magnetic connection. Your crush feels the same pull you do — don’t let this spark slip away.',
+                70:'{a} & {b}, the signs are strong! There’s real interest here. A little courage and the right moment could turn this crush into something beautiful.',
+                50:'{a} & {b}, there’s a sweet spark glowing. The interest is mutual but shy. Spend more time together and let the connection grow naturally.',
+                30:'{a} & {b}, the vibe is gentle and warm — but early. Build a friendship first, show your best self, and let feelings bloom in their own time.',
+                0:'{a} & {b}, right now the energy says great friends. And honestly? The strongest love stories often begin exactly there. Stay close and stay genuine.'
+            },
+            hints:{
+                hi:[{i:'😏',t:'Make Eye Contact',d:'A confident glance says more than a hundred messages.'},{i:'💬',t:'Start the Talk',d:'Text first about something you both love. Keep it light.'},{i:'🌹',t:'Small Gestures',d:'A tiny thoughtful act melts hearts faster than grand ones.'},{i:'⏰',t:'Pick the Moment',d:'Confess when the vibe is relaxed, not rushed.'}],
+                mid:[{i:'😊',t:'Be Genuine',d:'Drop the act — your real self is your best self.'},{i:'🎯',t:'Find Common Ground',d:'Bond over a shared hobby or favourite show.'},{i:'👂',t:'Listen Closely',d:'People fall for those who truly hear them.'},{i:'🌱',t:'Give it Time',d:'Don’t rush. Let the spark grow at its own pace.'}],
+                low:[{i:'🤗',t:'Build Friendship',d:'The best romances grow from solid friendships.'},{i:'✨',t:'Shine As You',d:'Focus on being awesome — attraction follows confidence.'},{i:'😄',t:'Stay Light',d:'Make them laugh. Joy is the most attractive trait.'},{i:'💛',t:'No Pressure',d:'Let things unfold naturally. Forcing it never works.'}]
+            },
+            advice:{
+                hi:{text:'{a} & {b}, the chemistry here is undeniable. Be brave — the universe rarely gives such a clear green light. A genuine, well-timed move could start a love story worth remembering.',tags:['Strong Signals','Mutual Vibes','Go For It','Magnetic Pull']},
+                mid:{text:'{a} & {b}, something sweet is brewing. Nurture it with honesty, light fun, and patience. Don’t overthink it — just keep showing up as your warm, real self.',tags:['Sweet Spark','Growing Interest','Be Yourself','Stay Patient']},
+                low:{text:'{a} & {b}, the timing may not be now, and that’s okay. Build a real friendship, keep your confidence high, and let life surprise you. The right spark always finds its moment.',tags:['Friends First','Stay Confident','Trust Timing','Keep Shining']}
+            },
+            extras:{
+                emojiTitle:'Your Love Emoji', futureTitle:'Future Prediction', soulmateTitle:'Soulmate Sign', horoTitle:'Today’s Love Horoscope',
+                emojis:['💖 ✨ 💫','🔥 💘 😍','🌹 💕 😌','💛 🌈 🦋','😎 💗 🎶'],
+                futures:['A surprise message changes everything 💌','You two grow closer over a shared moment ☕','A mutual friend plays cupid 🏹','Patience turns a spark into a flame 🔥','A fun outing brings hidden feelings out ✨'],
+                soulmates:['Leo ♌ — bold & warm','Libra ♎ — charming & fair','Pisces ♓ — dreamy & kind','Scorpio ♏ — intense & loyal','Gemini ♊ — playful & witty','Taurus ♉ — steady & loving'],
+                horos:['Venus favours bold hearts today — make a move 💫','A small kindness today opens a big door 🚪','Speak honestly; the stars reward courage tonight ⭐','Let your guard down — vulnerability is magnetic now 🌙','Good news travels fast in love today 💌']
+            },
+            advLabels:{compat:'Compatibility Number',element:'Love Element',firstmove:'Who Should Move First',date:'Ideal First Date',odds:'Confession Odds',luckyday:'Lucky Day to Ask'},
+            firstMove:{a:'{a} should make the first move 💪',b:'Let {b} take the lead 😌',both:'Make a move together — meet halfway 🤝'},
+            dates:['Coffee & a long walk ☕','Movie night 🎬','Sunset by the water 🌅','Street food adventure 🍜','Bookstore & dessert 📚'],
+            days:['Friday','Saturday','Sunday','Wednesday'],
+            wm:'crush-calculator', share:'💘 Crush Calculator Result!'
+        },
+        hi: {
+            steps:['💘 इशारे पढ़ रहे हैं...','🔮 तारों से पूछ रहे हैं...','✨ वाइब्स डिकोड कर रहे हैं...','💌 सच बता रहे हैं...'],
+            levels:[{min:90,e:'🔥',n:'सोलमेट्स'},{min:70,e:'💖',n:'स्ट्रॉन्ग क्रश'},{min:50,e:'💗',n:'स्वीट स्पार्क'},{min:30,e:'😊',n:'शाई वाइब्स'},{min:0,e:'🤗',n:'फ्रेंड ज़ोन'}],
+            desc:{
+                90:'{a} और {b}, तारे लगभग चिल्ला रहे हैं! यह एक दुर्लभ, चुंबकीय जुड़ाव है। आपका क्रश भी वही खिंचाव महसूस करता है — इस स्पार्क को जाने न दें।',
+                70:'{a} और {b}, इशारे मज़बूत हैं! यहां सच्ची दिलचस्पी है। थोड़ी हिम्मत और सही पल इस क्रश को कुछ खूबसूरत बना सकता है।',
+                50:'{a} और {b}, एक प्यारा स्पार्क चमक रहा है। दिलचस्पी दोनों तरफ है पर थोड़ी शर्मीली। साथ समय बिताएं, जुड़ाव अपने आप बढ़ेगा।',
+                30:'{a} और {b}, वाइब कोमल और गर्म है — पर शुरुआती। पहले दोस्ती बनाएं, अपना बेहतरीन रूप दिखाएं, भावनाएं अपने समय पर खिलेंगी।',
+                0:'{a} और {b}, अभी ऊर्जा अच्छे दोस्तों की कहती है। और सच कहें? सबसे मज़बूत प्रेम कहानियां अक्सर यहीं से शुरू होती हैं।'
+            },
+            hints:{
+                hi:[{i:'😏',t:'नज़रें मिलाएं',d:'एक आत्मविश्वासी नज़र सौ मैसेज से ज़्यादा कहती है।'},{i:'💬',t:'बात शुरू करें',d:'किसी पसंदीदा चीज़ पर पहले मैसेज करें। हल्का रखें।'},{i:'🌹',t:'छोटे इशारे',d:'एक छोटा सोचा-समझा काम बड़े से जल्दी दिल पिघलाता है।'},{i:'⏰',t:'सही पल चुनें',d:'जब माहौल शांत हो तभी दिल की बात कहें।'}],
+                mid:[{i:'😊',t:'सच्चे रहें',d:'दिखावा छोड़ें — आपका असली रूप सबसे अच्छा है।'},{i:'🎯',t:'समान रुचि',d:'किसी कॉमन शौक या शो पर जुड़ें।'},{i:'👂',t:'ध्यान से सुनें',d:'लोग उन पर फ़िदा होते हैं जो उन्हें सच में सुनते हैं।'},{i:'🌱',t:'वक्त दें',d:'जल्दबाज़ी न करें। स्पार्क को अपनी रफ़्तार से बढ़ने दें।'}],
+                low:[{i:'🤗',t:'दोस्ती बनाएं',d:'सबसे अच्छे रोमांस मज़बूत दोस्ती से बढ़ते हैं।'},{i:'✨',t:'खुद चमकें',d:'शानदार बनने पर ध्यान दें — आकर्षण आत्मविश्वास से आता है।'},{i:'😄',t:'हल्के रहें',d:'उन्हें हंसाएं। खुशी सबसे आकर्षक गुण है।'},{i:'💛',t:'कोई दबाव नहीं',d:'चीज़ों को स्वाभाविक रूप से होने दें।'}]
+            },
+            advice:{
+                hi:{text:'{a} और {b}, यहां केमिस्ट्री से इनकार नहीं किया जा सकता। हिम्मत करें — ब्रह्मांड शायद ही इतना साफ हरा संकेत देता है। एक सच्चा, सही समय पर उठाया कदम यादगार प्रेम कहानी शुरू कर सकता है।',tags:['मज़बूत संकेत','दोनों तरफ वाइब','कर दिखाएं','चुंबकीय खिंचाव']},
+                mid:{text:'{a} और {b}, कुछ प्यारा पक रहा है। ईमानदारी, हल्की मस्ती और धैर्य से इसे संभालें। ज़्यादा न सोचें — बस अपने गर्म, असली रूप में रहें।',tags:['स्वीट स्पार्क','बढ़ती दिलचस्पी','खुद रहें','धैर्य रखें']},
+                low:{text:'{a} और {b}, शायद अभी सही समय नहीं, और यह ठीक है। सच्ची दोस्ती बनाएं, आत्मविश्वास ऊंचा रखें, और ज़िंदगी को चौंकाने दें। सही स्पार्क हमेशा अपना पल ढूंढ लेता है।',tags:['पहले दोस्ती','आत्मविश्वास रखें','समय पर भरोसा','चमकते रहें']}
+            },
+            extras:{
+                emojiTitle:'आपका लव इमोजी', futureTitle:'भविष्यवाणी', soulmateTitle:'सोलमेट राशि', horoTitle:'आज का लव राशिफल',
+                emojis:['💖 ✨ 💫','🔥 💘 😍','🌹 💕 😌','💛 🌈 🦋','😎 💗 🎶'],
+                futures:['एक अचानक मैसेज सब बदल देगा 💌','किसी साझा पल में आप करीब आएंगे ☕','कोई कॉमन दोस्त कपिड बनेगा 🏹','धैर्य स्पार्क को आग में बदलेगा 🔥','एक मज़ेदार आउटिंग छुपी भावनाएं बाहर लाएगी ✨'],
+                soulmates:['सिंह ♌ — साहसी व गर्म','तुला ♎ — आकर्षक व निष्पक्ष','मीन ♓ — स्वप्निल व दयालु','वृश्चिक ♏ — गहन व वफ़ादार','मिथुन ♊ — चंचल व हाज़िरजवाब','वृषभ ♉ — स्थिर व प्रेमी'],
+                horos:['आज शुक्र साहसी दिलों के साथ है — कदम बढ़ाएं 💫','आज एक छोटी दयालुता बड़ा दरवाज़ा खोलेगी 🚪','सच बोलें; आज रात तारे साहस को इनाम देंगे ⭐','दिल खोलें — आज कमज़ोरी ही चुंबकीय है 🌙','आज प्यार में अच्छी खबर तेज़ी से फैलेगी 💌']
+            },
+            advLabels:{compat:'कम्पैटिबिलिटी नंबर',element:'लव तत्व',firstmove:'पहला कदम कौन उठाए',date:'आदर्श पहली डेट',odds:'इज़हार की संभावना',luckyday:'पूछने का शुभ दिन'},
+            firstMove:{a:'{a} को पहला कदम उठाना चाहिए 💪',b:'{b} को आगे बढ़ने दें 😌',both:'साथ कदम बढ़ाएं — बीच में मिलें 🤝'},
+            dates:['कॉफी और लंबी सैर ☕','मूवी नाइट 🎬','पानी के पास सनसेट 🌅','स्ट्रीट फूड एडवेंचर 🍜','बुकस्टोर और डेज़र्ट 📚'],
+            days:['शुक्रवार','शनिवार','रविवार','बुधवार'],
+            wm:'crush-calculator', share:'💘 क्रश कैलकुलेटर रिज़ल्ट!'
+        }
+    };
+
+    var ELEMENTS={en:['Fire 🔥','Water 💧','Air 🌬','Earth 🌍'],hi:['अग्नि 🔥','जल 💧','वायु 🌬','पृथ्वी 🌍']};
+
+    function clean(s){ return (s||'').toLowerCase().replace(/[^a-zऀ-ॿ]/g,''); }
+    function score(n1,n2){
+        var a=clean(n1),b=clean(n2);
+        if (!a||!b){ return 50; }
+        var sa=0,sb=0,i;
+        for (i=0;i<a.length;i++){ sa+=a.charCodeAt(i); }
+        for (i=0;i<b.length;i++){ sb+=b.charCodeAt(i); }
+        var fa={},fb={},k,ov=0,tot=0;
+        for (i=0;i<a.length;i++){ fa[a[i]]=(fa[a[i]]||0)+1; }
+        for (i=0;i<b.length;i++){ fb[b[i]]=(fb[b[i]]||0)+1; }
+        var keys={}; for (k in fa){ keys[k]=1; } for (k in fb){ keys[k]=1; }
+        for (k in keys){ ov+=Math.min(fa[k]||0,fb[k]||0); tot+=Math.max(fa[k]||0,fb[k]||0); }
+        var overlap=tot?(ov/tot)*100:50;
+        var num=C.reduceDigit(sa+sb)*10;
+        var sd=C.seed(a+'<3'+b);
+        var rand=Math.abs(Math.sin(sd))*32;
+        var raw=overlap*0.34+num*0.22+rand*0.7+18;
+        var sc=Math.round(raw);
+        if (sc<14){ sc=14+(Math.abs(sd)%22); }
+        if (sc>99){ sc=99; }
+        return sc;
+    }
+    function metrics(n1,n2,sc){
+        var sd=C.seed(clean(n1)+'*'+clean(n2));
+        function v(off){ var r=Math.abs(Math.sin(sd+off))*22-11; return Math.max(18,Math.min(99,Math.round(sc+r))); }
+        return {b1:v(1),b2:v(2),b3:v(3),b4:v(4)};
+    }
+    function levelFor(sc){ var L=T[lang].levels; for (var i=0;i<L.length;i++){ if (sc>=L[i].min){ return L[i]; } } return L[L.length-1]; }
+    function tier(sc){ return sc>=70?'hi':(sc>=40?'mid':'low'); }
+    function band(sc){ return sc>=90?90:sc>=70?70:sc>=50?50:sc>=30?30:0; }
+
+    var state={};
+
+    function render(){
+        var t=T[lang], n1=state.n1, n2=state.n2, sc=state.sc, m=state.m;
+        var lvl=levelFor(sc), tr=tier(sc), sd=C.seed(clean(n1)+clean(n2));
+        $('rc-n-a').textContent=n1; $('rc-n-b').textContent=n2;
+        $('rc-av-a').textContent=n1.charAt(0).toUpperCase();
+        $('rc-av-b').textContent=n2.charAt(0).toUpperCase();
+        $('level').textContent=lvl.e+' '+lvl.n;
+        $('desc').textContent=t.desc[band(sc)].replace('{a}',n1).replace('{b}',n2);
+        $('wm').textContent=t.wm+' 💘';
+
+        C.animateNum($('pct'),0,sc,1700);
+        var circ=2*Math.PI*86;
+        setTimeout(function(){ $('ring').style.strokeDashoffset=circ-(circ*sc/100); },80);
+        setTimeout(function(){
+            $('b1').style.width=m.b1+'%'; $('b2').style.width=m.b2+'%'; $('b3').style.width=m.b3+'%'; $('b4').style.width=m.b4+'%';
+            $('b1-v').textContent=m.b1+'%'; $('b2-v').textContent=m.b2+'%'; $('b3-v').textContent=m.b3+'%'; $('b4-v').textContent=m.b4+'%';
+        },200);
+
+        var ex=t.extras;
+        var cards=[
+            {e:'😍',ti:ex.emojiTitle,v:C.pick(ex.emojis,sd,1)},
+            {e:'🔮',ti:ex.futureTitle,v:C.pick(ex.futures,sd,2)},
+            {e:'💞',ti:ex.soulmateTitle,v:C.pick(ex.soulmates,sd,3)},
+            {e:'⭐',ti:ex.horoTitle,v:C.pick(ex.horos,sd,4)}
+        ];
+        var eg=$('extras'); eg.innerHTML='';
+        cards.forEach(function(c,i){
+            var d=document.createElement('div'); d.className='cts-x'; d.style.animationDelay=(i*0.08)+'s';
+            d.innerHTML='<div class="cts-x-head"><span class="cts-x-emoji">'+c.e+'</span><span class="cts-x-title">'+C.escapeHtml(c.ti)+'</span></div><p class="cts-x-val">'+C.escapeHtml(c.v)+'</p>';
+            eg.appendChild(d);
+        });
+
+        var hints=t.hints[tr], hg=$('hints'); hg.innerHTML='';
+        hints.forEach(function(h,i){
+            var d=document.createElement('div'); d.className='cts-hint'; d.style.animationDelay=(i*0.1)+'s';
+            d.innerHTML='<div class="cts-hint-icon">'+h.i+'</div><h4>'+C.escapeHtml(h.t)+'</h4><p>'+C.escapeHtml(h.d)+'</p>';
+            hg.appendChild(d);
+        });
+
+        var adv=t.advice[tr];
+        $('advice').textContent=adv.text.replace('{a}',n1).replace('{b}',n2);
+        var tags=$('tags'); tags.innerHTML='';
+        adv.tags.forEach(function(tg){ var s=document.createElement('span'); s.className='cts-tag'; s.textContent=tg; tags.appendChild(s); });
+
+        // advanced
+        var al=t.advLabels;
+        var fmKey=(Math.abs(C.seed(n1))%3); var fm=fmKey===0?t.firstMove.a.replace('{a}',n1):(fmKey===1?t.firstMove.b.replace('{b}',n2):t.firstMove.both);
+        var advData=[
+            [al.compat, C.reduceDigit(C.seed(clean(n1))+C.seed(clean(n2)))],
+            [al.element, C.pick(ELEMENTS[lang],sd,5)],
+            [al.firstmove, fm],
+            [al.date, C.pick(t.dates,sd,6)],
+            [al.odds, sc+'%'],
+            [al.luckyday, C.pick(t.days,sd,7)]
+        ];
+        var ag=$('adv-grid'); ag.innerHTML='';
+        advData.forEach(function(p){ var d=document.createElement('div'); d.className='cts-adv-item'; d.innerHTML='<div class="k">'+C.escapeHtml(p[0])+'</div><div class="v">'+C.escapeHtml(String(p[1]))+'</div>'; ag.appendChild(d); });
+        if (root.classList.contains('cts-adv-active')) { $('adv-panel').classList.add('cts-show'); }
+
+        var url=window.location.href;
+        var msg=t.share+'\n\n'+n1+' 💘 '+n2+' = '+sc+'%\n'+lvl.e+' '+lvl.n+'\n\n'+url;
+        $('wa').href=C.shareWhatsApp(msg);
+        $('tw').href=C.shareTwitter(n1+' 💘 '+n2+' = '+sc+'% '+lvl.n, url);
+
+        if (sc>=70){ setTimeout(C.confetti,600); }
+        setTimeout(function(){ $('result').scrollIntoView({behavior:'smooth',block:'start'}); },100);
+    }
+
+    function go(){
+        var n1=($('name-a').value||'').trim(), n2=($('name-b').value||'').trim(), err=$('error');
+        if (!n1||!n2){ err.classList.add('cts-show'); return; }
+        if (n1.length<2||n2.length<2){ err.textContent=lang==='hi'?'नाम कम से कम 2 अक्षर का हो।':'Names should be at least 2 characters.'; err.classList.add('cts-show'); return; }
+        err.classList.remove('cts-show');
+        state.n1=n1; state.n2=n2; state.sc=score(n1,n2); state.m=metrics(n1,n2,state.sc);
+        $('input').style.display='none';
+        var ld=$('loading'); ld.style.display='block'; ld.classList.add('cts-show');
+        $('load-title').textContent=n1+' 💘 '+n2;
+        $('bar').style.width='0%';
+        C.runLoading($('load-step'),$('bar'),T[lang].steps,function(){
+            ld.classList.remove('cts-show'); ld.style.display='none';
+            $('result').classList.add('cts-show'); render();
+        });
+    }
+
+    function reset(){
+        $('result').classList.remove('cts-show');
+        $('loading').classList.remove('cts-show'); $('loading').style.display='none';
+        $('input').style.display='block';
+        $('name-a').value=''; $('name-b').value=''; $('av-a').textContent='?'; $('av-b').textContent='?';
+        $('pct').textContent='0'; $('ring').style.strokeDashoffset=540.35;
+        ['b1','b2','b3','b4'].forEach(function(id){ $(id).style.width='0%'; });
+        $('adv-panel').classList.toggle('cts-show', root.classList.contains('cts-adv-active'));
+        $('input').scrollIntoView({behavior:'smooth',block:'start'});
+        setTimeout(function(){ $('name-a').focus(); },400);
+    }
+
+    function av(input,avatar){ var v=(input.value||'').trim(); avatar.textContent=v?v.charAt(0).toUpperCase():'?'; $('error').classList.remove('cts-show'); }
+    $('name-a').addEventListener('input',function(){ av($('name-a'),$('av-a')); });
+    $('name-b').addEventListener('input',function(){ av($('name-b'),$('av-b')); });
+    [$('name-a'),$('name-b')].forEach(function(el){ el.addEventListener('keydown',function(e){ if (e.key==='Enter'){ e.preventDefault(); go(); } }); });
+
+    $('calc').addEventListener('click',go);
+    $('try').addEventListener('click',reset);
+    $('copy').addEventListener('click',function(){ C.copyLink(this, lang==='hi'?'✅ कॉपी हुआ!':'✅ Copied!'); });
+    $('dl').addEventListener('click',function(){
+        var lvl=levelFor(state.sc);
+        var ok=C.downloadCard({
+            brand:'Crush Calculator', title:state.n1+' & '+state.n2,
+            percent:state.sc, centerText:state.sc+'%', centerSub:lang==='hi'?'क्रश मैच':'Crush Match',
+            level:lvl.e+' '+lvl.n, desc:T[lang].desc[band(state.sc)].replace('{a}',state.n1).replace('{b}',state.n2),
+            footer:'crush-calculator', file:'crush-'+state.sc
+        });
+        if (!ok){ alert(lang==='hi'?'स्क्रीनशॉट लेकर सेव करें!':'Take a screenshot to save your result!'); }
+    });
+
+    C.qa(root,'.cts-seg').forEach(function(btn){
+        btn.addEventListener('click',function(){
+            lang=btn.getAttribute('data-lang');
+            C.qa(root,'.cts-seg').forEach(function(x){ x.classList.toggle('cts-on', x===btn); });
+            C.applyLang(root,lang);
+            if ($('result').classList.contains('cts-show')){ render(); }
+        });
+    });
+
+    $('adv-toggle').addEventListener('click',function(){
+        var on=root.classList.toggle('cts-adv-active');
+        this.classList.toggle('cts-on',on);
+        if ($('result').classList.contains('cts-show')){ $('adv-panel').classList.toggle('cts-show',on); }
+    });
+
+    C.applyLang(root,'en');
+    C.liveCounter($('counter'),312760);
+})();
+</script>
+        
+</body></html>
